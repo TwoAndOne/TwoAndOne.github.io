@@ -1,2 +1,2 @@
-# TwoAndOne.github.io
+# twoandone.github.io
 TwoAndOne Blog
