@@ -3,15 +3,15 @@
 ## 1.1 语法
 
  	1. 单标记 
-         - ```<br/>```换行
-         - ```<hr/>```水平分割线
+         - <br/>换行
+         - <hr/>水平分割线
  	2. 双标记
-         - ```<h1> 标题 </h1>``` 
+         - <h1> 标题 </h1> 
 	3. 属性语法
-        - ```<br size="3" color="red" align="center"/> ```
+        - <br size="3" color="red" align="center"/> 
 	4. 注释
-        - ```<!-- 注释 ---> ```
-        - ```<comment> 注释 </comment> ```
+        - <!-- 注释 ---> 
+        - <comment> 注释 </comment> 
 
 ## 1.1.2  头部 head
 
