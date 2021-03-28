@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"twoandone.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="后端废物">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Yus">
+<meta property="og:url" content="https://twoandone.github.io/index.html">
+<meta property="og:site_name" content="Yus">
+<meta property="og:description" content="后端废物">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Yus">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://twoandone.github.io/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Yus</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Yus" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Yus</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">沧浪之水浊兮，可以濯吾足; 沧浪之水清兮，可以濯吾缨</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/tech/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Yus">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yus">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/" class="post-title-link" itemprop="url">JVM GC参数(Xmn,Xms,Xmx,Xss)助记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-23 12:18:20" itemprop="dateCreated datePublished" datetime="2021-03-23T12:18:20+08:00">2021-03-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-28 13:52:45" itemprop="dateModified" datetime="2021-03-28T13:52:45+08:00">2021-03-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><strong>太长不看总结:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-</td>
+<td>标准VM 选项</td>
+</tr>
+<tr>
+<td>-X</td>
+<td>非标准VM选项</td>
+</tr>
+<tr>
+<td>-Xms</td>
+<td>maximum size 设置堆的最大初始初始值</td>
+</tr>
+<tr>
+<td>-Xmn</td>
+<td>maximum nursery 设置堆中新生代的最大初始值</td>
+</tr>
+<tr>
+<td>-Xmx</td>
+<td>memory maximum 设置堆的最大值</td>
+</tr>
+<tr>
+<td>-Xss</td>
+<td>stack size 设置线程中栈的内容大小</td>
+</tr>
+</tbody></table>
+<p>-Xms, -Xms, -Xmn, -Xss</p>
+<p>在看技术博客时,看到到这些参数是不是很无语,完全不知道说的是啥,根本无法理解!</p>
+<p>但是仔细想想写JDK的那群神仙会像我们这种菜鸟随便命名吗?</p>
+<p>所以我放下书本去翻了一下文档</p>
+<p><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html">https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html</a></p>
+<blockquote>
+<p>OptionsThe <code>java</code> command supports a wide range of options that can be divided into the following categories:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDJJFI">Standard Options</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI">Non-Standard Options</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABCBGHF">Advanced Runtime Options</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDDFII">Advanced JIT Compiler Options</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABFJDIC">Advanced Serviceability Options</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABFAFAE">Advanced Garbage Collection Options</a></li>
+</ul>
+<p>Standard options are guaranteed to be supported by all implementations of the Java Virtual Machine (JVM). They are used for common actions, such as checking the version of the JRE, setting the class path, enabling verbose output, and so on.</p>
+<p>Non-standard options are general purpose options that are specific to the Java HotSpot Virtual Machine, so they are not guaranteed to be supported by all JVM implementations, and are subject to change. These options start with <code>-X</code>.</p>
+<p>Advanced options are not recommended for casual use. These are developer options used for tuning specific areas of the Java HotSpot Virtual Machine operation that often have specific system requirements and may require privileged access to system configuration parameters. They are also not guaranteed to be supported by all JVM implementations, and are subject to change. Advanced options start with <code>-XX</code>.</p>
+</blockquote>
+<p>翻译一下,大概就是java提供了很多命令,有标准的,有非标准的,非标准的就得用<code>-X</code>开头,进阶一点不建议平时使用的用<code>-XX</code>开头</p>
+<p>好的,我们已经明白这几个命令的开头是什么意思了</p>
+<ul>
+<li>- : 标准VM选项，VM规范的选项</li>
+<li>-X: 非标准VM选项，不保证所有VM支持</li>
+<li>-XX: 高级选项，高级特性，但属于不稳定的选项</li>
+</ul>
+<h2 id="Xmn"><a href="#Xmn" class="headerlink" title="-Xmn"></a>-Xmn</h2><blockquote>
+<p> Sets the initial and maximum size (in bytes) of the heap for the young generation (nursery). </p>
+</blockquote>
+<p>为新生代设置在堆上的初始最大值</p>
+<blockquote>
+<p> Append the letter <code>k</code> or <code>K</code> to indicate kilobytes, <code>m</code> or <code>M</code> to indicate megabytes, <code>g</code> or <code>G</code> to indicate gigabytes.</p>
+</blockquote>
+<p>参数后可以指定单位,比如用k、m、g</p>
+<blockquote>
+<p>The young generation region of the heap is used for new objects. GC is performed in this region more often than in other regions. If the size for the young generation is too small, then a lot of minor garbage collections will be performed. If the size is too large, then only full garbage collections will be performed, which can take a long time to complete. </p>
+</blockquote>
+<p>堆的新生代区域用于新对象。GC在这个区域执行的频率高于其他区域。如果年轻代size太小，那么将执行大量次要的垃圾收集。如果size太大，则只有完整的垃圾收集才会被执行，这可能需要很长时间才能完成。</p>
+<blockquote>
+<p>Oracle recommends that you keep the size for the young generation between a half and a quarter of the overall heap size.</p>
+</blockquote>
+<p>Oracle建议将新生代的堆的size保持在总体堆size的二分之一到四分之一之间。</p>
+<blockquote>
+<p> The following examples show how to set the initial and maximum size of young generation to 256 MB using various units:</p>
+<p>-Xmn256m  </p>
+<p>-Xmn262144k</p>
+<p>-Xmn268435456  </p>
+<p> Instead of the <code>-Xmn</code> option to set both the initial and maximum size of the heap for the young generation, you can use <code>-XX:NewSize</code> to set the initial size and <code>-XX:MaxNewSize</code> to set the maximum size.</p>
+</blockquote>
+<p>下面是使用不同的单位设置新生代的例子,不翻译了,都能看懂.</p>
+<p><strong>总结</strong></p>
+<p>-Xmn 指的是,</p>
+<ul>
+<li><p>-X:非标准VM选项</p>
+</li>
+<li><p>m:maximum 最大</p>
+</li>
+<li><p>n: nursery :托儿所</p>
+</li>
+</ul>
+<p>最大的托儿所,就是新生代最大size</p>
+<h2 id="Xms"><a href="#Xms" class="headerlink" title="-Xms"></a>-Xms</h2><blockquote>
+<p>Sets the initial size (in bytes) of the heap. This value must be a multiple of 1024 and greater than 1 MB. Append the letter <code>k</code> or <code>K</code> to indicate kilobytes, <code>m</code> or <code>M</code> to indicate megabytes, <code>g</code> or <code>G</code> to indicate gigabytes.</p>
+</blockquote>
+<p>设置堆的初始最大size,这个值必须是1024的倍数,必须大于1MB,可以用k、m、g做参数后面的单位</p>
+<blockquote>
+<p> The following examples show how to set the size of allocated memory to 6 MB using various units:</p>
+<p><code>-Xms6291456 -Xms6144k -Xms6m </code></p>
+</blockquote>
+<p>下面是一些例子,用不同单位设置6MB的最大内存</p>
+<p><strong>总结</strong></p>
+<ul>
+<li><p>-X:非标准VM选项</p>
+</li>
+<li><p>m:最大 maximum</p>
+</li>
+<li><p>s:大小 size</p>
+</li>
+</ul>
+<p>在堆上初始最大的容量</p>
+<h2 id="Xmx"><a href="#Xmx" class="headerlink" title="-Xmx"></a>-Xmx</h2><blockquote>
+<p>Specifies the maximum size (in bytes) of the memory allocation pool in bytes. This value must be a multiple of 1024 and greater than 2 MB. Append the letter <code>k</code> or <code>K</code> to indicate kilobytes, <code>m</code> or <code>M</code> to indicate megabytes, <code>g</code> or <code>G</code> to indicate gigabytes. </p>
+</blockquote>
+<p>指定堆的最大值,跟-Xms的区别是,ms是初始值,这个是可容纳的最大值</p>
+<blockquote>
+<p>The default value is chosen at runtime based on system configuration. For server deployments, <code>-Xms</code> and <code>-Xmx</code> are often set to the same value. See the section “Ergonomics” in <em>Java SE HotSpot Virtual Machine Garbage Collection Tuning Guide</em> at ``<a target="_blank" rel="noopener" href="http://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/index.html%60">http://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/index.html`</a>.</p>
+</blockquote>
+<p>默认值是基于系统配置在运行时选择的,在服务部署时,-Xms与-Xmx一般被设置为同样的大小</p>
+<blockquote>
+<p> The following examples show how to set the maximum allowed size of allocated memory to 80 MB using various units:</p>
+</blockquote>
+<p>80MB的例子</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">-Xmx83886080</span></span><br><span class="line"><span class="deletion">-Xmx81920k</span></span><br><span class="line"><span class="deletion">-Xmx80m</span></span><br></pre></td></tr></table></figure>
+
+<p>The <code>-Xmx</code> option is equivalent to <code>-XX:MaxHeapSize</code>.</p>
+<p><strong>总结</strong></p>
+<ul>
+<li><p>-X:非标准VM选项</p>
+</li>
+<li><p>m:最大 memory</p>
+</li>
+<li><p>x:大小 maximum</p>
+</li>
+</ul>
+<p>最大的容量</p>
+<h2 id="Xss"><a href="#Xss" class="headerlink" title="-Xss"></a>-Xss</h2><blockquote>
+<p>Sets the thread stack size (in bytes). Append the letter <code>k</code> or <code>K</code> to indicate KB, <code>m</code> or <code>M</code> to indicate MB, <code>g</code> or <code>G</code> to indicate GB. The default value depends on virtual memory.</p>
+</blockquote>
+<p>设置线程栈的大小,可以用不同的单位来设置,默认值取决于虚拟机.</p>
+<p>The following examples set the thread stack size to 1024 KB in different units:</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">-Xss1m</span></span><br><span class="line"><span class="deletion">-Xss1024k</span></span><br><span class="line"><span class="deletion">-Xss1048576</span></span><br></pre></td></tr></table></figure>
+
+<p>This option is equivalent to <code>-XX:ThreadStackSize</code>.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/23/%E7%90%86%E8%A7%A3%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Yus">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yus">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/23/%E7%90%86%E8%A7%A3%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/" class="post-title-link" itemprop="url">理解强引用、软引用、弱引用、虚引用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-23 12:03:09" itemprop="dateCreated datePublished" datetime="2021-03-23T12:03:09+08:00">2021-03-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-28 13:54:10" itemprop="dateModified" datetime="2021-03-28T13:54:10+08:00">2021-03-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="强引用"><a href="#强引用" class="headerlink" title="强引用"></a>强引用</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">reference</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">testReference</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ListNode test = <span class="keyword">new</span> ListNode(<span class="number">3</span>);</span><br><span class="line">        test = <span class="keyword">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ListNode</span> </span>&#123;</span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;test被回收了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>强引用是最普遍的引用,在代码中随处可见,只要某个对象与强引用关联,这个对象就不会被回收,JVM宁愿抛出OOM也不会回收.</p>
+<p>那么什么时候才能被回收呢?</p>
+<p>手动把引用指向null,比如上述代码中</p>
+<p><code>test = null</code></p>
+<h1 id="软引用"><a href="#软引用" class="headerlink" title="软引用"></a>软引用</h1><p><img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323132537741.png" alt="image-20210323132537741"></p>
+<p><img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323132606414.png" alt="image-20210323132606414"></p>
+<p>软引用需要用SoftReference对象包装一下</p>
+<p>它的特点是,当内存不足时,就会触发JVM的GC,如果GC后内存还是不足,就会把软引用包裹的对象回收.也就是说只有当内存不足时,JVM才会回收软引用</p>
+<p>解释一下图片的例子:</p>
+<p>创建一个软引用对象,里面包裹byte[],byte[]占用10M,设置JVM运行参数,-Xmx,表示堆内存最大容量</p>
+<p>这个参数不懂的可以参考笔者另一篇文章</p>
+<p>第一次用softReference.get()方法获取该引用的地址</p>
+<p>手动打开GC</p>
+<p>GC后,测试发现该引用还是存在,这是因为内存还比较充足</p>
+<p>接着再创建一个10M的byte[]对象</p>
+<p>再次用softReference.get()方法获取软引用的地址,发现已经为null了</p>
+<p><strong>软引用的作用</strong></p>
+<p>做缓存吧,内存够就正常拿缓存,内存不够就干掉它,不至于马上抛出OOM</p>
+<h2 id="弱引用"><a href="#弱引用" class="headerlink" title="弱引用"></a>弱引用</h2><p><img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323133735452.png" alt="image-20210323133735452"></p>
+<p>弱引用是用WeakReference来包裹对象</p>
+<p>无论有没有内存,gc遇到它就回收</p>
+<p><strong>什么时候用呢</strong></p>
+<p>ThreadLocal,WeakHashMap</p>
+<p>ThreadLocal是一个本地线程副本变量工具类。内部是一个<strong>弱引用</strong>的Map来维护。</p>
+<p>WeakHashMap其实和HashMap大多数行为是一样的，只是WeakHashMap不会阻止GC回收key对象（不是value）</p>
+<h2 id="虚引用"><a href="#虚引用" class="headerlink" title="虚引用"></a>虚引用</h2><p><img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323134603056.png" alt="image-20210323134603056"></p>
+<p>运行完直接返回null,说明根本拿不到虚引用指向的对象</p>
+<p>看图中,创建虚引用不仅需要传入被包裹对象,还得传入一个ReferenceQueue , 当GC准备回收一个对象时,如果发现它还有虚引用,就会在回收之前,把这个虚引用加入到与之关联的ReferenceQueue中.</p>
+<p>平时没用到虚引用,所以我也不是很懂,待续…….</p>
+<p>NIO中好像使用了虚引用管理堆外内存. </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/22/cmd%E5%91%BD%E4%BB%A4%E4%B8%8ELinux%E5%91%BD%E4%BB%A4%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Yus">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yus">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/22/cmd%E5%91%BD%E4%BB%A4%E4%B8%8ELinux%E5%91%BD%E4%BB%A4%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">cmd命令与Linux命令的区别</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:03:16" itemprop="dateCreated datePublished" datetime="2021-03-22T21:03:16+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-28 13:52:56" itemprop="dateModified" datetime="2021-03-28T13:52:56+08:00">2021-03-28</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>太长不看总结</strong></p>
+<p>cmd是.exe程序,windows系统拿来模拟Dos系统的</p>
+<p>Linux命令也就是shell,是用户态于内核态的交互层,功能更强大.</p>
+<table>
+<thead>
+<tr>
+<th><strong>功能</strong></th>
+<th><strong>cmd</strong></th>
+<th><strong>linux</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>复制文件</td>
+<td>copy</td>
+<td>cp</td>
+</tr>
+<tr>
+<td>移动文件</td>
+<td>move</td>
+<td>mv</td>
+</tr>
+<tr>
+<td>列举文件</td>
+<td>dir</td>
+<td>ls</td>
+</tr>
+<tr>
+<td>清除屏幕</td>
+<td>cls</td>
+<td>clear</td>
+</tr>
+<tr>
+<td>退出</td>
+<td>exit</td>
+<td>exit</td>
+</tr>
+<tr>
+<td>显示修改日期</td>
+<td>date</td>
+<td>date</td>
+</tr>
+<tr>
+<td>删除文件</td>
+<td>del</td>
+<td>rm</td>
+</tr>
+<tr>
+<td>回响信息到屏幕</td>
+<td>echo</td>
+<td>echo</td>
+</tr>
+<tr>
+<td>用编辑器编辑文件</td>
+<td>edit</td>
+<td>vi</td>
+</tr>
+<tr>
+<td>比较文件内容</td>
+<td>fc</td>
+<td>diff</td>
+</tr>
+<tr>
+<td>在文件中查找字符串</td>
+<td>find</td>
+<td>grep</td>
+</tr>
+<tr>
+<td>显示命令帮助</td>
+<td>命令/?</td>
+<td>man 命令</td>
+</tr>
+<tr>
+<td>创建目录</td>
+<td>mkdir</td>
+<td>mkdir</td>
+</tr>
+<tr>
+<td>删除目录</td>
+<td>rd</td>
+<td>rmdir</td>
+</tr>
+<tr>
+<td>目录更名</td>
+<td>move</td>
+<td>mv</td>
+</tr>
+<tr>
+<td>拷贝目录</td>
+<td>xcopy</td>
+<td>copy</td>
+</tr>
+<tr>
+<td>查看文件</td>
+<td>more</td>
+<td>less</td>
+</tr>
+<tr>
+<td>重命名文件</td>
+<td>ren</td>
+<td>mv</td>
+</tr>
+<tr>
+<td>切换目录</td>
+<td>cd</td>
+<td>cd</td>
+</tr>
+<tr>
+<td>显示时间</td>
+<td>time</td>
+<td>date</td>
+</tr>
+<tr>
+<td>显示已被使用的内存</td>
+<td>mem</td>
+<td>free</td>
+</tr>
+<tr>
+<td>在屏幕打印文件内容</td>
+<td>type</td>
+<td>cat</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/21/%E7%90%86%E8%A7%A3BIO-NIO-AIO-IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Yus">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yus">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/21/%E7%90%86%E8%A7%A3BIO-NIO-AIO-IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" class="post-title-link" itemprop="url">理解BIO,NIO,AIO,IO多路复用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-21 18:56:41" itemprop="dateCreated datePublished" datetime="2021-03-21T18:56:41+08:00">2021-03-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-28 13:53:26" itemprop="dateModified" datetime="2021-03-28T13:53:26+08:00">2021-03-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>预备知识:</strong></p>
+<p>操作系统分内核态与用户态,真正的I/O操作都不是应用程序在做,为了保证安全,操作系统提供了系统调用,比如read&amp;write.</p>
+<p>通常一个应用程序的执行代表一个进程,当应用程序需要I/O时就会执行系统调用.</p>
+<p>比如一次read指令的执行,应用调用read指令,内核从外部设备获取数据放入内核缓冲区,然后又把内核缓存区的内容复制到进程缓冲区.</p>
+<p><strong>四种IO模型:</strong></p>
+<p>１.　BＩＯ，同步阻塞IO</p>
+<p>２.　ＮＩＯ，同步非阻塞IO</p>
+<p>３.　IO多路复用,同步非阻塞IO升级版</p>
+<p>４.　AIO，异步非阻塞IO</p>
+<p>怎么理解用一个例子来执行一下就好啦</p>
+<p><strong>BIO</strong></p>
+<img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210321191140634.png" alt="image-20210321191140634" style="zoom:67%;" />
+
+<p>首先我们得知道,内核态的内存缓冲区也不是一开始就有数据的,所以这就分了两个阶段,</p>
+<p>第一个是等待内核态内存缓存区充满的过程,</p>
+<p>第二个是从内核态内存缓存区复制到进程缓冲区的过程</p>
+<p>所以同步阻塞IO就比较惨,在这两个阶段都得等着</p>
+<p>第一个阶段是阻塞,用户态发起IO执行read调用指令,如果内核态没数据就被ＯＳ挂起</p>
+<p>第二个阶段内核态复制数据到进程缓冲区,它也不能干其他的.</p>
+<p><strong>NIO</strong></p>
+<img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210321191002045.png" alt="image-20210321191002045" style="zoom:70%;" />
+
+<p>同步非阻塞也没好到哪里去</p>
+<p>第一个阶段,虽然没有被阻塞,但是也得不停的轮询,不断发起IO系统调用</p>
+<p>第二个阶段，等待复制完成</p>
+<p><strong>IO多路复用</strong></p>
+<img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210321195033926.png" alt="image-20210321195033926" style="zoom:67%;" />
+
+<p>IO多路复用本质上还是同步非阻塞</p>
+<p>在这种模式中，首先不是进行read系统调动，而是进行select/epoll系统调用。当然，这里有一个前提，需要将目标网络连接，提前注册到select/epoll的可查询socket列表中。然后，才可以开启整个的IO多路复用模型的读流程。</p>
+<p>（1）进行select/epoll系统调用，查询可以读的连接。kernel会查询所有select的可查询socket列表，当任何一个socket中的数据准备好了，select就会返回。</p>
+<p>当用户进程调用了select，那么整个线程会被block（阻塞掉）。</p>
+<p>（2）用户线程获得了目标连接后，发起read系统调用，用户线程阻塞。内核开始复制数据。它就会将数据从kernel内核缓冲区，拷贝到用户缓冲区（用户内存），然后kernel返回结果。</p>
+<p>（3）用户线程才解除block的状态，用户线程终于真正读取到数据，继续执行。</p>
+<p>多路复用IO的特点：</p>
+<p>IO多路复用模型，建立在操作系统kernel内核能够提供的多路分离系统调用select/epoll基础之上的。多路复用IO需要用到两个系统调用（system call）， 一个select/epoll查询调用，一个是IO的读取调用。</p>
+<p>和NIO模型相似，多路复用IO需要轮询。负责select/epoll查询调用的线程，需要不断的进行select/epoll轮询，查找出可以进行IO操作的连接。</p>
+<p>另外，多路复用IO模型与前面的NIO模型，是有关系的。对于每一个可以查询的socket，一般都设置成为non-blocking模型。只是这一点，对于用户程序是透明的（不感知）。</p>
+<p>多路复用IO的优点：</p>
+<p>用select/epoll的优势在于，它可以同时处理成千上万个连接（connection）。与一条线程维护一个连接相比，I/O多路复用技术的最大优势是：系统不必创建线程，也不必维护这些线程，从而大大减小了系统的开销。</p>
+<p>Java的NIO（new IO）技术，使用的就是IO多路复用模型。在linux系统上，使用的是epoll系统调用。</p>
+<p>多路复用IO的缺点：</p>
+<p>本质上，select/epoll系统调用，属于同步IO，也是阻塞IO。都需要在读写事件就绪后，自己负责进行读写，也就是说这个读写过程是阻塞的。</p>
+<p><strong>AIO</strong></p>
+<p><img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210321195511679.png" alt="image-20210321195511679"></p>
+<p>如果大家学过终端的话就容易理解AIO</p>
+<p>第一个阶段,用户态程序执行read调用,如果内核态没数据,那就做其他事情</p>
+<p>第二个阶段,内核态把数据复制到了用户态的进程缓冲区后通知用户应用程序</p>
+<p>异步IO模型的特点：</p>
+<p>在内核kernel的等待数据和复制数据的两个阶段，用户线程都不是block(阻塞)的。用户线程需要接受kernel的IO操作完成的事件，或者说注册IO操作完成的回调函数，到操作系统的内核。所以说，异步IO有的时候，也叫做信号驱动 IO 。</p>
+<p>异步IO模型缺点：</p>
+<p>需要完成事件的注册与传递，这里边需要底层操作系统提供大量的支持，去做大量的工作。</p>
+<p>目前来说， Windows 系统下通过 IOCP 实现了真正的异步 I/O。但是，就目前的业界形式来说，Windows 系统，很少作为百万级以上或者说高并发应用的服务器操作系统来使用。</p>
+<p>而在 Linux 系统下，异步IO模型在2.6版本才引入，目前并不完善。所以，这也是在 Linux 下，实现高并发网络编程时都是以 IO 复用模型模式为主。</p>
+<p><strong>总结</strong></p>
+<p>只有AIO不会阻塞,其他的都会在第二个阶段阻塞.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/HashMap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Yus">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yus">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/20/HashMap/" class="post-title-link" itemprop="url">HashMap</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-20 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-20T13:42:25+08:00">2021-03-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-28 13:53:53" itemprop="dateModified" datetime="2021-03-28T13:53:53+08:00">2021-03-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>介绍一下HashMap吧</p>
+<p>那我首先说一下它<strong>能干什么</strong>,hashmap实现了map接口,那肯定能存储键值对,它允许null键但只能有一个,null值可以有多个,线程不安全,不保证有序,因为根据hashcode值存储数据,大多数时候可以直接定位到它的值,所以具有很快的访问速度.</p>
+<p>从<strong>结构实现</strong>上看,hashmap是由数组,链表,红黑树实现的,红黑树是jdk8引进的.</p>
+<p>hashmap最基本的方法是<strong>get和put方法</strong>,get是取,put是存.</p>
+<p>怎么取呢?也就是<strong>get()方法的工作原理</strong>是啥.</p>
+<p>在调用get方法时,我们会传入key,然后get方法内部会先调用hash方法算出hash值,也就是下标然后再调用getnode方法,接着判断链表的第一个位置存储的元素是不是要找的元素,如果不是,还会判断下一个是不是为空,为空就返回null,不为空还得判断链表的第一个结点是否是treenode的结点,如果是就继续treenode的get方法,如果不是就遍历链表来获取结点.</p>
+<p>put方法呢,首先判断键值对数组table是否为空,如果是就得扩容,否就根据键值key计算hash值得到插入的数组索引,得到索引就判断这个位置是否空,空就直接插入,当然插入也得看此时的size是否大于threshold大于就还得扩容,然后回到这个不空的情况来,不空的话就得判断这个位置的key是否和给定的key相同,相同就直接覆盖,不相同就得再后面排队了,排队也得分情况,判断第一个结点是不是红黑树的结点,是红黑树就得用红黑树的方式插入,不是就直接在链表里插入,在链表里插入也得考虑此时的链表长度是否大于8,大于8就得转换为红黑树,不大于8就链表插入,key存在就直接覆盖.</p>
+<p><img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210320164108937.png" alt="image-20210320164108937"></p>
+<p>说了这么多次,根据key计算数组索引,接下来讲讲怎么计算索引吧.</p>
+<p>第一步取key的hashCode值,第二步高位运算,第三步取模运算.</p>
+<p><strong>HashMap的长度为什么是2的幂次方</strong></p>
+<p>可能是Doug Lea太厉害了,hashmap的作者,哈哈哈. </p>
+<p>不开玩笑了,为了让hashmap存储高效就得把哈希函数映射得比较均匀分散以避免哈希碰撞,但hashmap是有容量的,为了保证得到的索引值在容量范围内就得对散列值进行取余,但是取余运算符效率太低,为了能够让位运算实现取余操作,必须保证hashmap的长度也就是取模运算的模数必须为2的幂.<strong>(length - 1) &amp; hash</strong></p>
+<p><strong>HashMap怎么扩容</strong></p>
+<p>因为Java里的数组无法自动扩容,方法是使用一个新的数组代替已有的容量小的数组.</p>
+<p>大致分两步:1 ,容量扩充为原来的两倍,2,对每个结点重新计算哈希值,重新计算索引位置,将原来的元素移动到新的哈希表中.</p>
+<p><strong>HashMap与HashTable的区别</strong>k</p>
+<p>作者不一样,Doug Lea没有参与HashTable的编写</p>
+<p>　　1.HashMap继承于AbstractMap，而Hashtable继承于Dictionary；<br>　　2.线程安全不同。Hashtable的几乎所有函数都是同步的，即它是线程安全的，支持多线程。而HashMap的函数则是非同步的，它不是线程安全的。若要在多线程中使用HashMap，需要我们额外的进行同步处理；<br>　　3.null值。HashMap的key、value都可以为null。Hashtable的key、value都不可以为null；<br>　　4.迭代器(Iterator)。HashMap的迭代器(Iterator)是fail-fast迭代器，而Hashtable的enumerator迭代器不是fail-fast的。所以当有其它线程改变了HashMap的结构（增加或者移除元素），将会抛出ConcurrentModificationException。<br>　　5.容量的初始值和增加方式都不一样：HashMap默认的容量大小是16；增加容量时，每次将容量变为“原始容量x2”。Hashtable默认的容量大小是11；增加容量时，每次将容量变为“原始容量x2 + 1”；<br>　　6.添加key-value时的hash值算法不同：HashMap添加元素时，是使用自定义的哈希算法。Hashtable没有自定义哈希算法，而直接采用的key的hashCode()。<br>　　7.速度。由于Hashtable是线程安全的也是synchronized，所以在单线程环境下它比HashMap要慢。如果你不需要同步，只需要单一线程，那么使用HashMap性能要好过Hashtable。</p>
+<p>参考:</p>
+<p><a target="_blank" rel="noopener" href="https://tech.meituan.com/2016/06/24/java-hashmap.html">https://tech.meituan.com/2016/06/24/java-hashmap.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/java/collection/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98?id=_146-hashmap-%e7%9a%84%e9%95%bf%e5%ba%a6%e4%b8%ba%e4%bb%80%e4%b9%88%e6%98%af-2-%e7%9a%84%e5%b9%82%e6%ac%a1%e6%96%b9">https://snailclimb.gitee.io/javaguide/#/docs/java/collection/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98?id=_146-hashmap-%e7%9a%84%e9%95%bf%e5%ba%a6%e4%b8%ba%e4%bb%80%e4%b9%88%e6%98%af-2-%e7%9a%84%e5%b9%82%e6%ac%a1%e6%96%b9</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u012512634/article/details/72735183">https://blog.csdn.net/u012512634/article/details/72735183</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yus"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Yus</p>
+  <div class="site-description" itemprop="description">后端废物</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="mailto:yuslook@foxmail.com" title="E-Mail → mailto:yuslook@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.douban.com/people/141039567/" title="Douban → https:&#x2F;&#x2F;www.douban.com&#x2F;people&#x2F;141039567&#x2F;" rel="noopener" target="_blank"><i class="fas fa-globe-asia fa-fw"></i>Douban</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yus</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
