@@ -20,26 +20,23 @@
     var CONFIG = {"hostname":"twoandone.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="强引用12345678910111213141516public class reference &amp;#123;    @Test    public  void testReference() &amp;#123;        ListNode test &#x3D; new ListNode(3);        test &#x3D; null;        System.gc();    &amp;#125;&amp;#125;p">
+  <meta name="description" content="Talk is cheap, show me the code. 12345678910111213141516171819202122232425262728293031class A&amp;#123;    static int a &#x3D; 0;    static &amp;#123;        a++;        System.out.println(&quot;静态块a:&quot;+a);">
 <meta property="og:type" content="article">
-<meta property="og:title" content="理解强引用、软引用、弱引用、虚引用">
-<meta property="og:url" content="https://twoandone.github.io/2021/03/23/%E7%90%86%E8%A7%A3%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/index.html">
+<meta property="og:title" content="具有继承关系的对象创建顺序">
+<meta property="og:url" content="https://twoandone.github.io/2021/04/11/%E5%85%B7%E6%9C%89%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E9%A1%BA%E5%BA%8F/index.html">
 <meta property="og:site_name" content="Yus">
-<meta property="og:description" content="强引用12345678910111213141516public class reference &amp;#123;    @Test    public  void testReference() &amp;#123;        ListNode test &#x3D; new ListNode(3);        test &#x3D; null;        System.gc();    &amp;#125;&amp;#125;p">
+<meta property="og:description" content="Talk is cheap, show me the code. 12345678910111213141516171819202122232425262728293031class A&amp;#123;    static int a &#x3D; 0;    static &amp;#123;        a++;        System.out.println(&quot;静态块a:&quot;+a);">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323132537741.png">
-<meta property="og:image" content="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323132606414.png">
-<meta property="og:image" content="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323133735452.png">
-<meta property="og:image" content="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323134603056.png">
-<meta property="article:published_time" content="2021-03-23T04:03:09.000Z">
-<meta property="article:modified_time" content="2021-03-28T05:54:10.808Z">
+<meta property="og:image" content="https://gitee.com/yuswork/my-images/raw/master/img/image-20210411131114234.png">
+<meta property="og:image" content="c:/Users/asus/AppData/Roaming/Typora/typora-user-images/image-20210411133158449.png">
+<meta property="article:published_time" content="2021-04-11T05:08:04.000Z">
+<meta property="article:modified_time" content="2021-04-11T05:52:32.632Z">
 <meta property="article:author" content="Yus">
 <meta property="article:tag" content="java">
-<meta property="article:tag" content="jvm">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323132537741.png">
+<meta name="twitter:image" content="https://gitee.com/yuswork/my-images/raw/master/img/image-20210411131114234.png">
 
-<link rel="canonical" href="https://twoandone.github.io/2021/03/23/%E7%90%86%E8%A7%A3%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/">
+<link rel="canonical" href="https://twoandone.github.io/2021/04/11/%E5%85%B7%E6%9C%89%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E9%A1%BA%E5%BA%8F/">
 
 
 <script id="page-configurations">
@@ -52,7 +49,7 @@
   };
 </script>
 
-  <title>理解强引用、软引用、弱引用、虚引用 | Yus</title>
+  <title>具有继承关系的对象创建顺序 | Yus</title>
   
 
 
@@ -164,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/23/%E7%90%86%E8%A7%A3%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/04/11/%E5%85%B7%E6%9C%89%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E9%A1%BA%E5%BA%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -177,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          理解强引用、软引用、弱引用、虚引用
+          具有继承关系的对象创建顺序
         </h1>
 
         <div class="post-meta">
@@ -186,16 +183,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-03-23 12:03:09" itemprop="dateCreated datePublished" datetime="2021-03-23T12:03:09+08:00">2021-03-23</time>
+              <time title="Created: 2021-04-11 13:08:04 / Modified: 13:52:32" itemprop="dateCreated datePublished" datetime="2021-04-11T13:08:04+08:00">2021-04-11</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-28 13:54:10" itemprop="dateModified" datetime="2021-03-28T13:54:10+08:00">2021-03-28</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -217,38 +208,31 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="强引用"><a href="#强引用" class="headerlink" title="强引用"></a>强引用</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">reference</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">testReference</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ListNode test = <span class="keyword">new</span> ListNode(<span class="number">3</span>);</span><br><span class="line">        test = <span class="keyword">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ListNode</span> </span>&#123;</span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;test被回收了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>Talk is cheap, show me the code.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        a++;</span><br><span class="line">        System.out.println(<span class="string">&quot;静态块a:&quot;</span>+a);</span><br><span class="line">    &#125;</span><br><span class="line">    A()&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;A构造a:&quot;</span>+a);</span><br><span class="line">        System.out.println(<span class="string">&quot;A的构造方法&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        b++;</span><br><span class="line">        System.out.println(<span class="string">&quot;静态块b:&quot;</span>+b);</span><br><span class="line">    &#125;</span><br><span class="line">    B()&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;B构造b:&quot;</span>+b);</span><br><span class="line">        System.out.println(<span class="string">&quot;B的构造方法&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        A a = <span class="keyword">new</span> B();</span><br><span class="line">        a = <span class="keyword">new</span> A();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>强引用是最普遍的引用,在代码中随处可见,只要某个对象与强引用关联,这个对象就不会被回收,JVM宁愿抛出OOM也不会回收.</p>
-<p>那么什么时候才能被回收呢?</p>
-<p>手动把引用指向null,比如上述代码中</p>
-<p><code>test = null</code></p>
-<h1 id="软引用"><a href="#软引用" class="headerlink" title="软引用"></a>软引用</h1><p><img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323132537741.png" alt="image-20210323132537741"></p>
-<p><img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323132606414.png" alt="image-20210323132606414"></p>
-<p>软引用需要用SoftReference对象包装一下</p>
-<p>它的特点是,当内存不足时,就会触发JVM的GC,如果GC后内存还是不足,就会把软引用包裹的对象回收.也就是说只有当内存不足时,JVM才会回收软引用</p>
-<p>解释一下图片的例子:</p>
-<p>创建一个软引用对象,里面包裹byte[],byte[]占用10M,设置JVM运行参数,-Xmx,表示堆内存最大容量</p>
-<p>这个参数不懂的可以参考笔者另一篇文章</p>
-<p>第一次用softReference.get()方法获取该引用的地址</p>
-<p>手动打开GC</p>
-<p>GC后,测试发现该引用还是存在,这是因为内存还比较充足</p>
-<p>接着再创建一个10M的byte[]对象</p>
-<p>再次用softReference.get()方法获取软引用的地址,发现已经为null了</p>
-<p><strong>软引用的作用</strong></p>
-<p>做缓存吧,内存够就正常拿缓存,内存不够就干掉它,不至于马上抛出OOM</p>
-<h2 id="弱引用"><a href="#弱引用" class="headerlink" title="弱引用"></a>弱引用</h2><p><img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323133735452.png" alt="image-20210323133735452"></p>
-<p>弱引用是用WeakReference来包裹对象</p>
-<p>无论有没有内存,gc遇到它就回收</p>
-<p><strong>什么时候用呢</strong></p>
-<p>ThreadLocal,WeakHashMap</p>
-<p>ThreadLocal是一个本地线程副本变量工具类。内部是一个<strong>弱引用</strong>的Map来维护。</p>
-<p>WeakHashMap其实和HashMap大多数行为是一样的，只是WeakHashMap不会阻止GC回收key对象（不是value）</p>
-<h2 id="虚引用"><a href="#虚引用" class="headerlink" title="虚引用"></a>虚引用</h2><p><img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323134603056.png" alt="image-20210323134603056"></p>
-<p>运行完直接返回null,说明根本拿不到虚引用指向的对象</p>
-<p>看图中,创建虚引用不仅需要传入被包裹对象,还得传入一个ReferenceQueue , 当GC准备回收一个对象时,如果发现它还有虚引用,就会在回收之前,把这个虚引用加入到与之关联的ReferenceQueue中.</p>
-<p>平时没用到虚引用,所以我也不是很懂,待续…….</p>
-<p>NIO中好像使用了虚引用管理堆外内存. </p>
+<p>运行结果</p>
+<p><img src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210411131114234.png" alt="image-20210411131114234"></p>
+<p><strong>分析</strong></p>
+<p><code>new</code>关键字用于实例化一个对象，而实例化一个对象首先要确保一个类已经被加载进JVM中</p>
+<p>类加载的过程分为</p>
+<ol>
+<li><p>加载：生产Class对象，存在方法区</p>
+</li>
+<li><p>连接</p>
+<ol>
+<li>验证：文件格式、元数据、字节码、符号引用验证</li>
+<li>准备：为类变量分配内存，也就是被<code>static</code>关键字修饰的变量</li>
+<li>解析：将常量池的符号引用替换成直接引用，也就是得到类或字段、方法在内存中的指针或者偏移量</li>
+</ol>
+</li>
+<li><p>初始化：如果父类未初始化，会先触发父类的初始化，初始化会按照代码顺序依次执行静态变量和静态块，如下图，在静态块中引用未初始化的静态变量会编译失败。</p>
+<p><img src="C:\Users\asus\AppData\Roaming\Typora\typora-user-images\image-20210411133158449.png" alt="image-20210411133158449"></p>
+</li>
+</ol>
+<p><strong>总结</strong></p>
+<p>所以运行结果是输出A类的静态块接着输出B类的静态块，然后因为类已经加载进来了，所以第二次new的时候就不需要执行被static修饰的部分了</p>
+<p>实例化对象时，通过构造方法实现，如果有父类需要先实例化父类再实例化子类。</p>
 
     </div>
 
@@ -260,7 +244,6 @@
           
           <div class="post-tags">
               <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
-              <a href="/tags/jvm/" rel="tag"><i class="fa fa-tag"></i> jvm</a>
           </div>
 
         
@@ -269,13 +252,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/03/22/cmd%E5%91%BD%E4%BB%A4%E4%B8%8ELinux%E5%91%BD%E4%BB%A4%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="prev" title="cmd命令与Linux命令的区别">
-      <i class="fa fa-chevron-left"></i> cmd命令与Linux命令的区别
+    <a href="/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/" rel="prev" title="JVM GC参数(Xmn,Xms,Xmx,Xss)助记">
+      <i class="fa fa-chevron-left"></i> JVM GC参数(Xmn,Xms,Xmx,Xss)助记
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/" rel="next" title="JVM GC参数(Xmn,Xms,Xmx,Xss)助记">
-      JVM GC参数(Xmn,Xms,Xmx,Xss)助记 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -334,7 +314,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%BA%E5%BC%95%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">强引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AF%E5%BC%95%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">软引用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%B1%E5%BC%95%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">弱引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E5%BC%95%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">虚引用</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
