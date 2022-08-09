@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpeg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"twoandone.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="RDBMS | Elasticsearch | — | — | database| index | table | type | row | document | column | field | 索引 | 反向索引| SQL | 查询DSL| select | GET http:&#x2F;&#x2F;| update table set | PUT http:&#x2F;&#x2F; | delete | delete http:&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES之我见">
+<meta property="og:url" content="https://twoandone.github.io/2022/03/18/ElasticSearch/">
+<meta property="og:site_name" content="Yussss">
+<meta property="og:description" content="RDBMS | Elasticsearch | — | — | database| index | table | type | row | document | column | field | 索引 | 反向索引| SQL | 查询DSL| select | GET http:&#x2F;&#x2F;| update table set | PUT http:&#x2F;&#x2F; | delete | delete http:&#x2F;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-03-18T05:42:25.000Z">
+<meta property="article:modified_time" content="2022-07-17T17:19:09.843Z">
+<meta property="article:author" content="Yus">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://twoandone.github.io/2022/03/18/ElasticSearch/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://twoandone.github.io/2022/03/18/ElasticSearch/","path":"2022/03/18/ElasticSearch/","title":"ES之我见"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ES之我见 | Yussss</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Yussss</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">沧浪之水清兮，可以濯我缨。沧浪之水浊兮，可以濯我足</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%B8%8E%E5%90%AF%E5%8A%A8"><span class="nav-number">1.</span> <span class="nav-text">安装与启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#elastic-stack-%E7%94%9F%E6%80%81%E5%92%8C%E5%9C%BA%E6%99%AF%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">Elastic Stack 生态和场景方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#beats"><span class="nav-number">2.1.</span> <span class="nav-text">Beats</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logstach"><span class="nav-number">2.2.</span> <span class="nav-text">Logstach</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#elasticsearch"><span class="nav-number">2.3.</span> <span class="nav-text">ElasticSearch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kibana"><span class="nav-number">2.4.</span> <span class="nav-text">Kibana</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yus"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Yus</p>
+  <div class="site-description" itemprop="description">后端废物</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="mailto:2414655851@qq.com" title="E-Mail → mailto:2414655851@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/03/18/ElasticSearch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ES之我见 | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ES之我见
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-18 13:42:25" itemprop="dateCreated datePublished" datetime="2022-03-18T13:42:25+08:00">2022-03-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:19:09" itemprop="dateModified" datetime="2022-07-18T01:19:09+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <div class="line-block">RDBMS | Elasticsearch |<br />
+— | — |<br />
+database| index |<br />
+table | type |<br />
+row | document |<br />
+column | field |<br />
+索引 | 反向索引|<br />
+SQL | 查询DSL|<br />
+select | GET http://|<br />
+update table set | PUT http:// |<br />
+delete | delete http:// |</div>
+<h1 id="安装与启动">安装与启动</h1>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew services start elasticsearch</span><br></pre></td></tr></table></figure>
+<p>配置文件的地址: <code>/opt/homebrew/etc/elasticsearch</code></p>
+<p>可执行文件的地址:
+<code>/opt/homebrew/opt/elasticsearch@6/bin</code></p>
+<p>当前版本: <code>6.8.22</code></p>
+<h1 id="elastic-stack-生态和场景方案">Elastic Stack 生态和场景方案</h1>
+<blockquote>
+<p>Beats + Logstash + ElasticSearch + Kibana</p>
+</blockquote>
+<h2 id="beats">Beats</h2>
+<p>Beats是一个面向轻量型采集器的平台，这些采集器可以从边缘机器向Logstash、ElasticSearch发送数据，它是由Go语言进行开发的，运行效率方面比较快。</p>
+<h2 id="logstach">Logstach</h2>
+<p>Logstash是动态数据收集管道，拥有可扩展的插件生态系统，支持从不同来源采集数据，转换数据，并将数据发送到不同的存储库中。</p>
+<ul>
+<li><p>实时解析和转换数据；</p></li>
+<li><p>可扩展，具有200多个插件；</p></li>
+<li><p>可靠性、安全性。Logstash会通过持久化队列来保证至少将运行中的事件送达一次，同时将数据进行传输加密；</p></li>
+<li><p>监控；</p>
+<h2 id="elasticsearch">ElasticSearch</h2>
+<p>ElasticSearch对数据进行搜索、分析和存储，其是基于JSON的分布式搜索和分析引擎，专门为实现水平可扩展性、高可靠性和管理便捷性而设计的。</p>
+<p>它的实现原理主要分为以下几个步骤：</p></li>
+<li><p>首先用户将数据提交到ElasticSearch数据库中；</p></li>
+<li><p>再通过分词控制器将对应的语句分词；</p></li>
+<li><p>将分词结果及其权重一并存入，以备用户在搜索数据时，根据权重将结果排名和打分，将返回结果呈现给用户；</p>
+<h2 id="kibana">Kibana</h2>
+<p>Kibana实现数据可视化，其作用就是在ElasticSearch中进行民航。Kibana能够以图表的形式呈现数据，并且具有可扩展的用户界面，可以全方位的配置和管理ElasticSearch。</p></li>
+</ul>
+<p>Kibana最早的时候是基于Logstash创建的工具，后被Elastic公司在2013年收购。</p>
+<ul>
+<li>Kibana可以提供各种可视化的图表；</li>
+<li>可以通过机器学习的技术，对异常情况进行检测，用于提前发现可疑问题</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/10/%E4%B8%80%E9%94%AE%E7%99%BB%E5%BD%95%E8%B7%B3%E6%9D%BF%E6%9C%BA/" rel="prev" title="登录跳板机之我见">
+                  <i class="fa fa-chevron-left"></i> 登录跳板机之我见
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/28/maven/" rel="next" title="小🌧️学maven">
+                  小🌧️学maven <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+<!--  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+-->
+ by 
+  <span class="author" itemprop="copyrightHolder">Yus</span>
+</div>
+
+<!-- -->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

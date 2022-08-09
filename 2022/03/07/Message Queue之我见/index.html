@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpeg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"twoandone.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="概念   jbvzVb  第一次学习需要达到的目标：  消息队列解决什么问题？ 对应不同场景，应该选用哪个消息队列产品？ 最佳的实践方式是什么？  为什么需要消息队列  对于系统中已经使用消息队列，可以对应到这一讲中提到的哪个场景？  最近做的打折的需求，在发短信和push都使用了消息队列，两者都达到了异步处理、服务解耦。 流量控制暂时不是很清楚，不过在发短信的时候设计了批量发送 该如何选择消息队">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MQ之我见">
+<meta property="og:url" content="https://twoandone.github.io/2022/03/07/Message%20Queue%E4%B9%8B%E6%88%91%E8%A7%81/">
+<meta property="og:site_name" content="Yussss">
+<meta property="og:description" content="概念   jbvzVb  第一次学习需要达到的目标：  消息队列解决什么问题？ 对应不同场景，应该选用哪个消息队列产品？ 最佳的实践方式是什么？  为什么需要消息队列  对于系统中已经使用消息队列，可以对应到这一讲中提到的哪个场景？  最近做的打折的需求，在发短信和push都使用了消息队列，两者都达到了异步处理、服务解耦。 流量控制暂时不是很清楚，不过在发短信的时候设计了批量发送 该如何选择消息队">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-03-07T05:42:25.000Z">
+<meta property="article:modified_time" content="2022-07-17T17:16:46.442Z">
+<meta property="article:author" content="Yus">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://twoandone.github.io/2022/03/07/Message%20Queue%E4%B9%8B%E6%88%91%E8%A7%81/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://twoandone.github.io/2022/03/07/Message%20Queue%E4%B9%8B%E6%88%91%E8%A7%81/","path":"2022/03/07/Message Queue之我见/","title":"MQ之我见"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MQ之我见 | Yussss</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Yussss</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">沧浪之水清兮，可以濯我缨。沧浪之水浊兮，可以濯我足</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">1.1.</span> <span class="nav-text">为什么需要消息队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A5%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">1.2.</span> <span class="nav-text">该如何选择消息队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">消息模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#command"><span class="nav-number"></span> <span class="nav-text">Command</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yus"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Yus</p>
+  <div class="site-description" itemprop="description">后端废物</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="mailto:2414655851@qq.com" title="E-Mail → mailto:2414655851@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/03/07/Message%20Queue%E4%B9%8B%E6%88%91%E8%A7%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MQ之我见 | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MQ之我见
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-07 13:42:25" itemprop="dateCreated datePublished" datetime="2022-03-07T13:42:25+08:00">2022-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:16:46" itemprop="dateModified" datetime="2022-07-18T01:16:46+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="概念">概念</h2>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/uPic/jbvzVb.png"
+alt="jbvzVb" />
+<figcaption aria-hidden="true">jbvzVb</figcaption>
+</figure>
+<p>第一次学习需要达到的目标：</p>
+<ol type="1">
+<li>消息队列解决什么问题？</li>
+<li>对应不同场景，应该选用哪个消息队列产品？</li>
+<li>最佳的实践方式是什么？</li>
+</ol>
+<h3 id="为什么需要消息队列">为什么需要消息队列</h3>
+<blockquote>
+<p>对于系统中已经使用消息队列，可以对应到这一讲中提到的哪个场景？</p>
+</blockquote>
+<p>最近做的打折的需求，在发短信和push都使用了消息队列，两者都达到了异步处理、服务解耦。
+流量控制暂时不是很清楚，不过在发短信的时候设计了批量发送</p>
+<h3 id="该如何选择消息队列">该如何选择消息队列</h3>
+<p>第一梯队：</p>
+<ol type="1">
+<li>RabbitMQ
+<ol type="1">
+<li>简单、开箱即用、Erlang语言学习成本高、支持量级几万到几十万</li>
+</ol></li>
+<li>RocketMQ
+<ol type="1">
+<li>各方面比较平衡、延时低、中文社区</li>
+</ol></li>
+<li>Kafka
+<ol type="1">
+<li>用于海量日志处理，最高可达每秒2000w的量级，延时高</li>
+</ol></li>
+</ol>
+<p>第二梯队：</p>
+<ol type="1">
+<li>ActiveMQ在；过时</li>
+<li>ZeroMQ：基于消息队列的多线程网络库</li>
+<li>Pulsar：还在成长，存储和计算分离</li>
+</ol>
+<h3 id="消息模型">消息模型</h3>
+<blockquote>
+<p>好的架构不是设计出来的，而是演进出来的</p>
+</blockquote>
+<p>早期消息队列就是一个“队列”,先进先出</p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/uPic/ctwRDU.png"
+alt="ctwRDU" />
+<figcaption aria-hidden="true">ctwRDU</figcaption>
+</figure>
+<p>但是这没法解决多个消费者接收同一个队列的问题，要解决的话，只有再加一个队列，这显然很蠢。所以出现了“发布-订阅模型”
+这个模型与前者最大的区别就是，一份消息能不能被消费多次。</p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/uPic/ONSKNI.png"
+alt="ONSKNI" />
+<figcaption aria-hidden="true">ONSKNI</figcaption>
+</figure>
+<p>RabbitMQ的消息模型</p>
+<p>我感觉这就是用多个队列实现多消费者问题</p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/uPic/6fLMdk.png"
+alt="6fLMdk" />
+<figcaption aria-hidden="true">6fLMdk</figcaption>
+</figure>
+<p>RocketMQ的消息模型</p>
+<p>每个主题包括多个队列，通过多个队列来实现多实例并行生产和消费。</p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/uPic/J9NhN1.png"
+alt="J9NhN1" />
+<figcaption aria-hidden="true">J9NhN1</figcaption>
+</figure>
+<p>Kafka的消息模型</p>
+<p>和rocketmq差不多，不过在kafka中队列的名字叫分区</p>
+<h1 id="command">Command</h1>
+<p>日志的位置 ~/logs/rocketmqlogs</p>
+<p>rocketmq命令的位置
+~/workspace/i/rocketmq-rocketmq-all-4.6.0/distribution/target/rocketmq-4.6.0/rocketmq-4.6.0/bin</p>
+<ol type="1">
+<li>暴露本机地址
+<ul>
+<li>export NAMESRV_ADDR=localhost:9876</li>
+</ul></li>
+<li>启动nameserver:
+<ul>
+<li>nohup sh mqnamesrv &amp;</li>
+</ul></li>
+<li>启动broker:
+<ul>
+<li>nohup sh mqbroker -n localhost:9876 &amp;</li>
+</ul></li>
+<li>查看日志:
+<ul>
+<li>tail -f namesrv.log</li>
+</ul></li>
+<li>查看是否启动成功:
+<ul>
+<li>tail -f ~/logs/rocketmqlogs/broker.log</li>
+</ul></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2022-01-17 18:37:02 INFO brokerOutApi_thread_4 - register broker[0]to name server localhost:9876 OK</span><br><span class="line">2022-01-17 18:37:32 INFO brokerOutApi_thread_1 - register broker[0]to name server localhost:9876 OK</span><br></pre></td></tr></table></figure>
+<p>或者 \6. sh mqadmin clusterList -n localhost:9876</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">Cluster Name     <span class="comment">#Broker Name            #BID  #Addr                  #Version                #InTPS(LOAD)       #OutTPS(LOAD) #PCWait(ms) #Hour #SPACE</span></span></span><br><span class="line">DefaultCluster    MacBook-Pro.local       0     10.1.80.185:10911      V4_6_0                   0.00(0,0ms)         0.00(0,0ms)          0 456226.67 0.3431</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>Shutdown</p>
+<p>nohup sh mqshutdown namesrv | broker</p></li>
+<li><p>Update or create Topic</p>
+<p>sh mqadmin updateTopic -b 127.0.0.1:10911 -t TopicA</p></li>
+<li><p>Update or create subscription group</p>
+<p>sh mqadmin updateSubGroup -b 127.0.0.1:10911 -g SubGroupA%</p></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/24/Muti%20Thread/" rel="prev" title="Muti Thread">
+                  <i class="fa fa-chevron-left"></i> Muti Thread
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/10/%E4%B8%80%E9%94%AE%E7%99%BB%E5%BD%95%E8%B7%B3%E6%9D%BF%E6%9C%BA/" rel="next" title="登录跳板机之我见">
+                  登录跳板机之我见 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+<!--  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+-->
+ by 
+  <span class="author" itemprop="copyrightHolder">Yus</span>
+</div>
+
+<!-- -->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

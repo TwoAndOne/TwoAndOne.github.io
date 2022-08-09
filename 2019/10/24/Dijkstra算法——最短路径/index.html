@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpeg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"twoandone.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="图的最短路径，仍然是贪心算法的运用。 明确问题：给定一个图，与图中的一个源点，找出这个源点到图中所有顶点的最短路径。 这个算法与前面的最小生成树Prim算法非常像，搞得本人纠结了许久，等会儿写一个两者对比的文章。 算法步骤：  维护两个集合A{}，B{}，A：已标记的顶点集合，B：未标记的顶点集合，初识时A中只有源点 在B中选一个顶点v，使得从源点经过A中的某些点（点的个数属于[0，len(A)]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dijkstra算法——最短路径">
+<meta property="og:url" content="https://twoandone.github.io/2019/10/24/Dijkstra%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/">
+<meta property="og:site_name" content="Yussss">
+<meta property="og:description" content="图的最短路径，仍然是贪心算法的运用。 明确问题：给定一个图，与图中的一个源点，找出这个源点到图中所有顶点的最短路径。 这个算法与前面的最小生成树Prim算法非常像，搞得本人纠结了许久，等会儿写一个两者对比的文章。 算法步骤：  维护两个集合A{}，B{}，A：已标记的顶点集合，B：未标记的顶点集合，初识时A中只有源点 在B中选一个顶点v，使得从源点经过A中的某些点（点的个数属于[0，len(A)]">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-10-24T09:42:32.000Z">
+<meta property="article:modified_time" content="2022-07-17T16:28:45.078Z">
+<meta property="article:author" content="Yus">
+<meta property="article:tag" content="arithmetic">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://twoandone.github.io/2019/10/24/Dijkstra%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://twoandone.github.io/2019/10/24/Dijkstra%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/","path":"2019/10/24/Dijkstra算法——最短路径/","title":"Dijkstra算法——最短路径"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Dijkstra算法——最短路径 | Yussss</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Yussss</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">沧浪之水清兮，可以濯我缨。沧浪之水浊兮，可以濯我足</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yus"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Yus</p>
+  <div class="site-description" itemprop="description">后端废物</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="mailto:2414655851@qq.com" title="E-Mail → mailto:2414655851@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2019/10/24/Dijkstra%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Dijkstra算法——最短路径 | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Dijkstra算法——最短路径
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-10-24 17:42:32" itemprop="dateCreated datePublished" datetime="2019-10-24T17:42:32+08:00">2019-10-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 00:28:45" itemprop="dateModified" datetime="2022-07-18T00:28:45+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>图的最短路径，仍然是贪心算法的运用。</p>
+<p>明确问题：给定一个图，与图中的一个源点，找出这个源点到图中所有顶点的最短路径。</p>
+<p>这个算法与前面的最小生成树Prim算法非常像，搞得本人纠结了许久，等会儿写一个两者对比的文章。</p>
+<p>算法步骤：</p>
+<ol type="1">
+<li>维护两个集合A{}，B{}，A：已标记的顶点集合，B：未标记的顶点集合，初识时A中只有源点</li>
+<li>在B中选一个顶点v，使得从源点经过A中的某些点（点的个数属于[0，len(A)]）之后与v相连的这条边存在，并且权重最小（相比B中其他顶点而言）</li>
+<li>标记顶点b，把v从B放入A中</li>
+<li>重复#2，#3，直至B集合为空</li>
+</ol>
+<span id="more"></span>
+<figure>
+<img
+src="https://pic3.zhimg.com/80/v2-9aab9d50242829fd79dcf9d5d184a602_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>以上图为例，假定源点是a</p>
+<p>A{a},B{b,c,d,e}</p>
+<p>用dict[]，记录A集合到B集合权重，初始dict[0,3,MAX,7,MAX]</p>
+<p>用sign[]，记录是否已经访问过,初始sign[1,0,0,0,0]
+（1：已访问，0：未访问；代码中为了好写，用0：已访问，1：未访问）</p>
+<figure>
+<img
+src="https://pic4.zhimg.com/80/v2-eb641b82950d8e324c039d3212cf25f1_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>经过算法步骤#2,#3，选出顶点b，更新dict[0,3,7,5,MAX],sign[1,1,0,0,0]</p>
+<p>可以看出只能在d，c，e中选，选择d，权重为5最小（a-&gt;b-&gt;d）</p>
+<figure>
+<img
+src="https://picb.zhimg.com/80/v2-6fcafc02e60db34ac18133f43da59a46_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>更新dict[0,3,7,5,9],sign[1,1,0,1,0]</p>
+<p>只能选c，e，选择c（a-&gt;b-&gt;c），权重为7</p>
+<figure>
+<img
+src="https://pic1.zhimg.com/80/v2-6162ce4da5952b06d9004f895e7a95ec_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>更新dict[0,3,7,5,9]，sign[1,1,1,1,0]</p>
+<p>选择e</p>
+<figure>
+<img
+src="https://pic1.zhimg.com/80/v2-27941ff71f0bdd40533fd6af83e04cfe_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>找到顶点a到其余各点的最短路径，结束。</p>
+<p>代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;dijkstra算法&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> E1_prim <span class="keyword">import</span> traver <span class="comment">#在前文prim算法的文章中写的转换数字与字母的函数</span></span><br><span class="line">MAX = sys.maxsize</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_parent</span>(<span class="params">parent,v</span>):</span><br><span class="line">    <span class="keyword">if</span>(parent[v]!=v):</span><br><span class="line">        <span class="built_in">print</span>(traver(find_parent(parent,parent[v])),<span class="string">&quot;-&gt; &quot;</span>,end=<span class="string">&quot;&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> v</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dijkstra</span>(<span class="params">graph,vertex</span>):</span><br><span class="line">    n = <span class="built_in">len</span>(graph)</span><br><span class="line">    <span class="built_in">dict</span> = []</span><br><span class="line">    parent = []</span><br><span class="line">    sign = [] <span class="comment">#标记结点是否被访问</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#初始化</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        <span class="built_in">dict</span>.append(graph[<span class="number">0</span>][i]) <span class="comment">#如果初始A中没有源点，就必须把这行注释掉，与下面一行是互斥的！</span></span><br><span class="line">        <span class="comment"># dict.append(MAX)# 如果是从源点开始的选的话，就必须把这个设为MAX！</span></span><br><span class="line">        parent.append(vertex) <span class="comment">#起始点</span></span><br><span class="line">        sign.append(<span class="number">1</span>)</span><br><span class="line">    sign[vertex] = <span class="number">0</span> <span class="comment">#下标为起始点，# 如果是从源点开始的选的话，就必须把这个注释掉！</span></span><br><span class="line">    <span class="built_in">dict</span>[vertex] = <span class="number">0</span> <span class="comment">#下标为起始点</span></span><br><span class="line">    cal = <span class="number">1</span></span><br><span class="line">    <span class="comment"># cal = 0 # 如果是从源点开始的选的话，就必须把这个设为0！</span></span><br><span class="line">    v = vertex <span class="comment">#记录当前被选择的节点</span></span><br><span class="line">    <span class="keyword">while</span> (cal &lt; n):</span><br><span class="line">        cal+=<span class="number">1</span></span><br><span class="line">        <span class="built_in">min</span> = MAX</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            <span class="keyword">if</span>( sign[j] <span class="keyword">and</span> <span class="built_in">dict</span>[j]&lt;<span class="built_in">min</span>):</span><br><span class="line">                <span class="built_in">min</span> = <span class="built_in">dict</span>[j]</span><br><span class="line">                v = j</span><br><span class="line">        sign[v] = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            <span class="keyword">if</span>(graph[v][k] &lt; MAX <span class="keyword">and</span> sign[k] <span class="keyword">and</span> graph[v][k] + <span class="built_in">dict</span>[v] &lt; <span class="built_in">dict</span>[k]):</span><br><span class="line">                <span class="built_in">dict</span>[k] = graph[v][k]+<span class="built_in">dict</span>[v]</span><br><span class="line">                parent[k] = v</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;w:&quot;</span>,<span class="built_in">dict</span>[i],<span class="string">&quot;path：&quot;</span>,end=<span class="string">&quot;&quot;</span>)</span><br><span class="line">        find_parent(parent,i)</span><br><span class="line">        <span class="built_in">print</span>(traver(i))</span><br><span class="line">        <span class="comment"># print(traver(i),&quot;==&quot;,dict[i])</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    graph = [[MAX,<span class="number">3</span>,MAX,<span class="number">7</span>,MAX],</span><br><span class="line">             [<span class="number">3</span>,MAX,<span class="number">4</span>,<span class="number">2</span>,MAX],</span><br><span class="line">             [MAX,<span class="number">4</span>,MAX,<span class="number">5</span>,<span class="number">6</span>],</span><br><span class="line">             [<span class="number">7</span>,<span class="number">2</span>,<span class="number">5</span>,MAX,<span class="number">4</span>],</span><br><span class="line">             [MAX,MAX,<span class="number">6</span>,<span class="number">4</span>,MAX]]</span><br><span class="line">    dijkstra(graph,<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>代码中的注释（有感叹号的几行），是从源点开始时的，初识A中没有源点</p>
+<p>现在的代码片段是已经选中的源点，在开始时就标记源点，也就是前文算法步骤中初识A中就已经存在源点的算法。</p>
+<p>代码输出：</p>
+<figure>
+<img
+src="https://pic2.zhimg.com/80/v2-f94f5ac041f07a2bda4b8b4bfeef5146_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/arithmetic/" rel="tag"># arithmetic</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/10/21/Dijkstra%E7%AE%97%E6%B3%95%E4%B8%8EPrim%E7%AE%97%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="prev" title="Dijkstra算法与Prim算法的区别">
+                  <i class="fa fa-chevron-left"></i> Dijkstra算法与Prim算法的区别
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/07/%E7%90%86%E8%A7%A3Lambda/" rel="next" title="理解Lambda">
+                  理解Lambda <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+<!--  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+-->
+ by 
+  <span class="author" itemprop="copyrightHolder">Yus</span>
+</div>
+
+<!-- -->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

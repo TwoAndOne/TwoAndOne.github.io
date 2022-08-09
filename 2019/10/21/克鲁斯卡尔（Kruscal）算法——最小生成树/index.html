@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpeg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"twoandone.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="最小生成树的定义在讲Prim算法时已经给出，这里不再赘述 Prim算法是找点，Kruscal算法则是从边出发。 具体思路：  把所有的边和这条边代表的权值用一个数组存储起来，并按权值大小给数组排序（升序）。 按顺序从数组中拿出一条边，检查这条边是否与到目前为止形成的树构成环，如果形成了环，就丢弃它；如果没有，就把这条边加入树中。 重复步骤#2，直到树中有 n-1 条边为止。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="克鲁斯卡尔（Kruscal）算法——最小生成树">
+<meta property="og:url" content="https://twoandone.github.io/2019/10/21/%E5%85%8B%E9%B2%81%E6%96%AF%E5%8D%A1%E5%B0%94%EF%BC%88Kruscal%EF%BC%89%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/">
+<meta property="og:site_name" content="Yussss">
+<meta property="og:description" content="最小生成树的定义在讲Prim算法时已经给出，这里不再赘述 Prim算法是找点，Kruscal算法则是从边出发。 具体思路：  把所有的边和这条边代表的权值用一个数组存储起来，并按权值大小给数组排序（升序）。 按顺序从数组中拿出一条边，检查这条边是否与到目前为止形成的树构成环，如果形成了环，就丢弃它；如果没有，就把这条边加入树中。 重复步骤#2，直到树中有 n-1 条边为止。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-10-21T09:37:03.000Z">
+<meta property="article:modified_time" content="2022-07-17T16:28:31.559Z">
+<meta property="article:author" content="Yus">
+<meta property="article:tag" content="arithmetic">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://twoandone.github.io/2019/10/21/%E5%85%8B%E9%B2%81%E6%96%AF%E5%8D%A1%E5%B0%94%EF%BC%88Kruscal%EF%BC%89%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://twoandone.github.io/2019/10/21/%E5%85%8B%E9%B2%81%E6%96%AF%E5%8D%A1%E5%B0%94%EF%BC%88Kruscal%EF%BC%89%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/","path":"2019/10/21/克鲁斯卡尔（Kruscal）算法——最小生成树/","title":"克鲁斯卡尔（Kruscal）算法——最小生成树"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>克鲁斯卡尔（Kruscal）算法——最小生成树 | Yussss</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Yussss</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">沧浪之水清兮，可以濯我缨。沧浪之水浊兮，可以濯我足</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yus"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Yus</p>
+  <div class="site-description" itemprop="description">后端废物</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="mailto:2414655851@qq.com" title="E-Mail → mailto:2414655851@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2019/10/21/%E5%85%8B%E9%B2%81%E6%96%AF%E5%8D%A1%E5%B0%94%EF%BC%88Kruscal%EF%BC%89%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="克鲁斯卡尔（Kruscal）算法——最小生成树 | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          克鲁斯卡尔（Kruscal）算法——最小生成树
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-10-21 17:37:03" itemprop="dateCreated datePublished" datetime="2019-10-21T17:37:03+08:00">2019-10-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 00:28:31" itemprop="dateModified" datetime="2022-07-18T00:28:31+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>最小生成树的定义在讲Prim算法时已经给出，这里不再赘述</p>
+<p>Prim算法是找点，Kruscal算法则是从边出发。</p>
+<p>具体思路：</p>
+<ol type="1">
+<li>把所有的边和这条边代表的权值用一个数组存储起来，并按权值大小给数组排序（升序）。</li>
+<li>按顺序从数组中拿出一条边，检查这条边是否与到目前为止形成的树构成环，如果形成了环，就丢弃它；如果没有，就把这条边加入树中。</li>
+<li>重复步骤#2，直到树中有 <em>n-1</em> 条边为止。</li>
+</ol>
+<span id="more"></span>
+<p>这里引入 边集数组[<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/people/xu-bai-21/posts?page=1#ref_1">1]</a>（图的存储结构）
+的概念：</p>
+<p>边集数组由两个一维数组构成：</p>
+<p>1.） 一个存储顶点信息。</p>
+<p>2.）
+一个存储边的信息，这个边数组每个数据元素由一条边的起点下标（begin）、终点下标（end）、和权（weight）组成。</p>
+<figure>
+<img
+src="https://picb.zhimg.com/80/v2-4c4ae868383519b5e12debedf89f57ca_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>Example：</p>
+<figure>
+<img
+src="https://pic1.zhimg.com/80/v2-9af61e6343ed6509662a25947dee9e76_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>边集数组edge_set：</p>
+<figure>
+<img
+src="https://pic3.zhimg.com/80/v2-53f8a3d0c82636908137b64ff44feb52_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>把edge_set[0]加入树MST中，未出现环，继续</p>
+<p>加入edge_set[1]，未出现环</p>
+<p>...</p>
+<p>加入edge_set[3], 未出现环</p>
+<figure>
+<img
+src="https://picb.zhimg.com/80/v2-8d0071580e0b8d7312c102773eb83c42_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>加入edge_set[4],出现环</p>
+<figure>
+<img
+src="https://pic4.zhimg.com/80/v2-e114ca5a0ef3c57e600a61f6b499fff4_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>去除edge<em>set[4]，加入edge_set</em>[5],未出现环</p>
+<figure>
+<img
+src="https://pic2.zhimg.com/80/v2-089a3aa23377a86c36f2af3b7045606e_720w.jpg"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>已经连接所有的顶点了，算法结束。</p>
+<p>算法有一个难点：</p>
+<p><strong>如何判断环的形成？</strong></p>
+<p>本文使用了并查集的思想来判断新加入的边两端的结点与树相连时是否出现环。</p>
+<p>附上维基百科的解释[<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/people/xu-bai-21/posts?page=1#ref_2">2]</a></p>
+<p><a
+href="https://link.zhihu.com/?target=https%3A//zh.wikipedia.org/wiki/%E5%B9%B6%E6%9F%A5%E9%9B%86">https://zh.wikipedia.org/wiki/%E5%B9%B6%E6%9F%A5%E9%9B%86zh.wikipedia.org</a></p>
+<p>代码实现：[<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/people/xu-bai-21/posts?page=1#ref_3">3]</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">实现最小生成树之Kruscal算法</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">adjacency_matrix_to_edge_set</span>(<span class="params">Graph,n</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    邻接矩阵-&gt;边集数组</span></span><br><span class="line"><span class="string">    :param Graph: 邻接矩阵</span></span><br><span class="line"><span class="string">    :param n: 图顶点个数</span></span><br><span class="line"><span class="string">    :return: 边集数组</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    edge_set = []</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;因为邻接矩阵存储时，有数据冗余，仅使用上三角部分就可得到所有边的信息&#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i,n):</span><br><span class="line">            edge_set.append([i,j,Graph[i][j]])</span><br><span class="line">    <span class="keyword">return</span> edge_set</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find</span>(<span class="params">parent,v1</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    查找顶点V1的根</span></span><br><span class="line"><span class="string">    :param parent:并查集森林</span></span><br><span class="line"><span class="string">    :param v1:顶点</span></span><br><span class="line"><span class="string">    :return:v1的根节点</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">if</span>(parent[v1] == v1):</span><br><span class="line">        <span class="keyword">return</span> v1</span><br><span class="line">    <span class="keyword">return</span> find(parent,parent[v1]) <span class="comment">#递归查找，因为这是颗树</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">union</span>(<span class="params">parent,rank,x,y</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    将两棵树合并在一起，通过将一棵树的根连接到另一棵树的根</span></span><br><span class="line"><span class="string">    :param parent: 并查集森林</span></span><br><span class="line"><span class="string">    :param rank: 秩</span></span><br><span class="line"><span class="string">    :param x: 顶点x</span></span><br><span class="line"><span class="string">    :param y: 顶点y</span></span><br><span class="line"><span class="string">    :return: None</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    xroot = find(parent,x) <span class="comment">#查找x的根</span></span><br><span class="line">    yroot = find(parent,y) <span class="comment">#查找Y的根</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    按秩合并，总是将更小的树连接到更大的树上</span></span><br><span class="line"><span class="string">    单元素的秩定义为0</span></span><br><span class="line"><span class="string">    当两颗秩相同的树联合时，他们的秩+1</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">if</span>(rank[xroot] &gt; rank[yroot]): </span><br><span class="line">        parent[yroot] = xroot</span><br><span class="line">    <span class="keyword">elif</span>(rank[yroot] &gt; rank[xroot]):</span><br><span class="line">        parent[xroot] = yroot</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        parent[yroot] = xroot</span><br><span class="line">        rank[xroot] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">kruscal</span>(<span class="params">Graph</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    克鲁斯卡尔算法，输出最小生成树的路径及最小权值</span></span><br><span class="line"><span class="string">    :param Graph: 邻接矩阵</span></span><br><span class="line"><span class="string">    :return: 最小权值</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    price = <span class="number">0</span> <span class="comment">#记录权值</span></span><br><span class="line">    MST = [] <span class="comment">#记录路径</span></span><br><span class="line">    n = <span class="built_in">len</span>(Graph)-<span class="number">1</span> <span class="comment">#MST边的个数</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;把邻接矩阵转化为边集数组&#x27;&#x27;&#x27;</span></span><br><span class="line">    edge_set = adjacency_matrix_to_edge_set(Graph,<span class="built_in">len</span>(Graph))</span><br><span class="line">    edge_set.sort(key=<span class="keyword">lambda</span> edge: edge[<span class="number">2</span>])</span><br><span class="line">    <span class="built_in">print</span>(edge_set)</span><br><span class="line">    edge_num = <span class="built_in">len</span>(edge_set)</span><br><span class="line">    parent = [x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)]</span><br><span class="line">    rank = [<span class="number">0</span>]*(n+<span class="number">1</span>) <span class="comment">#秩初始化</span></span><br><span class="line">    e = <span class="number">0</span></span><br><span class="line">    cal = <span class="number">0</span> <span class="comment">#判断是否已经有n条边</span></span><br><span class="line">    <span class="keyword">while</span> (cal &lt; n):</span><br><span class="line">        v1,v2,w = edge_set[e]</span><br><span class="line">        e += <span class="number">1</span></span><br><span class="line">        x = find(parent,v1)</span><br><span class="line">        y = find(parent,v2)</span><br><span class="line">        <span class="keyword">if</span>(x == y): <span class="comment">#如果加进来的边形成了环</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        union(parent,rank,x,y)</span><br><span class="line">        MST.append([v1,v2,w])</span><br><span class="line">        cal += <span class="number">1</span></span><br><span class="line">        price += w</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> v1,v2,w <span class="keyword">in</span> MST:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;%d -&gt; %d == %d&quot;</span> %(v1,v2,w))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> price</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    MAX = sys.maxsize</span><br><span class="line">    graph = [[MAX,<span class="number">6</span>,<span class="number">1</span>,<span class="number">5</span>,MAX,MAX],</span><br><span class="line">             [<span class="number">6</span>,MAX,<span class="number">5</span>,MAX,<span class="number">3</span>,MAX],</span><br><span class="line">             [<span class="number">1</span>,<span class="number">5</span>,MAX,<span class="number">5</span>,<span class="number">6</span>,<span class="number">4</span>],</span><br><span class="line">             [<span class="number">5</span>,MAX,<span class="number">5</span>,MAX,MAX,<span class="number">2</span>],</span><br><span class="line">             [MAX,<span class="number">3</span>,<span class="number">6</span>,MAX,MAX,<span class="number">6</span>],</span><br><span class="line">             [MAX,MAX,<span class="number">4</span>,<span class="number">2</span>,<span class="number">6</span>,MAX]]</span><br><span class="line">    kruscal(graph)</span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2>
+<ol type="1">
+<li>[^](https://www.zhihu.com/people/xu-bai-21/posts?page=1#ref_1_0)边集数组
+https://blog.csdn.net/zdp072/article/details/19756057</li>
+<li>[^](https://www.zhihu.com/people/xu-bai-21/posts?page=1#ref_2_0)并查集
+<a
+target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/并查集">https://zh.wikipedia.org/wiki/%E5%B9%B6%E6%9F%A5%E9%9B%86</a></li>
+<li>[^](https://www.zhihu.com/people/xu-bai-21/posts?page=1#ref_3_0)Kruscal
+<a
+target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/并查集">https://zh.wikipedia.org/wiki/%E5%B9%B6%E6%9F%A5%E9%9B%86</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/arithmetic/" rel="tag"># arithmetic</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/10/14/Prim%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/" rel="prev" title="Prim算法——最小生成树">
+                  <i class="fa fa-chevron-left"></i> Prim算法——最小生成树
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/21/Dijkstra%E7%AE%97%E6%B3%95%E4%B8%8EPrim%E7%AE%97%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="next" title="Dijkstra算法与Prim算法的区别">
+                  Dijkstra算法与Prim算法的区别 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+<!--  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+-->
+ by 
+  <span class="author" itemprop="copyrightHolder">Yus</span>
+</div>
+
+<!-- -->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

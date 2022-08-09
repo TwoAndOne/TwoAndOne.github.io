@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpeg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"twoandone.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="90. 子集 II 给你一个整数数组 nums ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。 解集 不能 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。 示例 1： 12输入：nums &#x3D; [1,2,2]输出：[[],[1],[1,2],[1,2,2],[2],[2,2]] 示例 2： 12输入：nums &#x3D; [0]输出：[[],[0]] 提示：  1 &lt;&#x3D; n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="子集Ⅱ">
+<meta property="og:url" content="https://twoandone.github.io/2021/04/23/%E5%AD%90%E9%9B%86%E2%85%A1/">
+<meta property="og:site_name" content="Yussss">
+<meta property="og:description" content="90. 子集 II 给你一个整数数组 nums ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。 解集 不能 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。 示例 1： 12输入：nums &#x3D; [1,2,2]输出：[[],[1],[1,2],[1,2,2],[2],[2,2]] 示例 2： 12输入：nums &#x3D; [0]输出：[[],[0]] 提示：  1 &lt;&#x3D; n">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210423164923562.png">
+<meta property="article:published_time" content="2021-04-23T08:33:13.000Z">
+<meta property="article:modified_time" content="2022-07-17T17:02:17.391Z">
+<meta property="article:author" content="Yus">
+<meta property="article:tag" content="arithmetic">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210423164923562.png">
+
+
+<link rel="canonical" href="https://twoandone.github.io/2021/04/23/%E5%AD%90%E9%9B%86%E2%85%A1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://twoandone.github.io/2021/04/23/%E5%AD%90%E9%9B%86%E2%85%A1/","path":"2021/04/23/子集Ⅱ/","title":"子集Ⅱ"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>子集Ⅱ | Yussss</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Yussss</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">沧浪之水清兮，可以濯我缨。沧浪之水浊兮，可以濯我足</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%90%E9%9B%86-ii"><span class="nav-number">1.</span> <span class="nav-text">90. 子集 II</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yus"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Yus</p>
+  <div class="site-description" itemprop="description">后端废物</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="mailto:2414655851@qq.com" title="E-Mail → mailto:2414655851@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/04/23/%E5%AD%90%E9%9B%86%E2%85%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="子集Ⅱ | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          子集Ⅱ
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-04-23 16:33:13" itemprop="dateCreated datePublished" datetime="2021-04-23T16:33:13+08:00">2021-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:02:17" itemprop="dateModified" datetime="2022-07-18T01:02:17+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h4 id="子集-ii"><a
+target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/subsets-ii/">90. 子集 II</a></h4>
+<p>给你一个整数数组 <code>nums</code>
+，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。</p>
+<p>解集 <strong>不能</strong> 包含重复的子集。返回的解集中，子集可以按
+<strong>任意顺序</strong> 排列。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [1,2,2]</span><br><span class="line">输出：[[],[1],[1,2],[1,2,2],[2],[2,2]]</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [0]</span><br><span class="line">输出：[[],[0]]</span><br></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 10</code></li>
+<li><code>-10 &lt;= nums[i] &lt;= 10</code></li>
+</ul>
+<p>回溯算法的启蒙，做这道题思考了很久，也算是在生活中用到了回溯吧，我决定先不做这道题，先去做<a
+target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/permutations/">46.
+全排列</a>，做完全排列之后，这道题就有了思路。</p>
+<p>全排列的实质是遍历多叉树,假如数组是[1,2,3]</p>
+<p><img src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210423164923562.png" alt="image-20210423164923562" style="zoom:50%;" /></p>
+<p>所以我们的思路就是</p>
+<ul>
+<li>终止条件
+<ul>
+<li>遍历到最后一个，也就是数组长度等于3的时候</li>
+</ul></li>
+<li>使用循环语句把每一个分支遍历到</li>
+<li>在循环语句内部使用递归调用本函数接着遍历子树</li>
+<li>同一层的结点遍历结束后需要回溯，举个例子，当遍历到[1,1,1]时下一个应该遍历[1,1,2]，此时在添加了[1,1,1]之后需要把最后一个1删除以增加空位。</li>
+</ul>
+<p>当然这只是第一步，得到全排列还需要剪枝，因为[1,1,1]这种排列并不是我们需要的，不过我们可以先实现这一种</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">bfs</span><span class="params">(<span class="type">int</span>[] nums, List&lt;List&lt;Integer&gt;&gt; list, ArrayList&lt;Integer&gt; tmp)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(tmp.size()==nums.length)&#123;</span><br><span class="line">            list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            tmp.add(nums[i]);</span><br><span class="line">            bfs(nums,list,tmp);</span><br><span class="line">            tmp.remove(tmp.size()-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>问题来了，我们怎么剪枝呢？</p>
+<p>简单的方法就是，我们在tmp.add(nums[i])之前进行判断tmp中是否已经有这个数了，如果有了就continue。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">    		<span class="keyword">if</span>(tmp.contains(nums[i])) <span class="keyword">continue</span>;</span><br><span class="line">            tmp.add(nums[i]);</span><br><span class="line">            bfs(nums,list,tmp);</span><br><span class="line">            tmp.remove(tmp.size()-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>还有一种方法是用一个标记数组进行记录被使用过的数字，这种也是回溯算法常用的方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;List&lt;Integer&gt;&gt; <span class="title function_">permute</span><span class="params">(<span class="type">int</span>[] nums)</span>&#123;</span><br><span class="line">       List&lt;List&lt;Integer&gt;&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">       <span class="type">boolean</span>[] used = <span class="keyword">new</span> <span class="title class_">boolean</span>[nums.length]; <span class="comment">//初始时都为false</span></span><br><span class="line">       bfs(nums,list,<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(),used);</span><br><span class="line">       <span class="keyword">return</span>  list;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">bfs</span><span class="params">(<span class="type">int</span>[] nums, List&lt;List&lt;Integer&gt;&gt; list, ArrayList&lt;Integer&gt; tmp,<span class="type">boolean</span>[] used)</span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(tmp.size()==nums.length)&#123;</span><br><span class="line">           list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">           <span class="keyword">if</span>(used[i]) <span class="keyword">continue</span>;</span><br><span class="line">           tmp.add(nums[i]);</span><br><span class="line">           used[i] = <span class="literal">true</span>;</span><br><span class="line">           bfs(nums,list,tmp,used);</span><br><span class="line">           tmp.remove(tmp.size()-<span class="number">1</span>);</span><br><span class="line">           used[i] = <span class="literal">false</span>;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>好的，全排列是大功告成啦！</p>
+<p>但是子集还没搞定</p>
+<p>先从<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/subsets/">78.
+子集</a>开始</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">子集的示例：</span><br><span class="line">输入：nums = [1,2,3]</span><br><span class="line">输出：[[],[1],[1,2],[1,2,3],[2],[2,3],[3]]</span><br><span class="line">全排列的示例：</span><br><span class="line">[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]</span><br></pre></td></tr></table></figure>
+<p>从示例中可以看出，子集会把tmp数组每一次变化加入list中，而全排列则需要在tmp数组长度为3时才加入</p>
+<p>总结一下：</p>
+<ul>
+<li>终止条件
+<ul>
+<li>tmp数组长度等于nums.length</li>
+</ul></li>
+<li>tmp数组的每一次变化都需要加入进返回数组list</li>
+<li>循环语句中，子集的剪枝可以从示例中看出，子集不需要回头</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span>[] nums,List&lt;List&lt;Integer&gt;&gt; list, ArrayList&lt;Integer&gt; tmp,<span class="type">int</span> index)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(tmp.size()==nums.length) &#123;</span><br><span class="line">        list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> index; i &lt; nums.length; i++) &#123;</span><br><span class="line">        tmp.add(nums[i]);</span><br><span class="line">        dfs(nums,list,tmp,i+<span class="number">1</span>);</span><br><span class="line">        tmp.remove(tmp.size()-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>子集Ⅱ与子集的区别就是给定的数组里有重复的数字</p>
+<p>加入给定数组[1,2,2]，不能出现，[1,2],[1,2]的情况，也就是挑选了下标为0，1和下标为0，2的的情况是一样的，不能出现这种情况</p>
+<p>容易想到的方法是，先对数组进行排序，如果nums[i]与nums[i-1]相等就跳过下标为i的情况</p>
+<p>考虑到边界条件，i必须大于0，但是只考虑这两种[1,2,2]的情况就会被排除，所以必须让for循环至少执行一次，也就是i大于index并且nums[i]与nums[i-1]相等时才不考虑i这种情况，当i等于index会保证至少执行一次。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;List&lt;Integer&gt;&gt; <span class="title function_">subsetsWithDup</span><span class="params">(<span class="type">int</span>[] nums)</span> &#123;</span><br><span class="line">    ArrayList&lt;List&lt;Integer&gt;&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    dfs(nums,list,<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(),<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span>[] nums,List&lt;List&lt;Integer&gt;&gt; list, ArrayList&lt;Integer&gt; tmp,<span class="type">int</span> index)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(tmp.size()==nums.length) &#123;</span><br><span class="line">        list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> index; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(i&gt;index&amp;&amp;nums[i-<span class="number">1</span>]==nums[i]) <span class="keyword">continue</span>;</span><br><span class="line">        tmp.add(nums[i]);</span><br><span class="line">        dfs(nums,list,tmp,i+<span class="number">1</span>);</span><br><span class="line">        tmp.remove(tmp.size()-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/arithmetic/" rel="tag"># arithmetic</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/11/LockSupport%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="prev" title="LockSupport的使用">
+                  <i class="fa fa-chevron-left"></i> LockSupport的使用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/05/26/%E7%90%86%E8%A7%A3ifconfig%E5%91%BD%E4%BB%A4/" rel="next" title="ifconfig命令初探">
+                  ifconfig命令初探 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+<!--  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+-->
+ by 
+  <span class="author" itemprop="copyrightHolder">Yus</span>
+</div>
+
+<!-- -->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

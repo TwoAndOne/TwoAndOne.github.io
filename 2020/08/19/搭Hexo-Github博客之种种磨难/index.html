@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpeg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"twoandone.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="搭一个hexo+GitHub的博客，外加换主题，花了一天时间。 唉，本来预想是两小时搞完，但总是不尽人意。 众所周知，学习任何计算机知识，第一步是一道坎——环境配置。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭Hexo+Github博客之种种磨难">
+<meta property="og:url" content="https://twoandone.github.io/2020/08/19/%E6%90%ADHexo-Github%E5%8D%9A%E5%AE%A2%E4%B9%8B%E7%A7%8D%E7%A7%8D%E7%A3%A8%E9%9A%BE/">
+<meta property="og:site_name" content="Yussss">
+<meta property="og:description" content="搭一个hexo+GitHub的博客，外加换主题，花了一天时间。 唉，本来预想是两小时搞完，但总是不尽人意。 众所周知，学习任何计算机知识，第一步是一道坎——环境配置。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-19T08:41:12.000Z">
+<meta property="article:modified_time" content="2021-03-28T05:50:35.000Z">
+<meta property="article:author" content="Yus">
+<meta property="article:tag" content="tool">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://twoandone.github.io/2020/08/19/%E6%90%ADHexo-Github%E5%8D%9A%E5%AE%A2%E4%B9%8B%E7%A7%8D%E7%A7%8D%E7%A3%A8%E9%9A%BE/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://twoandone.github.io/2020/08/19/%E6%90%ADHexo-Github%E5%8D%9A%E5%AE%A2%E4%B9%8B%E7%A7%8D%E7%A7%8D%E7%A3%A8%E9%9A%BE/","path":"2020/08/19/搭Hexo-Github博客之种种磨难/","title":"搭Hexo+Github博客之种种磨难"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>搭Hexo+Github博客之种种磨难 | Yussss</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Yussss</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">沧浪之水清兮，可以濯我缨。沧浪之水浊兮，可以濯我足</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yus"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Yus</p>
+  <div class="site-description" itemprop="description">后端废物</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="mailto:2414655851@qq.com" title="E-Mail → mailto:2414655851@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2020/08/19/%E6%90%ADHexo-Github%E5%8D%9A%E5%AE%A2%E4%B9%8B%E7%A7%8D%E7%A7%8D%E7%A3%A8%E9%9A%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="搭Hexo+Github博客之种种磨难 | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          搭Hexo+Github博客之种种磨难
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-08-19 16:41:12" itemprop="dateCreated datePublished" datetime="2020-08-19T16:41:12+08:00">2020-08-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-03-28 13:50:35" itemprop="dateModified" datetime="2021-03-28T13:50:35+08:00">2021-03-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>搭一个hexo+GitHub的博客，外加换主题，花了一天时间。
+唉，本来预想是两小时搞完，但总是不尽人意。
+众所周知，学习任何计算机知识，第一步是一道坎——环境配置。</p>
+<span id="more"></span>
+<p>总结: 很多问题的出现，可以归结于自己的强迫症。</p>
+<p>1.安装完node.js后，非要去改npm全局包默认存储路径(C盘！你别告诉我你能忍?)</p>
+<p>结果改完环境变量，最后版本还不对，又重新卸载安装。重安后，不小心勾选了自动安装相关tools，然后它竟然开始下载Python3.8、visualstudio2019……天哪！我当即Ctrl+C终止，又不辞辛苦卸载，重安。对，你猜的没错，重安后，我还是继续慢慢改环境变量，更改存储路径。</p>
+<p>2.接着是hexo的下载，这个可以用npm下载，没错，又遇到问题了！
+timeout超时</p>
+<p>由于hexo是托管在GitHub上的，国内访问GitHub特别喜欢超时。</p>
+<p>所以我曾经更改了hosts文件，希望访问快一点，没想到就是这个原因，导致我无法成功下载hexo。</p>
+<p>解决方法是把hosts文件里关于GitHub的全删掉。我兴致冲冲找到开文件路径，准备大删一番，结果你能想到，自然是铩羽而归(总是这样，我快习惯了）。</p>
+<p>因为前几天电脑网络不稳定，试过能试的办法，我猜想是不是中了病毒，便下了个360来杀毒，又因为我修改了hosts文件，它把hosts文件锁了，导致我无法打开。</p>
+<p>命运啊，总是这么循环🔁且无奈，前世种的因，今生就得果。曹刿曾曰:一鼓作气，再而衰，三而竭。现在的我竭得不能再竭了。</p>
+<p>打开360杀毒软件，借来齐天大圣的火眼金睛，终于找到添加白名单的按钮(实在是不敢乱点，真被吓到了，连正常软件都遇到诸多问题，软件中的流氓360那可是惹都不敢惹，动不动全家桶警告）。</p>
+<p>hosts修改成功，来吧，下载hexo。</p>
+<p>3.这是最简单的问题也是耗时最长的问题，一切都根源都来自我内心深处对美的追求(该死的强迫症，别为自己找借口！）。</p>
+<p>如果不换主题，这三四个小时完全可以用来玩耍，所以可恶啊！</p>
+<p>找bug的过程就不一一赘述了，纯粹是个搜商问题，再一次感慨Google的强大，连GitHub里某个issue的评论都能搜出来。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/tool/" rel="tag"># tool</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/06/03/Vue%20Note/" rel="prev" title="Vue Note">
+                  <i class="fa fa-chevron-left"></i> Vue Note
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/08/21/%E5%87%BA%E6%B7%A4%E6%B3%A5%E8%80%8C%E4%B8%8D%E6%9F%93%EF%BC%8C%E6%9C%AC%E8%BA%AB%E5%B0%B1%E5%BE%88%E9%9A%BE%E5%90%A7%EF%BC%8C%E6%9B%B4%E5%A4%9A%E7%9A%84%E4%BA%BA%E6%B0%B8%E8%BF%9C%E7%83%82%E5%9C%A8%E6%B3%A5%E9%87%8C/" rel="next" title="出淤泥而不染，本身就很难，更多的人永远烂在泥里">
+                  出淤泥而不染，本身就很难，更多的人永远烂在泥里 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+<!--  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+-->
+ by 
+  <span class="author" itemprop="copyrightHolder">Yus</span>
+</div>
+
+<!-- -->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
