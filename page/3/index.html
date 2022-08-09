@@ -181,6 +181,117 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/RocketMQ%E5%AE%89%E8%A3%85(windows)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/20/RocketMQ%E5%AE%89%E8%A3%85(windows)/" class="post-title-link" itemprop="url">RocketMQ 安装 （windows）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-20 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-20T13:42:25+08:00">2021-03-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:21:46" itemprop="dateModified" datetime="2022-07-18T01:21:46+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>按照官网的步骤，坑死我了，耗费好几个小时。</p>
+<p>官网地址：https://rocketmq.apache.org/docs/quick-start/</p>
+<ol type="1">
+<li><p><img
+src="https://github.com/TwoAndOne/my-images/raw/master/uPic/image-20220317174007720.png"
+alt="image-20220317174007720" />在官网的页面上，点击下载</p></li>
+<li><p>```powershell 解压 rocketmq-all-4.9.3-source-release.zip
+进入这个目录 rocketmq-all-4.9.3/ 打开 cmd 然后执行后面的命令：mvn
+-Prelease-all -DskipTests clean install -U <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. 这时候你可以在 rocketmq-all-4.9.3 目录看见`distribution\target\rocketmq-4.9.3\rocketmq-4.9.3\bin` 这个目录。</span><br><span class="line">   ![image-20220317174809910](https://gitee.com/yuswork/my-images/raw/master/uPic/image-20220317174809910.png)进入这个目录之后，你会看到 mqnamesrv.cmd，这就可以表明你已经编译成功了。</span><br><span class="line"></span><br><span class="line">   其实你可以先试一下运行这个`mqnamesrv.cmd` 能不能成功，不能成功再用我下面的方法。直接在命令行输入 `mqnamesrv.cmd`。</span><br><span class="line"></span><br><span class="line">4. 下一步，我们去配置环境变量，直接点击 win 按钮，输入环境变量四个字就可以看见编辑环境变量的选项</span><br><span class="line"></span><br><span class="line">   ```powershell</span><br><span class="line">   # 在系统变量那里选择编辑</span><br><span class="line">   ROCKETMQ_HOME=&quot;xxx\distribution\target\rocketmq-4.9.3\rocketmq-4.9.3&quot;</span><br><span class="line">   NAMESRV_ADDR=&quot;localhost:9876&quot;</span><br><span class="line">   # 重新打开 cmd 然后运行下述命令，查看是否配置成功 </span><br><span class="line">   set ROCKETMQ_HOME</span><br></pre></td></tr></table></figure></p></li>
+<li><p>OK，重新回到<code>distribution\target\rocketmq-4.9.2\rocketmq-4.9.2\bin</code>目录，用记事本打开
+runserver.cmd。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置一个变量</span></span><br><span class="line"><span class="built_in">set</span> JAVAHOME=<span class="string">&quot;%JAVA_HOME%&quot;</span></span><br><span class="line"><span class="comment"># 然后找到这一行 把 JAVA_HOME 替换成 JAVAHOME</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -Djava.ext.dirs=%BASE_DIR%lib;%JAVAHOME%\jre\lib\ext&quot;</span></span><br><span class="line"><span class="comment"># 找到这一行，删掉 CLASSPATH 外面的引号</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -cp %CLASSPATH%</span></span><br></pre></td></tr></table></figure>
+<p>为什么这么做呢？</p>
+<p>因为 JAVA_HOME、CLASSPATH、PATH 里都不能有空格，我们配置的
+JAVA_HOME的地址一般都是<code>D:\Program Files\xxx</code>
+这里面就有空格，所以我们再设置一个变量很巧妙的解决了这个问题。</p>
+<p>CLASSPATH 写在外面就包引号，写在引号里面就不用再加引号了。</p></li>
+<li><p>再一次回到
+<code>distribution\target\rocketmq-4.9.2\rocketmq-4.9.2\bin</code>
+目录，运行 <code>mqnamesrv.cmd</code>,如果看到，就可以了</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The Name Server boot success. </span><br></pre></td></tr></table></figure></li>
+<li><p>关闭 最简单的方式是直接关掉这几个窗口
+但是你也可以用<code>mqshutdown.cmd broker | namesrv</code>
+其实意思是一样的，查看 <code>mqshutdown.cmd</code> 会发现它也是直接 kill
+掉</p></li>
+</ol>
+<p><strong>备注</strong> set ROCKETMQ_HOME 可以看环境变量</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/Genshin%E8%82%9D%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -292,238 +403,6 @@
 <ul>
 <li>宗室</li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/HashMap/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/20/HashMap/" class="post-title-link" itemprop="url">HashMap</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-20 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-20T13:42:25+08:00">2021-03-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:03:29" itemprop="dateModified" datetime="2022-07-18T01:03:29+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>介绍一下HashMap吧</p>
-<p>那我首先说一下它<strong>能干什么</strong>,hashmap实现了map接口,那肯定能存储键值对,它允许null键但只能有一个,null值可以有多个,线程不安全,不保证有序,因为根据hashcode值存储数据,大多数时候可以直接定位到它的值,所以具有很快的访问速度.</p>
-<p>从<strong>结构实现</strong>上看,hashmap是由数组,链表,红黑树实现的,红黑树是jdk8引进的.</p>
-<p>hashmap最基本的方法是<strong>get和put方法</strong>,get是取,put是存.</p>
-<p>怎么取呢?也就是<strong>get()方法的工作原理</strong>是啥.</p>
-<p>在调用get方法时,我们会传入key,然后get方法内部会先调用hash方法算出hash值,也就是下标然后再调用getnode方法,接着判断链表的第一个位置存储的元素是不是要找的元素,如果不是,还会判断下一个是不是为空,为空就返回null,不为空还得判断链表的第一个结点是否是treenode的结点,如果是就继续treenode的get方法,如果不是就遍历链表来获取结点.</p>
-<p>put方法呢,首先判断键值对数组table是否为空,如果是就得扩容,否就根据键值key计算hash值得到插入的数组索引,得到索引就判断这个位置是否空,空就直接插入,当然插入也得看此时的size是否大于threshold大于就还得扩容,然后回到这个不空的情况来,不空的话就得判断这个位置的key是否和给定的key相同,相同就直接覆盖,不相同就得再后面排队了,排队也得分情况,判断第一个结点是不是红黑树的结点,是红黑树就得用红黑树的方式插入,不是就直接在链表里插入,在链表里插入也得考虑此时的链表长度是否大于8,大于8就得转换为红黑树,不大于8就链表插入,key存在就直接覆盖.</p>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210320164108937.png"
-alt="image-20210320164108937" />
-<figcaption aria-hidden="true">image-20210320164108937</figcaption>
-</figure>
-<p>说了这么多次,根据key计算数组索引,接下来讲讲怎么计算索引吧.</p>
-<p>第一步取key的hashCode值,第二步高位运算,第三步取模运算.</p>
-<p><strong>HashMap的长度为什么是2的幂次方</strong></p>
-<p>可能是Doug Lea太厉害了,hashmap的作者,哈哈哈.</p>
-<p>不开玩笑了,为了让hashmap存储高效就得把哈希函数映射得比较均匀分散以避免哈希碰撞,但hashmap是有容量的,为了保证得到的索引值在容量范围内就得对散列值进行取余,但是取余运算符效率太低,为了能够让位运算实现取余操作,必须保证hashmap的长度也就是取模运算的模数必须为2的幂.<strong>(length
-- 1) &amp; hash</strong></p>
-<p><strong>HashMap怎么扩容</strong></p>
-<p>因为Java里的数组无法自动扩容,方法是使用一个新的数组代替已有的容量小的数组.</p>
-<p>大致分两步:1
-,容量扩充为原来的两倍,2,对每个结点重新计算哈希值,重新计算索引位置,将原来的元素移动到新的哈希表中.</p>
-<p><strong>HashMap与HashTable的区别</strong>k</p>
-<p>作者不一样,Doug Lea没有参与HashTable的编写</p>
-<p>　　1.HashMap继承于AbstractMap，而Hashtable继承于Dictionary；
-　　2.线程安全不同。Hashtable的几乎所有函数都是同步的，即它是线程安全的，支持多线程。而HashMap的函数则是非同步的，它不是线程安全的。若要在多线程中使用HashMap，需要我们额外的进行同步处理；
-　　3.null值。HashMap的key、value都可以为null。Hashtable的key、value都不可以为null；
-　　4.迭代器(Iterator)。HashMap的迭代器(Iterator)是fail-fast迭代器，而Hashtable的enumerator迭代器不是fail-fast的。所以当有其它线程改变了HashMap的结构（增加或者移除元素），将会抛出ConcurrentModificationException。
-　　5.容量的初始值和增加方式都不一样：HashMap默认的容量大小是16；增加容量时，每次将容量变为“原始容量x2”。Hashtable默认的容量大小是11；增加容量时，每次将容量变为“原始容量x2
-+ 1”；
-　　6.添加key-value时的hash值算法不同：HashMap添加元素时，是使用自定义的哈希算法。Hashtable没有自定义哈希算法，而直接采用的key的hashCode()。
-　　7.速度。由于Hashtable是线程安全的也是synchronized，所以在单线程环境下它比HashMap要慢。如果你不需要同步，只需要单一线程，那么使用HashMap性能要好过Hashtable。</p>
-<p>参考:</p>
-<p>https://tech.meituan.com/2016/06/24/java-hashmap.html</p>
-<p>https://snailclimb.gitee.io/javaguide/#/docs/java/collection/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98?id=_146-hashmap-%e7%9a%84%e9%95%bf%e5%ba%a6%e4%b8%ba%e4%bb%80%e4%b9%88%e6%98%af-2-%e7%9a%84%e5%b9%82%e6%ac%a1%e6%96%b9</p>
-<p>https://blog.csdn.net/u012512634/article/details/72735183</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/RocketMQ%E5%AE%89%E8%A3%85(windows)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/20/RocketMQ%E5%AE%89%E8%A3%85(windows)/" class="post-title-link" itemprop="url">RocketMQ 安装 （windows）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-20 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-20T13:42:25+08:00">2021-03-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:21:46" itemprop="dateModified" datetime="2022-07-18T01:21:46+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>按照官网的步骤，坑死我了，耗费好几个小时。</p>
-<p>官网地址：https://rocketmq.apache.org/docs/quick-start/</p>
-<ol type="1">
-<li><p><img
-src="https://github.com/TwoAndOne/my-images/raw/master/uPic/image-20220317174007720.png"
-alt="image-20220317174007720" />在官网的页面上，点击下载</p></li>
-<li><p>```powershell 解压 rocketmq-all-4.9.3-source-release.zip
-进入这个目录 rocketmq-all-4.9.3/ 打开 cmd 然后执行后面的命令：mvn
--Prelease-all -DskipTests clean install -U <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. 这时候你可以在 rocketmq-all-4.9.3 目录看见`distribution\target\rocketmq-4.9.3\rocketmq-4.9.3\bin` 这个目录。</span><br><span class="line">   ![image-20220317174809910](https://gitee.com/yuswork/my-images/raw/master/uPic/image-20220317174809910.png)进入这个目录之后，你会看到 mqnamesrv.cmd，这就可以表明你已经编译成功了。</span><br><span class="line"></span><br><span class="line">   其实你可以先试一下运行这个`mqnamesrv.cmd` 能不能成功，不能成功再用我下面的方法。直接在命令行输入 `mqnamesrv.cmd`。</span><br><span class="line"></span><br><span class="line">4. 下一步，我们去配置环境变量，直接点击 win 按钮，输入环境变量四个字就可以看见编辑环境变量的选项</span><br><span class="line"></span><br><span class="line">   ```powershell</span><br><span class="line">   # 在系统变量那里选择编辑</span><br><span class="line">   ROCKETMQ_HOME=&quot;xxx\distribution\target\rocketmq-4.9.3\rocketmq-4.9.3&quot;</span><br><span class="line">   NAMESRV_ADDR=&quot;localhost:9876&quot;</span><br><span class="line">   # 重新打开 cmd 然后运行下述命令，查看是否配置成功 </span><br><span class="line">   set ROCKETMQ_HOME</span><br></pre></td></tr></table></figure></p></li>
-<li><p>OK，重新回到<code>distribution\target\rocketmq-4.9.2\rocketmq-4.9.2\bin</code>目录，用记事本打开
-runserver.cmd。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置一个变量</span></span><br><span class="line"><span class="built_in">set</span> JAVAHOME=<span class="string">&quot;%JAVA_HOME%&quot;</span></span><br><span class="line"><span class="comment"># 然后找到这一行 把 JAVA_HOME 替换成 JAVAHOME</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -Djava.ext.dirs=%BASE_DIR%lib;%JAVAHOME%\jre\lib\ext&quot;</span></span><br><span class="line"><span class="comment"># 找到这一行，删掉 CLASSPATH 外面的引号</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -cp %CLASSPATH%</span></span><br></pre></td></tr></table></figure>
-<p>为什么这么做呢？</p>
-<p>因为 JAVA_HOME、CLASSPATH、PATH 里都不能有空格，我们配置的
-JAVA_HOME的地址一般都是<code>D:\Program Files\xxx</code>
-这里面就有空格，所以我们再设置一个变量很巧妙的解决了这个问题。</p>
-<p>CLASSPATH 写在外面就包引号，写在引号里面就不用再加引号了。</p></li>
-<li><p>再一次回到
-<code>distribution\target\rocketmq-4.9.2\rocketmq-4.9.2\bin</code>
-目录，运行 <code>mqnamesrv.cmd</code>,如果看到，就可以了</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The Name Server boot success. </span><br></pre></td></tr></table></figure></li>
-<li><p>关闭 最简单的方式是直接关掉这几个窗口
-但是你也可以用<code>mqshutdown.cmd broker | namesrv</code>
-其实意思是一样的，查看 <code>mqshutdown.cmd</code> 会发现它也是直接 kill
-掉</p></li>
-</ol>
-<p><strong>备注</strong> set ROCKETMQ_HOME 可以看环境变量</p>
 
       
     </div>
@@ -1945,6 +1824,99 @@ target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33102022">漫�
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/01/05/workbench%E5%9C%A8win10%E4%B8%8B%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E9%97%AE%E9%A2%98/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2020/10/22/%E4%B8%A2%E5%A4%B1%E6%97%A5%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/10/22/%E4%B8%A2%E5%A4%B1%E6%97%A5%E8%AE%B0/" class="post-title-link" itemprop="url">丢失日记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-10-22 17:24:43" itemprop="dateCreated datePublished" datetime="2020-10-22T17:24:43+08:00">2020-10-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-03-28 13:06:19" itemprop="dateModified" datetime="2021-03-28T13:06:19+08:00">2021-03-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">life</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>创作的动力总是来源于生活中的起起伏伏，但大多是都是“伏”的时候。因为你已经高兴得来不及写作了。</p>
+<p>这次又是丢了什么呢？</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/10/22/%E4%B8%A2%E5%A4%B1%E6%97%A5%E8%AE%B0/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
