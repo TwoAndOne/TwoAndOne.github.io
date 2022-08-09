@@ -233,43 +233,50 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="final关键字的作用"><a href="#final关键字的作用" class="headerlink" title="final关键字的作用"></a><code>final</code>关键字的作用</h2><ol>
+          <h2 id="final关键字的作用"><code>final</code>关键字的作用</h2>
+<ol type="1">
 <li><p>修饰类</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">User</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-
 <p>表明这个类不能被继承</p>
-<p>注：final类中所有成员方法都会被隐式指定为final方法</p>
-</li>
+<p>注：final类中所有成员方法都会被隐式指定为final方法</p></li>
 <li><p>修饰方法</p>
 <blockquote>
 <p>下面这段话摘自《Java编程思想》第四版第143页：</p>
 <p>　　“使用final方法的原因有两个。第一个原因是把方法锁定，以防任何继承类修改它的含义；第二个原因是效率。在早期的Java实现版本中，会将final方法转为内嵌调用。但是如果方法过于庞大，可能看不到内嵌调用带来的任何性能提升。在最近的Java版本中，不需要使用final方法进行这些优化了。“</p>
 </blockquote>
-<p>类的private方法会隐式指定为final方法</p>
-</li>
+<p>类的private方法会隐式指定为final方法</p></li>
 <li><p>修饰变量</p>
 <ul>
 <li>基本类型变量：数值不变</li>
 <li>引用类型：引用不变，也就是指向的对象不能更改，但对象内部是可以更改的</li>
-</ul>
-</li>
+</ul></li>
 </ol>
 <p>深入思考：</p>
 <p>当final变量是基本数据类型以及String类型时，如果在编译期间能知道它的确切值，则编译器会把它当做编译期常量使用。也就是说在用到该final变量的地方，相当于直接访问的这个常量，不需要在运行时确定。<strong>待续……</strong></p>
-<h2 id="左移-右移-无符号右移"><a href="#左移-右移-无符号右移" class="headerlink" title="左移 右移 无符号右移"></a>左移 右移 无符号右移</h2><p><strong>左移&lt;&lt;</strong></p>
+<h2 id="左移-右移-无符号右移">左移 右移 无符号右移</h2>
+<p><strong>左移&lt;&lt;</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int a = 6&lt;&lt;2;</span><br><span class="line">int 类型在java中是4个字节,6是正数,补码的表示法与原码相同;</span><br><span class="line">00000000 00000000 00000000 0000 0110:6</span><br><span class="line">左移2位;</span><br><span class="line">00000000 00000000 00000000 0001 1000:24;</span><br><span class="line">int a = x&lt;&lt;y;</span><br></pre></td></tr></table></figure>
-
-<p>$$<br>a &#x3D; x\times2^y<br>$$</p>
+<p><span class="math display">\[
+a = x\times2^y
+\]</span></p>
 <p><strong>右移&gt;&gt;</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int a = 24&gt;&gt;2;</span><br><span class="line">int 类型在java中是4个字节,6是正数,补码的表示法与原码相同;</span><br><span class="line">00000000 00000000 00000000 0001 1000:24</span><br><span class="line">左移2位;</span><br><span class="line">00000000 00000000 00000000 0000 0110:6;</span><br><span class="line">int a = x&gt;&gt;y;</span><br></pre></td></tr></table></figure>
-
-<p>$$<br>a &#x3D; x\div2^y<br>$$</p>
+<p><span class="math display">\[
+a = x\div2^y
+\]</span></p>
 <p><strong>无符号右移&gt;&gt;&gt;</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">将6无符号右移2位：6&gt;&gt;&gt;2</span><br><span class="line">0000 0110      然后右移2位后，高位补0：</span><br><span class="line">0000 0001      换算成10进制为1</span><br><span class="line">将-6无符号右移2位：-6&gt;&gt;&gt;2</span><br><span class="line">1111 1111 1111 1111 1111 1111 1111 1010  负数都以补码表示，(取反加一或者取反到遇到了最后一个一)</span><br><span class="line">0011 1111 1111 1111 1111 1111 1111 1110  换算成10进制为1073741822  </span><br></pre></td></tr></table></figure>
-
-<h2 id="Java-8大基本类型"><a href="#Java-8大基本类型" class="headerlink" title="Java 8大基本类型"></a>Java 8大基本类型</h2><table>
+<h2 id="java-8大基本类型">Java 8大基本类型</h2>
+<table>
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 8%" />
+<col style="width: 6%" />
+<col style="width: 24%" />
+<col style="width: 52%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>类型</th>
 <th>存储需求</th>
 <th>bit 数</th>
@@ -277,57 +284,60 @@
 <th>备注</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>int</td>
 <td>4字节</td>
 <td>4*8</td>
 <td>-2147483648~2147483647</td>
 <td>即 (-2)的31次方 ~ (2的31次方) - 1</td>
 </tr>
-<tr>
+<tr class="even">
 <td>short</td>
 <td>2字节</td>
 <td>2*8</td>
 <td>-32768~32767</td>
 <td>即 (-2)的15次方 ~ (2的15次方) - 1</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>long</td>
 <td>8字节</td>
 <td>8*8</td>
 <td></td>
 <td>即 (-2)的63次方 ~ (2的63次方) - 1</td>
 </tr>
-<tr>
+<tr class="even">
 <td>byte</td>
 <td>1字节</td>
 <td>1*8</td>
 <td>-128~127</td>
 <td>即 (-2)的7次方 ~ (2的7次方) - 1</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>float</td>
 <td>4字节</td>
 <td>4*8</td>
 <td></td>
 <td>float 类型的数值有一个后缀 F（例如：3.14F）</td>
 </tr>
-<tr>
+<tr class="even">
 <td>double</td>
 <td>8字节</td>
 <td>8*8</td>
 <td></td>
 <td>没有后缀 F 的浮点数值（例如：3.14）默认为 double</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>boolean</td>
 <td>1字节</td>
 <td>1*8</td>
 <td>true、false</td>
 <td></td>
 </tr>
-</tbody></table>
-<p>至于为什么 Java 中 char 无论中英文数字都占用2字节，是因为 Java 中使用 Unicode 字符。</p>
+</tbody>
+</table>
+<p>至于为什么 Java 中 char 无论中英文数字都占用2字节，是因为 Java 中使用
+Unicode 字符。</p>
 
       
     </div>
@@ -408,7 +418,6 @@
     <div class="post-body" itemprop="articleBody">
           <p>最近写的代码用了Field，介于经常在看源码的时候看到</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">field.setAccessible(<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>在今天以前我都以为是用这个方法来突破权限访问控制，还生出：既然可以用反射来突破权限访问控制，为什么要设计这个功能的疑问。</p>
 </blockquote>
@@ -416,13 +425,14 @@
 <p>我们来跟踪一下代码，以Field为例：</p>
 <p>可以看到 flag 被传入到了AccessibleObject当前对象的overide属性</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># java.lang.reflect.AccessibleObject</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAccessible</span><span class="params">(<span class="type">boolean</span> flag)</span> <span class="keyword">throws</span> SecurityException &#123;</span><br><span class="line">        <span class="type">SecurityManager</span> <span class="variable">sm</span> <span class="operator">=</span> System.getSecurityManager();</span><br><span class="line">        <span class="keyword">if</span> (sm != <span class="literal">null</span>) sm.checkPermission(ACCESS_PERMISSION);</span><br><span class="line">        setAccessible0(<span class="built_in">this</span>, flag);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">setAccessible0</span><span class="params">(AccessibleObject obj, <span class="type">boolean</span> flag)</span></span><br><span class="line">        <span class="keyword">throws</span> SecurityException</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Constructor &amp;&amp; flag == <span class="literal">true</span>) &#123;</span><br><span class="line">            Constructor&lt;?&gt; c = (Constructor&lt;?&gt;)obj;</span><br><span class="line">            <span class="keyword">if</span> (c.getDeclaringClass() == Class.class) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Cannot make a java.lang.Class&quot;</span> +</span><br><span class="line">                                            <span class="string">&quot; constructor accessible&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        obj.override = flag;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>再来看 Field ，Field类继承了AccessibleObject类，也就继承了成员变量override。</p>
-<p>在get方法中，就判断了override的值，如果为true 就不会执行一系列check。</p>
+<p>再来看 Field
+，Field类继承了AccessibleObject类，也就继承了成员变量override。</p>
+<p>在get方法中，就判断了override的值，如果为true
+就不会执行一系列check。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Field</span> <span class="keyword">extends</span> <span class="title class_">AccessibleObject</span> <span class="keyword">implements</span> <span class="title class_">Member</span>&#123;</span><br><span class="line">  <span class="type">boolean</span> override;</span><br><span class="line">  <span class="keyword">public</span> Object <span class="title function_">get</span><span class="params">(Object obj)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!override) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!Reflection.quickCheckMemberAccess(clazz, modifiers)) &#123;</span><br><span class="line">                Class&lt;?&gt; caller = Reflection.getCallerClass();</span><br><span class="line">                checkAccess(caller, clazz, obj, modifiers);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> getFieldAccessor(obj).get(obj);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>实际上修饰符为 <code>public</code>的属性或者方法的 <code>Accessible</code>仍然是<code>false</code>的，我们之所以有所误解，在于修饰符如果为<code>public</code>的确可以不检查，<code>Reflection.quickCheckMemberAccess(clazz, modifiers)</code>方法先对<code>public</code>进行了检查，如果是<code>public</code>就不进行后续的检查了。</p>
-<p>看到这里，很明显，**<code>setAccessible(true)</code>的作用是关闭安全检查**</p>
+<p>实际上修饰符为 <code>public</code>的属性或者方法的
+<code>Accessible</code>仍然是<code>false</code>的，我们之所以有所误解，在于修饰符如果为<code>public</code>的确可以不检查，<code>Reflection.quickCheckMemberAccess(clazz, modifiers)</code>方法先对<code>public</code>进行了检查，如果是<code>public</code>就不进行后续的检查了。</p>
+<p>看到这里，很明显，<strong><code>setAccessible(true)</code>的作用是关闭安全检查</strong></p>
 <p>由于JDK的安全检查耗时较多，所以通过setAccessible(true)的方式关闭安全检查也可以提升反射速度</p>
 <blockquote>
 <p>对文首的疑问，我是这样理解的：</p>
@@ -507,17 +517,21 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>2022年7月20日 11:10:04<br>不行，我真的好想哭，好难过。</p>
-<p>2022年7月20日 10:35:57<br>其实不是第一次经历同事离职，毕竟刚来公司时，跟我同期入职的同事，在工作2个月就离职，虽然问他原因他不说，但也因为好奇，联系了他好几次，不过内心并没有什么波动。</p>
-<p>不过这一次好像不一样。<br>从一些蛛丝马迹中，大概提前了2个周猜测到了。由于一些不可名状的赌徒心理，不到黄河心不死，但到昨天大概心死的扎扎实实了。<br>他走了，带我的老师走了。<br>即使从什么书面意义或者名头上来讲，不见得是我的老师，但从实际意义上，他的确教了我很多，我愿意称他一声老师。<br>直到昨天，他也嘱咐了我一些在职场生存的箴言。</p>
-<p>很难过，今天的心情是沮丧的。看到旁边工位空空如也，我的心里也空空的。<br>再也没有为我撑腰、为我壮胆、为我兜底的人了。</p>
-<p>突然想起村上春树的一句话：</p>
-<blockquote>
-<p>你要做一个不动声色的大人了，不准情绪化，不准偷偷想念，不准回头看。</p>
-</blockquote>
+          <p>2022年7月20日 11:10:04 不行，我真的好想哭，好难过。</p>
+<p>2022年7月20日 10:35:57
+其实不是第一次经历同事离职，毕竟刚来公司时，跟我同期入职的同事，在工作2个月就离职，虽然问他原因他不说，但也因为好奇，联系了他好几次，不过内心并没有什么波动。</p>
+<p>不过这一次好像不一样。
+从一些蛛丝马迹中，大概提前了2个周猜测到了。由于一些不可名状的赌徒心理，不到黄河心不死，但到昨天大概心死的扎扎实实了。
+他走了，带我的老师走了。
+即使从什么书面意义或者名头上来讲，不见得是我的老师，但从实际意义上，他的确教了我很多，我愿意称他一声老师。
+直到昨天，他也嘱咐了我一些在职场生存的箴言。</p>
+<p>很难过，今天的心情是沮丧的。看到旁边工位空空如也，我的心里也空空的。
+再也没有为我撑腰、为我壮胆、为我兜底的人了。</p>
+<p>突然想起村上春树的一句话： &gt;
+你要做一个不动声色的大人了，不准情绪化，不准偷偷想念，不准回头看。</p>
 <p>那好吧，我只偷偷难过一上午，下午就好好干活。</p>
 <blockquote>
-<p>人有悲欢离合<br>月有阴晴圆缺<br>此事古难全<br>但愿人长久<br>千里共婵娟</p>
+<p>人有悲欢离合 月有阴晴圆缺 此事古难全 但愿人长久 千里共婵娟</p>
 </blockquote>
 
       
@@ -597,19 +611,29 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
+          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very
+first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for
+more info. If you get any problems when using Hexo, you can find the
+answer in <a
+target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or
+you can ask me on <a
+target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a
+target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<h3 id="generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a
+target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a
+target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
       
     </div>

@@ -20,12 +20,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"twoandone.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="最近写的代码用了Field，介于经常在看源码的时候看到 1field.setAccessible(true)   在今天以前我都以为是用这个方法来突破权限访问控制，还生出：既然可以用反射来突破权限访问控制，为什么要设计这个功能的疑问。  实际上这个方法只是安全管理器的开关，为true的时候就关闭检查。 我们来跟踪一下代码，以Field为例： 可以看到 flag 被传入到了AccessibleObj">
+    <meta name="description" content="最近写的代码用了Field，介于经常在看源码的时候看到 1field.setAccessible(true)  在今天以前我都以为是用这个方法来突破权限访问控制，还生出：既然可以用反射来突破权限访问控制，为什么要设计这个功能的疑问。  实际上这个方法只是安全管理器的开关，为true的时候就关闭检查。 我们来跟踪一下代码，以Field为例： 可以看到 flag 被传入到了AccessibleObje">
 <meta property="og:type" content="article">
 <meta property="og:title" content="setAccessible(true)之我见">
 <meta property="og:url" content="https://twoandone.github.io/2022/07/26/setAccessible-%E7%9A%84%E4%BD%9C%E7%94%A8/">
 <meta property="og:site_name" content="Yussss">
-<meta property="og:description" content="最近写的代码用了Field，介于经常在看源码的时候看到 1field.setAccessible(true)   在今天以前我都以为是用这个方法来突破权限访问控制，还生出：既然可以用反射来突破权限访问控制，为什么要设计这个功能的疑问。  实际上这个方法只是安全管理器的开关，为true的时候就关闭检查。 我们来跟踪一下代码，以Field为例： 可以看到 flag 被传入到了AccessibleObj">
+<meta property="og:description" content="最近写的代码用了Field，介于经常在看源码的时候看到 1field.setAccessible(true)  在今天以前我都以为是用这个方法来突破权限访问控制，还生出：既然可以用反射来突破权限访问控制，为什么要设计这个功能的疑问。  实际上这个方法只是安全管理器的开关，为true的时候就关闭检查。 我们来跟踪一下代码，以Field为例： 可以看到 flag 被传入到了AccessibleObje">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-07-26T07:06:02.000Z">
 <meta property="article:modified_time" content="2022-07-26T08:32:48.807Z">
@@ -238,7 +238,6 @@
     <div class="post-body" itemprop="articleBody">
         <p>最近写的代码用了Field，介于经常在看源码的时候看到</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">field.setAccessible(<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>在今天以前我都以为是用这个方法来突破权限访问控制，还生出：既然可以用反射来突破权限访问控制，为什么要设计这个功能的疑问。</p>
 </blockquote>
@@ -246,13 +245,14 @@
 <p>我们来跟踪一下代码，以Field为例：</p>
 <p>可以看到 flag 被传入到了AccessibleObject当前对象的overide属性</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># java.lang.reflect.AccessibleObject</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAccessible</span><span class="params">(<span class="type">boolean</span> flag)</span> <span class="keyword">throws</span> SecurityException &#123;</span><br><span class="line">        <span class="type">SecurityManager</span> <span class="variable">sm</span> <span class="operator">=</span> System.getSecurityManager();</span><br><span class="line">        <span class="keyword">if</span> (sm != <span class="literal">null</span>) sm.checkPermission(ACCESS_PERMISSION);</span><br><span class="line">        setAccessible0(<span class="built_in">this</span>, flag);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">setAccessible0</span><span class="params">(AccessibleObject obj, <span class="type">boolean</span> flag)</span></span><br><span class="line">        <span class="keyword">throws</span> SecurityException</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Constructor &amp;&amp; flag == <span class="literal">true</span>) &#123;</span><br><span class="line">            Constructor&lt;?&gt; c = (Constructor&lt;?&gt;)obj;</span><br><span class="line">            <span class="keyword">if</span> (c.getDeclaringClass() == Class.class) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Cannot make a java.lang.Class&quot;</span> +</span><br><span class="line">                                            <span class="string">&quot; constructor accessible&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        obj.override = flag;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>再来看 Field ，Field类继承了AccessibleObject类，也就继承了成员变量override。</p>
-<p>在get方法中，就判断了override的值，如果为true 就不会执行一系列check。</p>
+<p>再来看 Field
+，Field类继承了AccessibleObject类，也就继承了成员变量override。</p>
+<p>在get方法中，就判断了override的值，如果为true
+就不会执行一系列check。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Field</span> <span class="keyword">extends</span> <span class="title class_">AccessibleObject</span> <span class="keyword">implements</span> <span class="title class_">Member</span>&#123;</span><br><span class="line">  <span class="type">boolean</span> override;</span><br><span class="line">  <span class="keyword">public</span> Object <span class="title function_">get</span><span class="params">(Object obj)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!override) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!Reflection.quickCheckMemberAccess(clazz, modifiers)) &#123;</span><br><span class="line">                Class&lt;?&gt; caller = Reflection.getCallerClass();</span><br><span class="line">                checkAccess(caller, clazz, obj, modifiers);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> getFieldAccessor(obj).get(obj);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>实际上修饰符为 <code>public</code>的属性或者方法的 <code>Accessible</code>仍然是<code>false</code>的，我们之所以有所误解，在于修饰符如果为<code>public</code>的确可以不检查，<code>Reflection.quickCheckMemberAccess(clazz, modifiers)</code>方法先对<code>public</code>进行了检查，如果是<code>public</code>就不进行后续的检查了。</p>
-<p>看到这里，很明显，**<code>setAccessible(true)</code>的作用是关闭安全检查**</p>
+<p>实际上修饰符为 <code>public</code>的属性或者方法的
+<code>Accessible</code>仍然是<code>false</code>的，我们之所以有所误解，在于修饰符如果为<code>public</code>的确可以不检查，<code>Reflection.quickCheckMemberAccess(clazz, modifiers)</code>方法先对<code>public</code>进行了检查，如果是<code>public</code>就不进行后续的检查了。</p>
+<p>看到这里，很明显，<strong><code>setAccessible(true)</code>的作用是关闭安全检查</strong></p>
 <p>由于JDK的安全检查耗时较多，所以通过setAccessible(true)的方式关闭安全检查也可以提升反射速度</p>
 <blockquote>
 <p>对文首的疑问，我是这样理解的：</p>
