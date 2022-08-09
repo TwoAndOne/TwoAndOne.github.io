@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -138,7 +138,7 @@
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -172,6 +172,154 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/05/26/%E7%90%86%E8%A7%A3ifconfig%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/26/%E7%90%86%E8%A7%A3ifconfig%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">ifconfig命令初探</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-26 17:00:29" itemprop="dateCreated datePublished" datetime="2021-05-26T17:00:29+08:00">2021-05-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-08-09 17:09:48" itemprop="dateModified" datetime="2022-08-09T17:09:48+08:00">2022-08-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://github.com/twoandone/my-images/raw/master/img/image-20210526170305005.png" alt="image-20210526170305005" style="zoom:80%;" /></p>
+<p>ifconfig是Linux里查看和配置网卡的命令。</p>
+<p>如上图所示</p>
+<p>br-c5a9cfdba998、docker0、ens33等都是网卡的名字，其实还有lo，virbr0等网卡，由于版面就没截图了，lo全称loopback，表示回环地址，用于本机通信，经过内核处理直接返回s，ens代表由主板bios内置的PCI-E网卡（Peripheral
+Component Interconnect
+Express，根据接口类型，无线网卡分为USB网卡和PCI-E网卡）</p>
+<p><code>flags=4099&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;</code>是网卡状态</p>
+<p><code>mtu</code>全称<code>Maximum transmission unit</code>，最大传输单元，以字节为单位，是数据链路层的概念</p>
+<p><code>inet</code>表示网卡的ip地址</p>
+<p><code>netmask</code>表示子网掩码</p>
+<p><code>ether</code>表示网卡的MAC地址</p>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 43%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">OSI中的层</th>
+<th style="text-align: left;">功能</th>
+<th style="text-align: left;">TCP/IP协议族</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">应用层</td>
+<td
+style="text-align: left;">文件传输，电子邮件，文件服务，虚拟终端</td>
+<td
+style="text-align: left;">TFTP，HTTP，SNMP，FTP，SMTP，DNS，Telnet</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">表示层</td>
+<td style="text-align: left;">数据格式化，代码转换，数据加密</td>
+<td style="text-align: left;">没有协议</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">会话层</td>
+<td style="text-align: left;">解除或建立与别的接点的联系</td>
+<td style="text-align: left;">没有协议</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">传输层</td>
+<td style="text-align: left;">提供端对端的接口</td>
+<td style="text-align: left;">TCP，UDP</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">网络层</td>
+<td style="text-align: left;">为数据包选择路由</td>
+<td style="text-align: left;">IP，ICMP，RIP，OSPF，BGP，IGMP</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">数据链路层</td>
+<td style="text-align: left;">传输有地址的帧以及错误检测功能</td>
+<td style="text-align: left;">SLIP，CSLIP，PPP，ARP，RARP，MTU</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">物理层</td>
+<td style="text-align: left;">以二进制数据形式在物理媒体上传输数据</td>
+<td style="text-align: left;">ISO2110，IEEE802，IEEE802.2</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1532,143 +1680,6 @@ this software in parallel can cause all kinds of trouble.</p>
 <p>.zshrc
 文件修改以下配置，只要输入jdk8就切换jdk8的环境,输入jdk17就切换17 jdk</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_8_HOME=&quot;/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/&quot;</span><br><span class="line">export JAVA_17_HOME=&quot;/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home&quot;</span><br><span class="line">alias jdk8=&quot;export JAVA_HOME=$JAVA_8_HOME&quot;</span><br><span class="line">alias jdk17=&quot;export JAVA_HOME=$JAVA_17_HOME&quot;</span><br><span class="line">export JAVA_HOME=$JAVA_8_HOME</span><br><span class="line">export PATH=$PATH:$JAVA_HOME</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/Genshin%E8%82%9D%E5%BD%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/20/Genshin%E8%82%9D%E5%BD%95/" class="post-title-link" itemprop="url">Genshin 肝录</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-20 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-20T13:42:25+08:00">2021-03-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:24:56" itemprop="dateModified" datetime="2022-07-18T01:24:56+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">life</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="甘雨">甘雨</h1>
-<h3 id="天赋周二周五周日-勤劳的哲学">天赋（周二、周五、周日
-勤劳的哲学）</h3>
-<p>二段蓄力 霜华矢 霜华绽放 冰元素伤害</p>
-<p>E 持续 6s 冷却 10s</p>
-<p>Q 持续 15s 冷却 15s 元素能量 60</p>
-<h3 id="武器周二周五周日">武器（周二、周五、周日）</h3>
-<p>破魔之弓 重击提升 12%</p>
-<p><strong>砂之祭场 冬国仕女 射手丘丘人</strong></p>
-<h3 id="命座">命座</h3>
-<p>饮露 ：二段蓄力降低冰抗 15% 持续 6s</p>
-<h3 id="圣遗物">圣遗物</h3>
-<p>乐团</p>
-<hr />
-<h1 id="钟离">钟离</h1>
-<h3 id="天赋周三周六周日">天赋（周三、周六、周日）</h3>
-<p>E 持续 6s 冷却 10s</p>
-<p>Q 持续 3.2s 冷却 12s 元素能量 40</p>
-<h3 id="武器周三周六周日">武器（周三、周六、周日）</h3>
-<p>黑缨枪 提高生命值</p>
-<p><strong>古雷试炼场 龙蜥 射手丘丘人</strong></p>
-<h3 id="圣遗物-1">圣遗物</h3>
-<p>生命头 生命沙 生命杯</p>
-<p>有效词条：生命、充能</p>
-<ul>
-<li>千岩</li>
-<li>宗室</li>
-</ul>
-<hr />
-<h1 id="香菱">香菱</h1>
-<h3 id="天赋周二周五周日-勤劳的哲学-1">天赋（周二、周五、周日
-勤劳的哲学）</h3>
-<h3 id="武器">武器</h3>
-<p>渔获 # 钓鱼太烦了</p>
-<h3 id="圣遗物-2">圣遗物</h3>
-<p>暴击/爆伤头 充能沙 火伤杯</p>
-<p>有效词条：充能</p>
-<ul>
-<li>绝缘</li>
-</ul>
-<hr />
-<h1 id="班尼特">班尼特</h1>
-<h3 id="天赋周二周五周日-冰封废渊">天赋（周二、周五、周日
-冰封废渊）</h3>
-<p>Q 13 级</p>
-<h3 id="武器-1">武器</h3>
-<p>风鹰剑</p>
-<h3 id="圣遗物-3">圣遗物</h3>
-<p>治疗头 充能沙 生命杯</p>
-<p>有效词条：充能、生命</p>
-<ul>
-<li>宗室</li>
-</ul>
 
       
     </div>
