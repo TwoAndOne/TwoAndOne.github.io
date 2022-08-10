@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -138,7 +138,7 @@
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -172,296 +172,6 @@
 
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/05/26/%E7%90%86%E8%A7%A3ifconfig%E5%91%BD%E4%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/26/%E7%90%86%E8%A7%A3ifconfig%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">ifconfig命令初探</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-05-26 17:00:29" itemprop="dateCreated datePublished" datetime="2021-05-26T17:00:29+08:00">2021-05-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-09 17:09:48" itemprop="dateModified" datetime="2022-08-09T17:09:48+08:00">2022-08-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://github.com/twoandone/my-images/raw/master/img/image-20210526170305005.png" alt="image-20210526170305005" style="zoom:80%;" /></p>
-<p>ifconfig是Linux里查看和配置网卡的命令。</p>
-<p>如上图所示</p>
-<p>br-c5a9cfdba998、docker0、ens33等都是网卡的名字，其实还有lo，virbr0等网卡，由于版面就没截图了，lo全称loopback，表示回环地址，用于本机通信，经过内核处理直接返回s，ens代表由主板bios内置的PCI-E网卡（Peripheral
-Component Interconnect
-Express，根据接口类型，无线网卡分为USB网卡和PCI-E网卡）</p>
-<p><code>flags=4099&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;</code>是网卡状态</p>
-<p><code>mtu</code>全称<code>Maximum transmission unit</code>，最大传输单元，以字节为单位，是数据链路层的概念</p>
-<p><code>inet</code>表示网卡的ip地址</p>
-<p><code>netmask</code>表示子网掩码</p>
-<p><code>ether</code>表示网卡的MAC地址</p>
-<table>
-<colgroup>
-<col style="width: 11%" />
-<col style="width: 43%" />
-<col style="width: 45%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">OSI中的层</th>
-<th style="text-align: left;">功能</th>
-<th style="text-align: left;">TCP/IP协议族</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">应用层</td>
-<td
-style="text-align: left;">文件传输，电子邮件，文件服务，虚拟终端</td>
-<td
-style="text-align: left;">TFTP，HTTP，SNMP，FTP，SMTP，DNS，Telnet</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">表示层</td>
-<td style="text-align: left;">数据格式化，代码转换，数据加密</td>
-<td style="text-align: left;">没有协议</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">会话层</td>
-<td style="text-align: left;">解除或建立与别的接点的联系</td>
-<td style="text-align: left;">没有协议</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">传输层</td>
-<td style="text-align: left;">提供端对端的接口</td>
-<td style="text-align: left;">TCP，UDP</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">网络层</td>
-<td style="text-align: left;">为数据包选择路由</td>
-<td style="text-align: left;">IP，ICMP，RIP，OSPF，BGP，IGMP</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">数据链路层</td>
-<td style="text-align: left;">传输有地址的帧以及错误检测功能</td>
-<td style="text-align: left;">SLIP，CSLIP，PPP，ARP，RARP，MTU</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">物理层</td>
-<td style="text-align: left;">以二进制数据形式在物理媒体上传输数据</td>
-<td style="text-align: left;">ISO2110，IEEE802，IEEE802.2</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/04/23/%E5%AD%90%E9%9B%86%E2%85%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/23/%E5%AD%90%E9%9B%86%E2%85%A1/" class="post-title-link" itemprop="url">子集Ⅱ</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-23 16:33:13" itemprop="dateCreated datePublished" datetime="2021-04-23T16:33:13+08:00">2021-04-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:02:17" itemprop="dateModified" datetime="2022-07-18T01:02:17+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h4 id="子集-ii"><a
-target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/subsets-ii/">90. 子集 II</a></h4>
-<p>给你一个整数数组 <code>nums</code>
-，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。</p>
-<p>解集 <strong>不能</strong> 包含重复的子集。返回的解集中，子集可以按
-<strong>任意顺序</strong> 排列。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [1,2,2]</span><br><span class="line">输出：[[],[1],[1,2],[1,2,2],[2],[2,2]]</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [0]</span><br><span class="line">输出：[[],[0]]</span><br></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>1 &lt;= nums.length &lt;= 10</code></li>
-<li><code>-10 &lt;= nums[i] &lt;= 10</code></li>
-</ul>
-<p>回溯算法的启蒙，做这道题思考了很久，也算是在生活中用到了回溯吧，我决定先不做这道题，先去做<a
-target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/permutations/">46.
-全排列</a>，做完全排列之后，这道题就有了思路。</p>
-<p>全排列的实质是遍历多叉树,假如数组是[1,2,3]</p>
-<p><img src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210423164923562.png" alt="image-20210423164923562" style="zoom:50%;" /></p>
-<p>所以我们的思路就是</p>
-<ul>
-<li>终止条件
-<ul>
-<li>遍历到最后一个，也就是数组长度等于3的时候</li>
-</ul></li>
-<li>使用循环语句把每一个分支遍历到</li>
-<li>在循环语句内部使用递归调用本函数接着遍历子树</li>
-<li>同一层的结点遍历结束后需要回溯，举个例子，当遍历到[1,1,1]时下一个应该遍历[1,1,2]，此时在添加了[1,1,1]之后需要把最后一个1删除以增加空位。</li>
-</ul>
-<p>当然这只是第一步，得到全排列还需要剪枝，因为[1,1,1]这种排列并不是我们需要的，不过我们可以先实现这一种</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">bfs</span><span class="params">(<span class="type">int</span>[] nums, List&lt;List&lt;Integer&gt;&gt; list, ArrayList&lt;Integer&gt; tmp)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(tmp.size()==nums.length)&#123;</span><br><span class="line">            list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            tmp.add(nums[i]);</span><br><span class="line">            bfs(nums,list,tmp);</span><br><span class="line">            tmp.remove(tmp.size()-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>问题来了，我们怎么剪枝呢？</p>
-<p>简单的方法就是，我们在tmp.add(nums[i])之前进行判断tmp中是否已经有这个数了，如果有了就continue。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">    		<span class="keyword">if</span>(tmp.contains(nums[i])) <span class="keyword">continue</span>;</span><br><span class="line">            tmp.add(nums[i]);</span><br><span class="line">            bfs(nums,list,tmp);</span><br><span class="line">            tmp.remove(tmp.size()-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>还有一种方法是用一个标记数组进行记录被使用过的数字，这种也是回溯算法常用的方式</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;List&lt;Integer&gt;&gt; <span class="title function_">permute</span><span class="params">(<span class="type">int</span>[] nums)</span>&#123;</span><br><span class="line">       List&lt;List&lt;Integer&gt;&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">       <span class="type">boolean</span>[] used = <span class="keyword">new</span> <span class="title class_">boolean</span>[nums.length]; <span class="comment">//初始时都为false</span></span><br><span class="line">       bfs(nums,list,<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(),used);</span><br><span class="line">       <span class="keyword">return</span>  list;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">bfs</span><span class="params">(<span class="type">int</span>[] nums, List&lt;List&lt;Integer&gt;&gt; list, ArrayList&lt;Integer&gt; tmp,<span class="type">boolean</span>[] used)</span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(tmp.size()==nums.length)&#123;</span><br><span class="line">           list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">           <span class="keyword">if</span>(used[i]) <span class="keyword">continue</span>;</span><br><span class="line">           tmp.add(nums[i]);</span><br><span class="line">           used[i] = <span class="literal">true</span>;</span><br><span class="line">           bfs(nums,list,tmp,used);</span><br><span class="line">           tmp.remove(tmp.size()-<span class="number">1</span>);</span><br><span class="line">           used[i] = <span class="literal">false</span>;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>好的，全排列是大功告成啦！</p>
-<p>但是子集还没搞定</p>
-<p>先从<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/subsets/">78.
-子集</a>开始</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">子集的示例：</span><br><span class="line">输入：nums = [1,2,3]</span><br><span class="line">输出：[[],[1],[1,2],[1,2,3],[2],[2,3],[3]]</span><br><span class="line">全排列的示例：</span><br><span class="line">[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]</span><br></pre></td></tr></table></figure>
-<p>从示例中可以看出，子集会把tmp数组每一次变化加入list中，而全排列则需要在tmp数组长度为3时才加入</p>
-<p>总结一下：</p>
-<ul>
-<li>终止条件
-<ul>
-<li>tmp数组长度等于nums.length</li>
-</ul></li>
-<li>tmp数组的每一次变化都需要加入进返回数组list</li>
-<li>循环语句中，子集的剪枝可以从示例中看出，子集不需要回头</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span>[] nums,List&lt;List&lt;Integer&gt;&gt; list, ArrayList&lt;Integer&gt; tmp,<span class="type">int</span> index)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(tmp.size()==nums.length) &#123;</span><br><span class="line">        list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> index; i &lt; nums.length; i++) &#123;</span><br><span class="line">        tmp.add(nums[i]);</span><br><span class="line">        dfs(nums,list,tmp,i+<span class="number">1</span>);</span><br><span class="line">        tmp.remove(tmp.size()-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>子集Ⅱ与子集的区别就是给定的数组里有重复的数字</p>
-<p>加入给定数组[1,2,2]，不能出现，[1,2],[1,2]的情况，也就是挑选了下标为0，1和下标为0，2的的情况是一样的，不能出现这种情况</p>
-<p>容易想到的方法是，先对数组进行排序，如果nums[i]与nums[i-1]相等就跳过下标为i的情况</p>
-<p>考虑到边界条件，i必须大于0，但是只考虑这两种[1,2,2]的情况就会被排除，所以必须让for循环至少执行一次，也就是i大于index并且nums[i]与nums[i-1]相等时才不考虑i这种情况，当i等于index会保证至少执行一次。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;List&lt;Integer&gt;&gt; <span class="title function_">subsetsWithDup</span><span class="params">(<span class="type">int</span>[] nums)</span> &#123;</span><br><span class="line">    ArrayList&lt;List&lt;Integer&gt;&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    dfs(nums,list,<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(),<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span>[] nums,List&lt;List&lt;Integer&gt;&gt; list, ArrayList&lt;Integer&gt; tmp,<span class="type">int</span> index)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(tmp.size()==nums.length) &#123;</span><br><span class="line">        list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    list.add(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(tmp));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> index; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(i&gt;index&amp;&amp;nums[i-<span class="number">1</span>]==nums[i]) <span class="keyword">continue</span>;</span><br><span class="line">        tmp.add(nums[i]);</span><br><span class="line">        dfs(nums,list,tmp,i+<span class="number">1</span>);</span><br><span class="line">        tmp.remove(tmp.size()-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -1698,8 +1408,266 @@ this software in parallel can cause all kinds of trouble.</p>
 
 
 
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/Genshin%E8%82%9D%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/20/Genshin%E8%82%9D%E5%BD%95/" class="post-title-link" itemprop="url">Genshin 肝录</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-20 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-20T13:42:25+08:00">2021-03-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:24:56" itemprop="dateModified" datetime="2022-07-18T01:24:56+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">life</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="甘雨">甘雨</h1>
+<h3 id="天赋周二周五周日-勤劳的哲学">天赋（周二、周五、周日
+勤劳的哲学）</h3>
+<p>二段蓄力 霜华矢 霜华绽放 冰元素伤害</p>
+<p>E 持续 6s 冷却 10s</p>
+<p>Q 持续 15s 冷却 15s 元素能量 60</p>
+<h3 id="武器周二周五周日">武器（周二、周五、周日）</h3>
+<p>破魔之弓 重击提升 12%</p>
+<p><strong>砂之祭场 冬国仕女 射手丘丘人</strong></p>
+<h3 id="命座">命座</h3>
+<p>饮露 ：二段蓄力降低冰抗 15% 持续 6s</p>
+<h3 id="圣遗物">圣遗物</h3>
+<p>乐团</p>
+<hr />
+<h1 id="钟离">钟离</h1>
+<h3 id="天赋周三周六周日">天赋（周三、周六、周日）</h3>
+<p>E 持续 6s 冷却 10s</p>
+<p>Q 持续 3.2s 冷却 12s 元素能量 40</p>
+<h3 id="武器周三周六周日">武器（周三、周六、周日）</h3>
+<p>黑缨枪 提高生命值</p>
+<p><strong>古雷试炼场 龙蜥 射手丘丘人</strong></p>
+<h3 id="圣遗物-1">圣遗物</h3>
+<p>生命头 生命沙 生命杯</p>
+<p>有效词条：生命、充能</p>
+<ul>
+<li>千岩</li>
+<li>宗室</li>
+</ul>
+<hr />
+<h1 id="香菱">香菱</h1>
+<h3 id="天赋周二周五周日-勤劳的哲学-1">天赋（周二、周五、周日
+勤劳的哲学）</h3>
+<h3 id="武器">武器</h3>
+<p>渔获 # 钓鱼太烦了</p>
+<h3 id="圣遗物-2">圣遗物</h3>
+<p>暴击/爆伤头 充能沙 火伤杯</p>
+<p>有效词条：充能</p>
+<ul>
+<li>绝缘</li>
+</ul>
+<hr />
+<h1 id="班尼特">班尼特</h1>
+<h3 id="天赋周二周五周日-冰封废渊">天赋（周二、周五、周日
+冰封废渊）</h3>
+<p>Q 13 级</p>
+<h3 id="武器-1">武器</h3>
+<p>风鹰剑</p>
+<h3 id="圣遗物-3">圣遗物</h3>
+<p>治疗头 充能沙 生命杯</p>
+<p>有效词条：充能、生命</p>
+<ul>
+<li>宗室</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/HashMap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/20/HashMap/" class="post-title-link" itemprop="url">HashMap</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-20 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-20T13:42:25+08:00">2021-03-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:03:29" itemprop="dateModified" datetime="2022-07-18T01:03:29+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>介绍一下HashMap吧</p>
+<p>那我首先说一下它<strong>能干什么</strong>,hashmap实现了map接口,那肯定能存储键值对,它允许null键但只能有一个,null值可以有多个,线程不安全,不保证有序,因为根据hashcode值存储数据,大多数时候可以直接定位到它的值,所以具有很快的访问速度.</p>
+<p>从<strong>结构实现</strong>上看,hashmap是由数组,链表,红黑树实现的,红黑树是jdk8引进的.</p>
+<p>hashmap最基本的方法是<strong>get和put方法</strong>,get是取,put是存.</p>
+<p>怎么取呢?也就是<strong>get()方法的工作原理</strong>是啥.</p>
+<p>在调用get方法时,我们会传入key,然后get方法内部会先调用hash方法算出hash值,也就是下标然后再调用getnode方法,接着判断链表的第一个位置存储的元素是不是要找的元素,如果不是,还会判断下一个是不是为空,为空就返回null,不为空还得判断链表的第一个结点是否是treenode的结点,如果是就继续treenode的get方法,如果不是就遍历链表来获取结点.</p>
+<p>put方法呢,首先判断键值对数组table是否为空,如果是就得扩容,否就根据键值key计算hash值得到插入的数组索引,得到索引就判断这个位置是否空,空就直接插入,当然插入也得看此时的size是否大于threshold大于就还得扩容,然后回到这个不空的情况来,不空的话就得判断这个位置的key是否和给定的key相同,相同就直接覆盖,不相同就得再后面排队了,排队也得分情况,判断第一个结点是不是红黑树的结点,是红黑树就得用红黑树的方式插入,不是就直接在链表里插入,在链表里插入也得考虑此时的链表长度是否大于8,大于8就得转换为红黑树,不大于8就链表插入,key存在就直接覆盖.</p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210320164108937.png"
+alt="image-20210320164108937" />
+<figcaption aria-hidden="true">image-20210320164108937</figcaption>
+</figure>
+<p>说了这么多次,根据key计算数组索引,接下来讲讲怎么计算索引吧.</p>
+<p>第一步取key的hashCode值,第二步高位运算,第三步取模运算.</p>
+<p><strong>HashMap的长度为什么是2的幂次方</strong></p>
+<p>可能是Doug Lea太厉害了,hashmap的作者,哈哈哈.</p>
+<p>不开玩笑了,为了让hashmap存储高效就得把哈希函数映射得比较均匀分散以避免哈希碰撞,但hashmap是有容量的,为了保证得到的索引值在容量范围内就得对散列值进行取余,但是取余运算符效率太低,为了能够让位运算实现取余操作,必须保证hashmap的长度也就是取模运算的模数必须为2的幂.<strong>(length
+- 1) &amp; hash</strong></p>
+<p><strong>HashMap怎么扩容</strong></p>
+<p>因为Java里的数组无法自动扩容,方法是使用一个新的数组代替已有的容量小的数组.</p>
+<p>大致分两步:1
+,容量扩充为原来的两倍,2,对每个结点重新计算哈希值,重新计算索引位置,将原来的元素移动到新的哈希表中.</p>
+<p><strong>HashMap与HashTable的区别</strong>k</p>
+<p>作者不一样,Doug Lea没有参与HashTable的编写</p>
+<p>　　1.HashMap继承于AbstractMap，而Hashtable继承于Dictionary；
+　　2.线程安全不同。Hashtable的几乎所有函数都是同步的，即它是线程安全的，支持多线程。而HashMap的函数则是非同步的，它不是线程安全的。若要在多线程中使用HashMap，需要我们额外的进行同步处理；
+　　3.null值。HashMap的key、value都可以为null。Hashtable的key、value都不可以为null；
+　　4.迭代器(Iterator)。HashMap的迭代器(Iterator)是fail-fast迭代器，而Hashtable的enumerator迭代器不是fail-fast的。所以当有其它线程改变了HashMap的结构（增加或者移除元素），将会抛出ConcurrentModificationException。
+　　5.容量的初始值和增加方式都不一样：HashMap默认的容量大小是16；增加容量时，每次将容量变为“原始容量x2”。Hashtable默认的容量大小是11；增加容量时，每次将容量变为“原始容量x2
++ 1”；
+　　6.添加key-value时的hash值算法不同：HashMap添加元素时，是使用自定义的哈希算法。Hashtable没有自定义哈希算法，而直接采用的key的hashCode()。
+　　7.速度。由于Hashtable是线程安全的也是synchronized，所以在单线程环境下它比HashMap要慢。如果你不需要同步，只需要单一线程，那么使用HashMap性能要好过Hashtable。</p>
+<p>参考:</p>
+<p>https://tech.meituan.com/2016/06/24/java-hashmap.html</p>
+<p>https://snailclimb.gitee.io/javaguide/#/docs/java/collection/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98?id=_146-hashmap-%e7%9a%84%e9%95%bf%e5%ba%a6%e4%b8%ba%e4%bb%80%e4%b9%88%e6%98%af-2-%e7%9a%84%e5%b9%82%e6%ac%a1%e6%96%b9</p>
+<p>https://blog.csdn.net/u012512634/article/details/72735183</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 </div>
