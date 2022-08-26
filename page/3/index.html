@@ -414,6 +414,117 @@ this software in parallel can cause all kinds of trouble.</p>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/RocketMQ%E5%AE%89%E8%A3%85(windows)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/20/RocketMQ%E5%AE%89%E8%A3%85(windows)/" class="post-title-link" itemprop="url">RocketMQ 安装 （windows）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-20 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-20T13:42:25+08:00">2021-03-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:21:46" itemprop="dateModified" datetime="2022-07-18T01:21:46+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>按照官网的步骤，坑死我了，耗费好几个小时。</p>
+<p>官网地址：https://rocketmq.apache.org/docs/quick-start/</p>
+<ol type="1">
+<li><p><img
+src="https://github.com/TwoAndOne/my-images/raw/master/uPic/image-20220317174007720.png"
+alt="image-20220317174007720" />在官网的页面上，点击下载</p></li>
+<li><p>```powershell 解压 rocketmq-all-4.9.3-source-release.zip
+进入这个目录 rocketmq-all-4.9.3/ 打开 cmd 然后执行后面的命令：mvn
+-Prelease-all -DskipTests clean install -U <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. 这时候你可以在 rocketmq-all-4.9.3 目录看见`distribution\target\rocketmq-4.9.3\rocketmq-4.9.3\bin` 这个目录。</span><br><span class="line">   ![image-20220317174809910](https://gitee.com/yuswork/my-images/raw/master/uPic/image-20220317174809910.png)进入这个目录之后，你会看到 mqnamesrv.cmd，这就可以表明你已经编译成功了。</span><br><span class="line"></span><br><span class="line">   其实你可以先试一下运行这个`mqnamesrv.cmd` 能不能成功，不能成功再用我下面的方法。直接在命令行输入 `mqnamesrv.cmd`。</span><br><span class="line"></span><br><span class="line">4. 下一步，我们去配置环境变量，直接点击 win 按钮，输入环境变量四个字就可以看见编辑环境变量的选项</span><br><span class="line"></span><br><span class="line">   ```powershell</span><br><span class="line">   # 在系统变量那里选择编辑</span><br><span class="line">   ROCKETMQ_HOME=&quot;xxx\distribution\target\rocketmq-4.9.3\rocketmq-4.9.3&quot;</span><br><span class="line">   NAMESRV_ADDR=&quot;localhost:9876&quot;</span><br><span class="line">   # 重新打开 cmd 然后运行下述命令，查看是否配置成功 </span><br><span class="line">   set ROCKETMQ_HOME</span><br></pre></td></tr></table></figure></p></li>
+<li><p>OK，重新回到<code>distribution\target\rocketmq-4.9.2\rocketmq-4.9.2\bin</code>目录，用记事本打开
+runserver.cmd。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置一个变量</span></span><br><span class="line"><span class="built_in">set</span> JAVAHOME=<span class="string">&quot;%JAVA_HOME%&quot;</span></span><br><span class="line"><span class="comment"># 然后找到这一行 把 JAVA_HOME 替换成 JAVAHOME</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -Djava.ext.dirs=%BASE_DIR%lib;%JAVAHOME%\jre\lib\ext&quot;</span></span><br><span class="line"><span class="comment"># 找到这一行，删掉 CLASSPATH 外面的引号</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -cp %CLASSPATH%</span></span><br></pre></td></tr></table></figure>
+<p>为什么这么做呢？</p>
+<p>因为 JAVA_HOME、CLASSPATH、PATH 里都不能有空格，我们配置的
+JAVA_HOME的地址一般都是<code>D:\Program Files\xxx</code>
+这里面就有空格，所以我们再设置一个变量很巧妙的解决了这个问题。</p>
+<p>CLASSPATH 写在外面就包引号，写在引号里面就不用再加引号了。</p></li>
+<li><p>再一次回到
+<code>distribution\target\rocketmq-4.9.2\rocketmq-4.9.2\bin</code>
+目录，运行 <code>mqnamesrv.cmd</code>,如果看到，就可以了</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The Name Server boot success. </span><br></pre></td></tr></table></figure></li>
+<li><p>关闭 最简单的方式是直接关掉这几个窗口
+但是你也可以用<code>mqshutdown.cmd broker | namesrv</code>
+其实意思是一样的，查看 <code>mqshutdown.cmd</code> 会发现它也是直接 kill
+掉</p></li>
+</ol>
+<p><strong>备注</strong> set ROCKETMQ_HOME 可以看环境变量</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/HashMap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -509,117 +620,6 @@ alt="image-20210320164108937" />
 <p>https://tech.meituan.com/2016/06/24/java-hashmap.html</p>
 <p>https://snailclimb.gitee.io/javaguide/#/docs/java/collection/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98?id=_146-hashmap-%e7%9a%84%e9%95%bf%e5%ba%a6%e4%b8%ba%e4%bb%80%e4%b9%88%e6%98%af-2-%e7%9a%84%e5%b9%82%e6%ac%a1%e6%96%b9</p>
 <p>https://blog.csdn.net/u012512634/article/details/72735183</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/RocketMQ%E5%AE%89%E8%A3%85(windows)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/20/RocketMQ%E5%AE%89%E8%A3%85(windows)/" class="post-title-link" itemprop="url">RocketMQ 安装 （windows）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-20 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-20T13:42:25+08:00">2021-03-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:21:46" itemprop="dateModified" datetime="2022-07-18T01:21:46+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>按照官网的步骤，坑死我了，耗费好几个小时。</p>
-<p>官网地址：https://rocketmq.apache.org/docs/quick-start/</p>
-<ol type="1">
-<li><p><img
-src="https://github.com/TwoAndOne/my-images/raw/master/uPic/image-20220317174007720.png"
-alt="image-20220317174007720" />在官网的页面上，点击下载</p></li>
-<li><p>```powershell 解压 rocketmq-all-4.9.3-source-release.zip
-进入这个目录 rocketmq-all-4.9.3/ 打开 cmd 然后执行后面的命令：mvn
--Prelease-all -DskipTests clean install -U <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. 这时候你可以在 rocketmq-all-4.9.3 目录看见`distribution\target\rocketmq-4.9.3\rocketmq-4.9.3\bin` 这个目录。</span><br><span class="line">   ![image-20220317174809910](https://gitee.com/yuswork/my-images/raw/master/uPic/image-20220317174809910.png)进入这个目录之后，你会看到 mqnamesrv.cmd，这就可以表明你已经编译成功了。</span><br><span class="line"></span><br><span class="line">   其实你可以先试一下运行这个`mqnamesrv.cmd` 能不能成功，不能成功再用我下面的方法。直接在命令行输入 `mqnamesrv.cmd`。</span><br><span class="line"></span><br><span class="line">4. 下一步，我们去配置环境变量，直接点击 win 按钮，输入环境变量四个字就可以看见编辑环境变量的选项</span><br><span class="line"></span><br><span class="line">   ```powershell</span><br><span class="line">   # 在系统变量那里选择编辑</span><br><span class="line">   ROCKETMQ_HOME=&quot;xxx\distribution\target\rocketmq-4.9.3\rocketmq-4.9.3&quot;</span><br><span class="line">   NAMESRV_ADDR=&quot;localhost:9876&quot;</span><br><span class="line">   # 重新打开 cmd 然后运行下述命令，查看是否配置成功 </span><br><span class="line">   set ROCKETMQ_HOME</span><br></pre></td></tr></table></figure></p></li>
-<li><p>OK，重新回到<code>distribution\target\rocketmq-4.9.2\rocketmq-4.9.2\bin</code>目录，用记事本打开
-runserver.cmd。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置一个变量</span></span><br><span class="line"><span class="built_in">set</span> JAVAHOME=<span class="string">&quot;%JAVA_HOME%&quot;</span></span><br><span class="line"><span class="comment"># 然后找到这一行 把 JAVA_HOME 替换成 JAVAHOME</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -Djava.ext.dirs=%BASE_DIR%lib;%JAVAHOME%\jre\lib\ext&quot;</span></span><br><span class="line"><span class="comment"># 找到这一行，删掉 CLASSPATH 外面的引号</span></span><br><span class="line"><span class="built_in">set</span> <span class="string">&quot;JAVA_OPT=%JAVA_OPT% -cp %CLASSPATH%</span></span><br></pre></td></tr></table></figure>
-<p>为什么这么做呢？</p>
-<p>因为 JAVA_HOME、CLASSPATH、PATH 里都不能有空格，我们配置的
-JAVA_HOME的地址一般都是<code>D:\Program Files\xxx</code>
-这里面就有空格，所以我们再设置一个变量很巧妙的解决了这个问题。</p>
-<p>CLASSPATH 写在外面就包引号，写在引号里面就不用再加引号了。</p></li>
-<li><p>再一次回到
-<code>distribution\target\rocketmq-4.9.2\rocketmq-4.9.2\bin</code>
-目录，运行 <code>mqnamesrv.cmd</code>,如果看到，就可以了</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The Name Server boot success. </span><br></pre></td></tr></table></figure></li>
-<li><p>关闭 最简单的方式是直接关掉这几个窗口
-但是你也可以用<code>mqshutdown.cmd broker | namesrv</code>
-其实意思是一样的，查看 <code>mqshutdown.cmd</code> 会发现它也是直接 kill
-掉</p></li>
-</ol>
-<p><strong>备注</strong> set ROCKETMQ_HOME 可以看环境变量</p>
 
       
     </div>
