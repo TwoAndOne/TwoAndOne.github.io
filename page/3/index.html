@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -172,6 +172,239 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/21/Switch%20jdk8%20jdk17/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/21/Switch%20jdk8%20jdk17/" class="post-title-link" itemprop="url">Switch jdk8 jdk17</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-21 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-21T13:42:25+08:00">2021-03-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:23:24" itemprop="dateModified" datetime="2022-07-18T01:23:24+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>For the system Java wrappers to find this JDK, symlink it with</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -sfn /opt/homebrew/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk</span><br></pre></td></tr></table></figure>
+<p>openjdk is keg-only, which means it was not symlinked into
+/opt/homebrew, because macOS provides similar software and installing
+this software in parallel can cause all kinds of trouble.</p>
+<p>If you need to have openjdk first in your PATH, run:
+<code>echo 'export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"' &gt;&gt; ~/.zshrc</code></p>
+<p>For compilers to find openjdk you may need to set:
+<code>export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"</code></p>
+<p>.zshrc
+文件修改以下配置，只要输入jdk8就切换jdk8的环境,输入jdk17就切换17 jdk</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_8_HOME=&quot;/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/&quot;</span><br><span class="line">export JAVA_17_HOME=&quot;/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home&quot;</span><br><span class="line">alias jdk8=&quot;export JAVA_HOME=$JAVA_8_HOME&quot;</span><br><span class="line">alias jdk17=&quot;export JAVA_HOME=$JAVA_17_HOME&quot;</span><br><span class="line">export JAVA_HOME=$JAVA_8_HOME</span><br><span class="line">export PATH=$PATH:$JAVA_HOME</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/20/Genshin%E8%82%9D%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/20/Genshin%E8%82%9D%E5%BD%95/" class="post-title-link" itemprop="url">Genshin 肝录</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-20 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-20T13:42:25+08:00">2021-03-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:24:56" itemprop="dateModified" datetime="2022-07-18T01:24:56+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">life</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="甘雨">甘雨</h1>
+<h3 id="天赋周二周五周日-勤劳的哲学">天赋（周二、周五、周日
+勤劳的哲学）</h3>
+<p>二段蓄力 霜华矢 霜华绽放 冰元素伤害</p>
+<p>E 持续 6s 冷却 10s</p>
+<p>Q 持续 15s 冷却 15s 元素能量 60</p>
+<h3 id="武器周二周五周日">武器（周二、周五、周日）</h3>
+<p>破魔之弓 重击提升 12%</p>
+<p><strong>砂之祭场 冬国仕女 射手丘丘人</strong></p>
+<h3 id="命座">命座</h3>
+<p>饮露 ：二段蓄力降低冰抗 15% 持续 6s</p>
+<h3 id="圣遗物">圣遗物</h3>
+<p>乐团</p>
+<hr />
+<h1 id="钟离">钟离</h1>
+<h3 id="天赋周三周六周日">天赋（周三、周六、周日）</h3>
+<p>E 持续 6s 冷却 10s</p>
+<p>Q 持续 3.2s 冷却 12s 元素能量 40</p>
+<h3 id="武器周三周六周日">武器（周三、周六、周日）</h3>
+<p>黑缨枪 提高生命值</p>
+<p><strong>古雷试炼场 龙蜥 射手丘丘人</strong></p>
+<h3 id="圣遗物-1">圣遗物</h3>
+<p>生命头 生命沙 生命杯</p>
+<p>有效词条：生命、充能</p>
+<ul>
+<li>千岩</li>
+<li>宗室</li>
+</ul>
+<hr />
+<h1 id="香菱">香菱</h1>
+<h3 id="天赋周二周五周日-勤劳的哲学-1">天赋（周二、周五、周日
+勤劳的哲学）</h3>
+<h3 id="武器">武器</h3>
+<p>渔获 # 钓鱼太烦了</p>
+<h3 id="圣遗物-2">圣遗物</h3>
+<p>暴击/爆伤头 充能沙 火伤杯</p>
+<p>有效词条：充能</p>
+<ul>
+<li>绝缘</li>
+</ul>
+<hr />
+<h1 id="班尼特">班尼特</h1>
+<h3 id="天赋周二周五周日-冰封废渊">天赋（周二、周五、周日
+冰封废渊）</h3>
+<p>Q 13 级</p>
+<h3 id="武器-1">武器</h3>
+<p>风鹰剑</p>
+<h3 id="圣遗物-3">圣遗物</h3>
+<p>治疗头 充能沙 生命杯</p>
+<p>有效词条：充能、生命</p>
+<ul>
+<li>宗室</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1721,191 +1954,6 @@ target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34213112">JVM�
 target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33102022">漫画:单例模式</a></li>
 </ol>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/01/05/workbench%E5%9C%A8win10%E4%B8%8B%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/01/05/workbench%E5%9C%A8win10%E4%B8%8B%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">workbench在win10下无法启动问题</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-01-05 01:32:17" itemprop="dateCreated datePublished" datetime="2021-01-05T01:32:17+08:00">2021-01-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2021-03-28 13:49:50" itemprop="dateModified" datetime="2021-03-28T13:49:50+08:00">2021-03-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>好久没编程果然出现了很多问题，下面是一些记录。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/01/05/workbench%E5%9C%A8win10%E4%B8%8B%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E9%97%AE%E9%A2%98/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2020/10/22/%E4%B8%A2%E5%A4%B1%E6%97%A5%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/10/22/%E4%B8%A2%E5%A4%B1%E6%97%A5%E8%AE%B0/" class="post-title-link" itemprop="url">丢失日记</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-10-22 17:24:43" itemprop="dateCreated datePublished" datetime="2020-10-22T17:24:43+08:00">2020-10-22</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2021-03-28 13:06:19" itemprop="dateModified" datetime="2021-03-28T13:06:19+08:00">2021-03-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">life</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>创作的动力总是来源于生活中的起起伏伏，但大多是都是“伏”的时候。因为你已经高兴得来不及写作了。</p>
-<p>这次又是丢了什么呢？</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/10/22/%E4%B8%A2%E5%A4%B1%E6%97%A5%E8%AE%B0/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 
