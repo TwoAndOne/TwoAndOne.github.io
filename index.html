@@ -334,7 +334,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-23 14:21:23" itemprop="dateModified" datetime="2022-08-23T14:21:23+08:00">2022-08-23</time>
+      <time title="Modified: 2022-08-31 16:26:50" itemprop="dateModified" datetime="2022-08-31T16:26:50+08:00">2022-08-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -422,10 +422,27 @@ com.zhenai.framework.base.response.ReturnResponse的toString方法产生了这�
 和JavaBeanSerializer.write()这两个方法里绕圈。</p>
 <p>为什么呢？</p>
 <p>我们可以先看一下FastJson序列化的原理，</p>
-<p>FastJson是用类的getter方法来获取每一个字段的值的</p>
+<p>FastJson是用类的getter方法来获取每一个字段的值的。又因为json的树形结构，很自然会想到它会递归调用，获取value的时候又会重新进入这个方法。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">com/alibaba/fastjson/serializer/JavaBeanSerializer.java:<span class="number">240</span> </span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; getters.length; ++i) &#123;</span><br><span class="line">   <span class="type">FieldSerializer</span> <span class="variable">fieldSerializer</span> <span class="operator">=</span> getters[i];</span><br><span class="line"></span><br><span class="line">   <span class="type">Field</span> <span class="variable">field</span> <span class="operator">=</span> fieldSerializer.fieldInfo.field;</span><br><span class="line">   <span class="type">FieldInfo</span> <span class="variable">fieldInfo</span> <span class="operator">=</span> fieldSerializer.fieldInfo;</span><br><span class="line">   <span class="type">String</span> <span class="variable">fieldInfoName</span> <span class="operator">=</span> fieldInfo.name;</span><br><span class="line">   Class&lt;?&gt; fieldClass = fieldInfo.fieldClass;</span><br><span class="line">   ......</span><br><span class="line">   fieldSerializer.writeValue(serializer, propertyValue);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="type">boolean</span> <span class="variable">ignoreNonFieldGetter</span> <span class="operator">=</span> out.isEnabled(SerializerFeature.IgnoreNonFieldGetter);</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (ignoreNonFieldGetter) &#123;</span><br><span class="line">    <span class="keyword">if</span> (field == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么就会想到，既然这里在FieldSerializer.writeValue()
+和JavaBeanSerializer.write()这两个方法里绕圈。那么大概率是出现了循环引用。</p>
+<p>所以原因在TestBean类的getTestBean()方法，这里返回了this当前对象。</p>
+<p>知道原因了就好改了</p>
+<p>3.3、 解决方案</p>
+<p>方法：</p>
+<ol type="1">
+<li><p>方法名改一下，别用get开头，</p></li>
+<li><p>要么别返回this。但是fastjson作为一个开源项目，一定有其他人遇到了类似问题，代码里一定有解决方案。</p></li>
+<li><p>功夫不费有心人，我们还可以通过注解@JSONField(serialize=false)来避免对其进行序列化</p></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TestBean</span>&lt;T&gt; &#123;</span><br><span class="line">  	...</span><br><span class="line">  	<span class="meta">@JSONField(serialize=false)</span></span><br><span class="line">    <span class="keyword">public</span> TestBean&lt;T&gt; <span class="title function_">getTestBean</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li>在前文留了一个伏笔：异常堆栈的栈底很清楚的说明了调用了
+com.zhenai.framework.base.response.ReturnResponse的toString方法，这个方法里关闭了循环检测。果然，我删掉这一行就不报错了。但是会留下一个"&amp;ref"的字符,可能这就是架构组选择关闭的原因吧。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SerializerFeature.DisableCircularReferenceDetect</span><br><span class="line"></span><br><span class="line"><span class="comment">// 源码里对循环检测这个feature所做的处理</span></span><br><span class="line"><span class="keyword">final</span> <span class="type">boolean</span> <span class="variable">ignoreNonFieldGetter</span> <span class="operator">=</span> out.isEnabled(SerializerFeature.IgnoreNonFieldGetter);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (ignoreNonFieldGetter) &#123;</span><br><span class="line">    <span class="keyword">if</span> (field == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4、总结</p>
+<p>在bug中成长</p>
 
       
     </div>
