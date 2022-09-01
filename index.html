@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -272,6 +272,185 @@
 <p>“损之又损，以至于无为”，一切都空，空到了最后连空也把它空掉，空到一无所有；然后无所不有，一切皆知，一切皆有，就是这个简单的道理。文字很简单，意义也很简单，一说就明白了。问题是，做起来很难！如何能够把自己损之又损，放弃了又放弃，放到了一无所有之处，才能到达无所不知无所不有的境界！</p>
 <p>老子在这里清楚地告诉我们，人生在世能够学问成就，或修道成就，就要有两种能力：“提得起”是做学问要“为学日益”；“放得下”是修道要“为道日损”，一切放下。但是普通一个人，能够具备这两种能力，两种智慧，两种勇气，所谓智勇双全，就太难了。普通的人，叫他做学问，才用功读了一个礼拜的书，便觉得很累，就停下来去玩了，为学不能日益。去修道做工夫的话，放不下，刚打坐几天，又觉得一天到晚坐着，淡而无味，浪费时间，也要跑出去玩玩，所以“为道日损”也做不到。<strong>因此，一般人多半都在为学未益、为道未损的情况下，提也提不起，放也放不下，就那样过了一生。</strong>这就是我们读了《老子》以后，自己应该反省的地方。</p>
 </blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/08/31/FastJson-illegal-identifier/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/31/FastJson-illegal-identifier/" class="post-title-link" itemprop="url">common-lang3的Pair不要使用Fastjson序列化</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-08-31 16:42:10" itemprop="dateCreated datePublished" datetime="2022-08-31T16:42:10+08:00">2022-08-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-09-01 21:05:51" itemprop="dateModified" datetime="2022-09-01T21:05:51+08:00">2022-09-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>记录一个线上问题🐞</p>
+<p>先说一下情况：两个服务间用mq传递一个消息，由于需要传递的就两个字段，选择了使用common-lang3的Pair类，并且使用fastjson进行序列化。</p>
+<p>本文按照以下的思路进行阐述</p>
+<ol type="1">
+<li>定位问题</li>
+<li>解决问题</li>
+<li>浅析原理</li>
+</ol>
+<h2 id="定位问题">定位问题</h2>
+<p>堆栈如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">2022</span>-08-<span class="number">31</span> <span class="number">10</span>:<span class="number">36</span>:<span class="number">37.462</span> -ERROR] c.z.f.r.consumer.DefaultConsumerFactory  : traceId:078cc08e-2abf-4abc-bc88-d0f965caef94,platform:<span class="number">2</span>,version:<span class="number">1.0</span><span class="number">.0</span>,loginId:-<span class="number">1</span> - consume handle error illegal identifier : 1pos <span class="number">1</span>, line <span class="number">1</span>, column <span class="number">2</span>&#123;<span class="number">1191397455</span>:<span class="number">10048</span>&#125;</span><br><span class="line">com.alibaba.fastjson.JSONException: illegal identifier : 1pos <span class="number">1</span>, line <span class="number">1</span>, column <span class="number">2</span>&#123;<span class="number">1191397455</span>:<span class="number">10048</span>&#125;</span><br><span class="line">	at com.alibaba.fastjson.parser.JSONLexerBase.scanSymbolUnQuoted(JSONLexerBase.java:<span class="number">832</span>)</span><br><span class="line">	at com.alibaba.fastjson.parser.JSONLexerBase.scanSymbol(JSONLexerBase.java:<span class="number">633</span>)</span><br><span class="line">	at com.alibaba.fastjson.parser.deserializer.JavaBeanDeserializer.deserialze(JavaBeanDeserializer.java:<span class="number">718</span>)</span><br><span class="line">	at com.alibaba.fastjson.parser.deserializer.JavaBeanDeserializer.deserialze(JavaBeanDeserializer.java:<span class="number">300</span>)</span><br><span class="line">	at com.alibaba.fastjson.parser.DefaultJSONParser.parseObject(DefaultJSONParser.java:<span class="number">692</span>)</span><br><span class="line">	at com.alibaba.fastjson.JSON.parseObject(JSON.java:<span class="number">395</span>)</span><br><span class="line">	at com.alibaba.fastjson.JSON.parseObject(JSON.java:<span class="number">460</span>)</span><br><span class="line">	at com.alibaba.fastjson.JSON.parseObject(JSON.java:<span class="number">414</span>)</span><br><span class="line">	at com.alibaba.fastjson.JSON.parseObject(JSON.java:<span class="number">406</span>)</span><br></pre></td></tr></table></figure>
+<p>从堆栈中我们可以看出，对<code>&#123;1191397455:10048&#125;</code>的反序列化失败导致了异常。fastjson反序列化有以下四个步骤，从调用栈<code>JSONLexerBase.scanSymbol</code>显示，第一步词法分析就出了问题。</p>
+<blockquote>
+<ul>
+<li>词法分析</li>
+<li>构造方法选择</li>
+<li>缓存绕过</li>
+<li>反射调用</li>
+</ul>
+</blockquote>
+<p>初步猜测，也许是因为不符合Json的格式。毕竟平时我们看见的格式都有引号包裹。所以真正的问题其实不在反序列化，反而在序列化时。</p>
+<h2 id="解决问题">解决问题</h2>
+<p>要解决一个bug的前提是复现这个bug。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.commons.lang3.tuple.Pair;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSON;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.serializer.SerializerFeature;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">	      Pair&lt;Integer, Integer&gt; of = Pair.of(<span class="number">213525</span>, <span class="number">3525</span>);</span><br><span class="line">        <span class="type">byte</span>[] bytes = JSON.toJSONBytes(of, SerializerFeature.QuoteFieldNames);</span><br><span class="line">        <span class="type">Pair</span> <span class="variable">deserialize</span> <span class="operator">=</span> JSON.parseObject(bytes, Pair.class，Feature.AutoCloseSource);</span><br><span class="line">        System.out.println(deserialize.getObject1());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>输出异常与线上一致</p>
+<p>首先看了其他类似场景所使用的Class，要么是JavaBean，要么是Map
+这类JDK自带的数据结构，既然它们目前未出现异常，快速解决的方案就是先沿用成功的Class。</p>
+<p>把Pair换成Map果然没问题了。</p>
+<h2 id="浅析原理">浅析原理</h2>
+<p>虽然简单的解决了问题，但其实并不知道为什么。</p>
+<p>当然不能<strong>止步于此！</strong></p>
+<p>点进<code>JSON.toJSONBytes()</code>方法，一路跟踪，来到最关键的类<code>JSONSerialize</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">write</span><span class="params">(Object object)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (object == <span class="literal">null</span>) &#123;</span><br><span class="line">        out.writeNull();</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Class&lt;?&gt; clazz = object.getClass();</span><br><span class="line">    <span class="type">ObjectSerializer</span> <span class="variable">writer</span> <span class="operator">=</span> getObjectWriter(clazz);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        writer.write(<span class="built_in">this</span>, object, <span class="literal">null</span>, <span class="literal">null</span>, <span class="number">0</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">JSONException</span>(e.getMessage(), e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在第八行打断点,可以发现Pair拿到的ObjectSerializer是<code>MiscCodec</code>。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/iMQjXx.png"
+alt="iMQjXx" />
+<figcaption aria-hidden="true">iMQjXx</figcaption>
+</figure>
+<center>
+<strong>图 1 JSONSerialize类 </strong>
+</center>
+<p>ObjectSerializer是一个接口，可以通过实现这个接口，定制化序列化规则。MiscCodec实现了这个接口，那么什么情况下，才会让fastjson选择MiscCodec，而不是我们常见的<code>JavaBeanSerializer</code>呢？毕竟按理说，如果选择了JavaBeanserializer，Pair是可以被正确解析的。</p>
+<blockquote>
+<p>Interface representing a custom serializer for fastjson. You should
+write a custom serializer, if you are not happy with the default
+serialization done by fastjson. You will also need to register this
+serializer through SerializeConfig.put(Type, ObjectSerializer).</p>
+</blockquote>
+<p>继续深入，进入com.alibaba.fastjson.serializer.SerializeConfig#getObjectWriter(java.lang.Class&lt;?&gt;,
+boolean)方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> ObjectSerializer <span class="title function_">getObjectWriter</span><span class="params">(Class&lt;?&gt; clazz, <span class="type">boolean</span> create)</span> &#123;</span><br><span class="line">        <span class="type">ObjectSerializer</span> <span class="variable">writer</span> <span class="operator">=</span> get(clazz);</span><br><span class="line"> 						...</span><br><span class="line">            <span class="keyword">if</span> (writer == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">className</span> <span class="operator">=</span> clazz.getName();</span><br><span class="line">            Class&lt;?&gt; superClass;</span><br><span class="line">						...</span><br><span class="line">            <span class="keyword">if</span> (Map.class.isAssignableFrom(clazz)) &#123;</span><br><span class="line">                put(clazz, writer = MapSerializer.instance);</span><br><span class="line">            ...</span><br><span class="line">    				<span class="keyword">else</span> <span class="keyword">if</span> (Throwable.class.isAssignableFrom(clazz)) &#123;</span><br><span class="line">                <span class="type">SerializeBeanInfo</span> <span class="variable">beanInfo</span> <span class="operator">=</span> TypeUtils.buildBeanInfo(clazz, <span class="literal">null</span>, propertyNamingStrategy);</span><br><span class="line">                beanInfo.features |= SerializerFeature.WriteClassName.mask;</span><br><span class="line">                put(clazz, writer = <span class="keyword">new</span> <span class="title class_">JavaBeanSerializer</span>(beanInfo));</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (TimeZone.class.isAssignableFrom(clazz) || Map.Entry.class.isAssignableFrom(clazz)) &#123;</span><br><span class="line">                put(clazz, writer = MiscCodec.instance);</span><br><span class="line">      			...</span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/o14hZT.png"
+alt="o14hZT" />
+<figcaption aria-hidden="true">o14hZT</figcaption>
+</figure>
+<center>
+<strong>图 2 SerializeConfig类 </strong>
+</center>
+<p>可以发现，是因为<code>Map.Entry</code>这个接口，才让fastjson选择了MiscCodec,是的Pair类实现了Map.Entry接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Pair</span>&lt;L, R&gt; <span class="keyword">implements</span> <span class="title class_">Map</span>.Entry&lt;L, R&gt;, Comparable&lt;Pair&lt;L, R&gt;&gt;, Serializable</span><br></pre></td></tr></table></figure>
+<p>然后看看MiscCodec怎么解析的，才造成<code>&#123;1191397455:10048&#125;</code>的结果。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MiscCodec</span> <span class="keyword">implements</span> <span class="title class_">ObjectSerializer</span>, ObjectDeserializer &#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">write</span><span class="params">(JSONSerializer serializer, Object object, Object fieldName, Type fieldType,<span class="type">int</span> features)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    			<span class="keyword">if</span> (objClass == SimpleDateFormat.class) &#123;</span><br><span class="line">          ...</span><br><span class="line">          &#125;</span><br><span class="line">    			...</span><br><span class="line">					<span class="keyword">else</span> <span class="keyword">if</span> (object <span class="keyword">instanceof</span> Map.Entry) &#123;</span><br><span class="line">            Map.<span class="type">Entry</span> <span class="variable">entry</span> <span class="operator">=</span> (Map.Entry) object;</span><br><span class="line">            <span class="type">Object</span> <span class="variable">objKey</span> <span class="operator">=</span> entry.getKey(); <span class="comment">// 直接拿到key</span></span><br><span class="line">            <span class="type">Object</span> <span class="variable">objVal</span> <span class="operator">=</span> entry.getValue(); <span class="comment">// 直接拿到value</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (objKey <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> (String) objKey;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (objVal <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">                    <span class="type">String</span> <span class="variable">value</span> <span class="operator">=</span> (String) objVal;</span><br><span class="line">                    out.writeFieldValueStringWithDoubleQuoteCheck(<span class="string">&#x27;&#123;&#x27;</span>, key, value);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    out.write(<span class="string">&#x27;&#123;&#x27;</span>);</span><br><span class="line">                    out.writeFieldName(key);</span><br><span class="line">                    serializer.write(objVal);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// 传入的是int，所以走这里</span></span><br><span class="line">                out.write(<span class="string">&#x27;&#123;&#x27;</span>);</span><br><span class="line">                serializer.write(objKey);</span><br><span class="line">                out.write(<span class="string">&#x27;:&#x27;</span>);</span><br><span class="line">                serializer.write(objVal);</span><br><span class="line">            &#125;</span><br><span class="line">            out.write(<span class="string">&#x27;&#125;&#x27;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">				&#125;</span><br><span class="line">  		&#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>参考以上代码，可以得到第一层原因</p>
+<ol type="1">
+<li>把Pair强制转换为Map.Entry，拿到key和value</li>
+<li>然后按照{key:value}的格式输出</li>
+</ol>
+<p><strong>可以得知，Pair.class在被序列化的时候，是被作为<code>Map.Entry</code>被<code>MiscCodecSerializer</code>序列化；但是在被反序列化的时候，却是被<code>JavaBeanSerializer</code>解析（可以从前面#1定位问题的堆栈看出来）。</strong></p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/lZ6XfG.png"
+alt="lZ6XfG" />
+<figcaption aria-hidden="true">lZ6XfG</figcaption>
+</figure>
+<center>
+<strong>图 3 DefaultJSONParser类 </strong>
+</center>
+<p>由图3可知，这里拿到的Deserializer是JavaBeanSerializer。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/j1HT29.png"
+alt="j1HT29" />
+<figcaption aria-hidden="true">j1HT29</figcaption>
+</figure>
+<center>
+<strong>图 4 ParserConfig类</strong>
+</center>
+<p>图4显示了，取JavaBeanSerializer的逻辑。</p>
+<p>由此可见，真正的原因是Fastjson的<code>SerializerConfig</code>和<code>ParserConfig</code>的逻辑没有一一对应。</p>
+<p>但其实一一对应，也解决不了问题，因为Map.Entry序列化的结果是无法反序列化成Pair的。</p>
+<p>要么解析的时候，用Map.Entry.class来解析，要么别用common-lang3的Pair。</p>
 
       
     </div>
@@ -1337,129 +1516,6 @@ data-cites="Inherited注解修饰的注解是具有可继承性的">@Inherited�
 <p><code>mvn clean</code> 删除target文件夹</p>
 <p><code>mvn package</code> 打包 ：compile ⇨ testCompile test ⇨
 package</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/03/10/%E4%B8%80%E9%94%AE%E7%99%BB%E5%BD%95%E8%B7%B3%E6%9D%BF%E6%9C%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/10/%E4%B8%80%E9%94%AE%E7%99%BB%E5%BD%95%E8%B7%B3%E6%9D%BF%E6%9C%BA/" class="post-title-link" itemprop="url">登录跳板机脚本</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-03-10 13:42:25" itemprop="dateCreated datePublished" datetime="2022-03-10T13:42:25+08:00">2022-03-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-26 22:28:47" itemprop="dateModified" datetime="2022-08-26T22:28:47+08:00">2022-08-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="第一步">第一步</h1>
-<p>在某个目录（我是在～/exp）下创建一个文件：login-it_zhenaioa_com.exp
-vim login-it_zhenaioa_com.exp 文件内容如下：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/usr/bin/expect</span></span><br><span class="line">set ip it.zhenaioa.com</span><br><span class="line">set user user-name</span><br><span class="line">set password your-password</span><br><span class="line">set port 22</span><br><span class="line"></span><br><span class="line">spawn ssh  $user@$ip -p$port</span><br><span class="line"></span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*assword:*&quot; &#123; send &quot;$password\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
-<ol type="1">
-<li><code>[#!/usr/bin/expect］</code>
-这一行告诉操作系统脚本里的代码使用那一个shell来执行。这里的expect其实和linux下的bash、windows下的cmd是一类东西。
-注意：这一行需要在脚本的第一行。</li>
-<li><code>［set timeout 30］</code>
-基本上认识英文的都知道这是设置超时时间的，现在你只要记住他的计时单位是：秒</li>
-<li><code>［spawn ssh -l username 192.168.1.1］</code>
-spawn是进入expect环境后才可以执行的expect内部命令，如果没有装expect或者直接在默认的SHELL下执行是找不到spawn命令的。所以不要用
-“which
-spawn“之类的命令去找spawn命令。好比windows里的dir就是一个内部命令，这个命令由shell自带，你无法找到一个dir.com
-或 dir.exe 的可执行文件。
-它主要的功能是给ssh运行进程加个壳，用来传递交互指令。</li>
-<li><code>［expect "password:"］</code>
-这里的expect也是expect的一个内部命令，有点晕吧，expect的shell命令和内部命令是一样的，但不是一个功能，习惯就好了。这个命令的意思是判断上次输出结果里是否包含“password:”的字符串，如果有则立即返回，否则就等待一段时间后返回，这里等待时长就是前面设置的30秒</li>
-<li><code>［send "ispass\r"］</code>
-这里就是执行交互动作，与手工输入密码的动作等效。 温馨提示：
-命令字符串结尾别忘记加上 “，如果出现异常等待的状态可以核查一下。</li>
-<li><code>［interact］</code>
-执行完成后保持交互状态，把控制权交给控制台，这个时候就可以手工操作了。如果没有这一句登录完成后会退出，而不是留在远程终端上。如果你只是登录过去执行一段命令就退出，可改为［expect
-eof］</li>
-</ol>
-<h1 id="第二步">第二步</h1>
-<p>进入～/.zshrc文件，添加快捷alias</p>
-<p>vim .zshrc别名为zago</p>
-<p>expect后面的是刚才所创建文件的地址</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias zago=&quot;expect exp/login-it_zhenaioa_com.exp&quot;</span><br></pre></td></tr></table></figure>
-<p>修改了.zshrc文件后，执行 source .zshrc 命令刷新一下</p>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/uPic/8XNGrB.png"
-alt="8XNGrB" />
-<figcaption aria-hidden="true">8XNGrB</figcaption>
-</figure>
-<h1 id="第三步">第三步</h1>
-<p>执行你所命名的别名 go，然后就可以一键登录啦！</p>
 
       
     </div>

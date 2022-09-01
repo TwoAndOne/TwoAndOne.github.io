@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -172,6 +172,129 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/03/10/%E4%B8%80%E9%94%AE%E7%99%BB%E5%BD%95%E8%B7%B3%E6%9D%BF%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/10/%E4%B8%80%E9%94%AE%E7%99%BB%E5%BD%95%E8%B7%B3%E6%9D%BF%E6%9C%BA/" class="post-title-link" itemprop="url">登录跳板机脚本</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-10 13:42:25" itemprop="dateCreated datePublished" datetime="2022-03-10T13:42:25+08:00">2022-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-08-26 22:28:47" itemprop="dateModified" datetime="2022-08-26T22:28:47+08:00">2022-08-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="第一步">第一步</h1>
+<p>在某个目录（我是在～/exp）下创建一个文件：login-it_zhenaioa_com.exp
+vim login-it_zhenaioa_com.exp 文件内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/usr/bin/expect</span></span><br><span class="line">set ip it.zhenaioa.com</span><br><span class="line">set user user-name</span><br><span class="line">set password your-password</span><br><span class="line">set port 22</span><br><span class="line"></span><br><span class="line">spawn ssh  $user@$ip -p$port</span><br><span class="line"></span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*assword:*&quot; &#123; send &quot;$password\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><code>[#!/usr/bin/expect］</code>
+这一行告诉操作系统脚本里的代码使用那一个shell来执行。这里的expect其实和linux下的bash、windows下的cmd是一类东西。
+注意：这一行需要在脚本的第一行。</li>
+<li><code>［set timeout 30］</code>
+基本上认识英文的都知道这是设置超时时间的，现在你只要记住他的计时单位是：秒</li>
+<li><code>［spawn ssh -l username 192.168.1.1］</code>
+spawn是进入expect环境后才可以执行的expect内部命令，如果没有装expect或者直接在默认的SHELL下执行是找不到spawn命令的。所以不要用
+“which
+spawn“之类的命令去找spawn命令。好比windows里的dir就是一个内部命令，这个命令由shell自带，你无法找到一个dir.com
+或 dir.exe 的可执行文件。
+它主要的功能是给ssh运行进程加个壳，用来传递交互指令。</li>
+<li><code>［expect "password:"］</code>
+这里的expect也是expect的一个内部命令，有点晕吧，expect的shell命令和内部命令是一样的，但不是一个功能，习惯就好了。这个命令的意思是判断上次输出结果里是否包含“password:”的字符串，如果有则立即返回，否则就等待一段时间后返回，这里等待时长就是前面设置的30秒</li>
+<li><code>［send "ispass\r"］</code>
+这里就是执行交互动作，与手工输入密码的动作等效。 温馨提示：
+命令字符串结尾别忘记加上 “，如果出现异常等待的状态可以核查一下。</li>
+<li><code>［interact］</code>
+执行完成后保持交互状态，把控制权交给控制台，这个时候就可以手工操作了。如果没有这一句登录完成后会退出，而不是留在远程终端上。如果你只是登录过去执行一段命令就退出，可改为［expect
+eof］</li>
+</ol>
+<h1 id="第二步">第二步</h1>
+<p>进入～/.zshrc文件，添加快捷alias</p>
+<p>vim .zshrc别名为zago</p>
+<p>expect后面的是刚才所创建文件的地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias zago=&quot;expect exp/login-it_zhenaioa_com.exp&quot;</span><br></pre></td></tr></table></figure>
+<p>修改了.zshrc文件后，执行 source .zshrc 命令刷新一下</p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/uPic/8XNGrB.png"
+alt="8XNGrB" />
+<figcaption aria-hidden="true">8XNGrB</figcaption>
+</figure>
+<h1 id="第三步">第三步</h1>
+<p>执行你所命名的别名 go，然后就可以一键登录啦！</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1654,155 +1777,6 @@ alt="image-20210323134603056" />
 </tr>
 </tbody>
 </table>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/21/%E7%90%86%E8%A7%A3BIO-NIO-AIO-IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/21/%E7%90%86%E8%A7%A3BIO-NIO-AIO-IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" class="post-title-link" itemprop="url">理解BIO,NIO,AIO,IO多路复用</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-21 18:56:41" itemprop="dateCreated datePublished" datetime="2021-03-21T18:56:41+08:00">2021-03-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:04:09" itemprop="dateModified" datetime="2022-07-18T01:04:09+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>预备知识:</strong></p>
-<p>操作系统分内核态与用户态,真正的I/O操作都不是应用程序在做,为了保证安全,操作系统提供了系统调用,比如read&amp;write.</p>
-<p>通常一个应用程序的执行代表一个进程,当应用程序需要I/O时就会执行系统调用.</p>
-<p>比如一次read指令的执行,应用调用read指令,内核从外部设备获取数据放入内核缓冲区,然后又把内核缓存区的内容复制到进程缓冲区.</p>
-<p><strong>四种IO模型:</strong></p>
-<p>１.　BＩＯ，同步阻塞IO</p>
-<p>２.　ＮＩＯ，同步非阻塞IO</p>
-<p>３.　IO多路复用,同步非阻塞IO升级版</p>
-<p>４.　AIO，异步非阻塞IO</p>
-<p>怎么理解用一个例子来执行一下就好啦</p>
-<p><strong>BIO</strong></p>
-<p><img src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321191140634.png" alt="image-20210321191140634" style="zoom:67%;" /></p>
-<p>首先我们得知道,内核态的内存缓冲区也不是一开始就有数据的,所以这就分了两个阶段,</p>
-<p>第一个是等待内核态内存缓存区充满的过程,</p>
-<p>第二个是从内核态内存缓存区复制到进程缓冲区的过程</p>
-<p>所以同步阻塞IO就比较惨,在这两个阶段都得等着</p>
-<p>第一个阶段是阻塞,用户态发起IO执行read调用指令,如果内核态没数据就被ＯＳ挂起</p>
-<p>第二个阶段内核态复制数据到进程缓冲区,它也不能干其他的.</p>
-<p><strong>NIO</strong></p>
-<p><img src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321191002045.png" alt="image-20210321191002045" style="zoom:70%;" /></p>
-<p>同步非阻塞也没好到哪里去</p>
-<p>第一个阶段,虽然没有被阻塞,但是也得不停的轮询,不断发起IO系统调用</p>
-<p>第二个阶段，等待复制完成</p>
-<p><strong>IO多路复用</strong></p>
-<p><img src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321195033926.png" alt="image-20210321195033926" style="zoom:67%;" /></p>
-<p>IO多路复用本质上还是同步非阻塞</p>
-<p>在这种模式中，首先不是进行read系统调动，而是进行select/epoll系统调用。当然，这里有一个前提，需要将目标网络连接，提前注册到select/epoll的可查询socket列表中。然后，才可以开启整个的IO多路复用模型的读流程。</p>
-<p>（1）进行select/epoll系统调用，查询可以读的连接。kernel会查询所有select的可查询socket列表，当任何一个socket中的数据准备好了，select就会返回。</p>
-<p>当用户进程调用了select，那么整个线程会被block（阻塞掉）。</p>
-<p>（2）用户线程获得了目标连接后，发起read系统调用，用户线程阻塞。内核开始复制数据。它就会将数据从kernel内核缓冲区，拷贝到用户缓冲区（用户内存），然后kernel返回结果。</p>
-<p>（3）用户线程才解除block的状态，用户线程终于真正读取到数据，继续执行。</p>
-<p>多路复用IO的特点：</p>
-<p>IO多路复用模型，建立在操作系统kernel内核能够提供的多路分离系统调用select/epoll基础之上的。多路复用IO需要用到两个系统调用（system
-call）， 一个select/epoll查询调用，一个是IO的读取调用。</p>
-<p>和NIO模型相似，多路复用IO需要轮询。负责select/epoll查询调用的线程，需要不断的进行select/epoll轮询，查找出可以进行IO操作的连接。</p>
-<p>另外，多路复用IO模型与前面的NIO模型，是有关系的。对于每一个可以查询的socket，一般都设置成为non-blocking模型。只是这一点，对于用户程序是透明的（不感知）。</p>
-<p>多路复用IO的优点：</p>
-<p>用select/epoll的优势在于，它可以同时处理成千上万个连接（connection）。与一条线程维护一个连接相比，I/O多路复用技术的最大优势是：系统不必创建线程，也不必维护这些线程，从而大大减小了系统的开销。</p>
-<p>Java的NIO（new
-IO）技术，使用的就是IO多路复用模型。在linux系统上，使用的是epoll系统调用。</p>
-<p>多路复用IO的缺点：</p>
-<p>本质上，select/epoll系统调用，属于同步IO，也是阻塞IO。都需要在读写事件就绪后，自己负责进行读写，也就是说这个读写过程是阻塞的。</p>
-<p><strong>AIO</strong></p>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321195511679.png"
-alt="image-20210321195511679" />
-<figcaption aria-hidden="true">image-20210321195511679</figcaption>
-</figure>
-<p>如果大家学过终端的话就容易理解AIO</p>
-<p>第一个阶段,用户态程序执行read调用,如果内核态没数据,那就做其他事情</p>
-<p>第二个阶段,内核态把数据复制到了用户态的进程缓冲区后通知用户应用程序</p>
-<p>异步IO模型的特点：</p>
-<p>在内核kernel的等待数据和复制数据的两个阶段，用户线程都不是block(阻塞)的。用户线程需要接受kernel的IO操作完成的事件，或者说注册IO操作完成的回调函数，到操作系统的内核。所以说，异步IO有的时候，也叫做信号驱动
-IO 。</p>
-<p>异步IO模型缺点：</p>
-<p>需要完成事件的注册与传递，这里边需要底层操作系统提供大量的支持，去做大量的工作。</p>
-<p>目前来说， Windows 系统下通过 IOCP 实现了真正的异步
-I/O。但是，就目前的业界形式来说，Windows
-系统，很少作为百万级以上或者说高并发应用的服务器操作系统来使用。</p>
-<p>而在 Linux
-系统下，异步IO模型在2.6版本才引入，目前并不完善。所以，这也是在 Linux
-下，实现高并发网络编程时都是以 IO 复用模型模式为主。</p>
-<p><strong>总结</strong></p>
-<p>只有AIO不会阻塞,其他的都会在第二个阶段阻塞.</p>
 
       
     </div>
