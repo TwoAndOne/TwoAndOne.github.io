@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -172,6 +172,289 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/" class="post-title-link" itemprop="url">JVM GC参数(Xmn,Xms,Xmx,Xss)助记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-23 12:18:20" itemprop="dateCreated datePublished" datetime="2021-03-23T12:18:20+08:00">2021-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-03-28 13:52:45" itemprop="dateModified" datetime="2021-03-28T13:52:45+08:00">2021-03-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="overview">Overview</h2>
+<p><strong>太长不看总结:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-</td>
+<td>标准VM 选项</td>
+</tr>
+<tr class="even">
+<td>-X</td>
+<td>非标准VM选项</td>
+</tr>
+<tr class="odd">
+<td>-Xms</td>
+<td>maximum size 设置堆的最大初始初始值</td>
+</tr>
+<tr class="even">
+<td>-Xmn</td>
+<td>maximum nursery 设置堆中新生代的最大初始值</td>
+</tr>
+<tr class="odd">
+<td>-Xmx</td>
+<td>memory maximum 设置堆的最大值</td>
+</tr>
+<tr class="even">
+<td>-Xss</td>
+<td>stack size 设置线程中栈的内容大小</td>
+</tr>
+</tbody>
+</table>
+<p>-Xms, -Xms, -Xmn, -Xss</p>
+<p>在看技术博客时,看到到这些参数是不是很无语,完全不知道说的是啥,根本无法理解!</p>
+<p>但是仔细想想写JDK的那群神仙会像我们这种菜鸟随便命名吗?</p>
+<p>所以我放下书本去翻了一下文档</p>
+<p>https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html</p>
+<blockquote>
+<p>OptionsThe <code>java</code> command supports a wide range of options
+that can be divided into the following categories:</p>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDJJFI">Standard
+Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI">Non-Standard
+Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABCBGHF">Advanced
+Runtime Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDDFII">Advanced
+JIT Compiler Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABFJDIC">Advanced
+Serviceability Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABFAFAE">Advanced
+Garbage Collection Options</a></li>
+</ul>
+<p>Standard options are guaranteed to be supported by all
+implementations of the Java Virtual Machine (JVM). They are used for
+common actions, such as checking the version of the JRE, setting the
+class path, enabling verbose output, and so on.</p>
+<p>Non-standard options are general purpose options that are specific to
+the Java HotSpot Virtual Machine, so they are not guaranteed to be
+supported by all JVM implementations, and are subject to change. These
+options start with <code>-X</code>.</p>
+<p>Advanced options are not recommended for casual use. These are
+developer options used for tuning specific areas of the Java HotSpot
+Virtual Machine operation that often have specific system requirements
+and may require privileged access to system configuration parameters.
+They are also not guaranteed to be supported by all JVM implementations,
+and are subject to change. Advanced options start with
+<code>-XX</code>.</p>
+</blockquote>
+<p>翻译一下,大概就是java提供了很多命令,有标准的,有非标准的,非标准的就得用<code>-X</code>开头,进阶一点不建议平时使用的用<code>-XX</code>开头</p>
+<p>好的,我们已经明白这几个命令的开头是什么意思了</p>
+<ul>
+<li>- : 标准VM选项，VM规范的选项</li>
+<li>-X: 非标准VM选项，不保证所有VM支持</li>
+<li>-XX: 高级选项，高级特性，但属于不稳定的选项</li>
+</ul>
+<h2 id="xmn">-Xmn</h2>
+<blockquote>
+<p>Sets the initial and maximum size (in bytes) of the heap for the
+young generation (nursery).</p>
+</blockquote>
+<p>为新生代设置在堆上的初始最大值</p>
+<blockquote>
+<p>Append the letter <code>k</code> or <code>K</code> to indicate
+kilobytes, <code>m</code> or <code>M</code> to indicate megabytes,
+<code>g</code> or <code>G</code> to indicate gigabytes.</p>
+</blockquote>
+<p>参数后可以指定单位,比如用k、m、g</p>
+<blockquote>
+<p>The young generation region of the heap is used for new objects. GC
+is performed in this region more often than in other regions. If the
+size for the young generation is too small, then a lot of minor garbage
+collections will be performed. If the size is too large, then only full
+garbage collections will be performed, which can take a long time to
+complete.</p>
+</blockquote>
+<p>堆的新生代区域用于新对象。GC在这个区域执行的频率高于其他区域。如果年轻代size太小，那么将执行大量次要的垃圾收集。如果size太大，则只有完整的垃圾收集才会被执行，这可能需要很长时间才能完成。</p>
+<blockquote>
+<p>Oracle recommends that you keep the size for the young generation
+between a half and a quarter of the overall heap size.</p>
+</blockquote>
+<p>Oracle建议将新生代的堆的size保持在总体堆size的二分之一到四分之一之间。</p>
+<blockquote>
+<p>The following examples show how to set the initial and maximum size
+of young generation to 256 MB using various units:</p>
+<p>-Xmn256m</p>
+<p>-Xmn262144k</p>
+<p>-Xmn268435456</p>
+<p>Instead of the <code>-Xmn</code> option to set both the initial and
+maximum size of the heap for the young generation, you can use
+<code>-XX:NewSize</code> to set the initial size and
+<code>-XX:MaxNewSize</code> to set the maximum size.</p>
+</blockquote>
+<p>下面是使用不同的单位设置新生代的例子,不翻译了,都能看懂.</p>
+<p><strong>总结</strong></p>
+<p>-Xmn 指的是,</p>
+<ul>
+<li><p>-X:非标准VM选项</p></li>
+<li><p>m:maximum 最大</p></li>
+<li><p>n: nursery :托儿所</p></li>
+</ul>
+<p>最大的托儿所,就是新生代最大size</p>
+<h2 id="xms">-Xms</h2>
+<blockquote>
+<p>Sets the initial size (in bytes) of the heap. This value must be a
+multiple of 1024 and greater than 1 MB. Append the letter <code>k</code>
+or <code>K</code> to indicate kilobytes, <code>m</code> or
+<code>M</code> to indicate megabytes, <code>g</code> or <code>G</code>
+to indicate gigabytes.</p>
+</blockquote>
+<p>设置堆的初始最大size,这个值必须是1024的倍数,必须大于1MB,可以用k、m、g做参数后面的单位</p>
+<blockquote>
+<p>The following examples show how to set the size of allocated memory
+to 6 MB using various units:</p>
+<p><code>-Xms6291456 -Xms6144k -Xms6m</code></p>
+</blockquote>
+<p>下面是一些例子,用不同单位设置6MB的最大内存</p>
+<p><strong>总结</strong></p>
+<ul>
+<li><p>-X:非标准VM选项</p></li>
+<li><p>m:最大 maximum</p></li>
+<li><p>s:大小 size</p></li>
+</ul>
+<p>在堆上初始最大的容量</p>
+<h2 id="xmx">-Xmx</h2>
+<blockquote>
+<p>Specifies the maximum size (in bytes) of the memory allocation pool
+in bytes. This value must be a multiple of 1024 and greater than 2 MB.
+Append the letter <code>k</code> or <code>K</code> to indicate
+kilobytes, <code>m</code> or <code>M</code> to indicate megabytes,
+<code>g</code> or <code>G</code> to indicate gigabytes.</p>
+</blockquote>
+<p>指定堆的最大值,跟-Xms的区别是,ms是初始值,这个是可容纳的最大值</p>
+<blockquote>
+<p>The default value is chosen at runtime based on system configuration.
+For server deployments, <code>-Xms</code> and <code>-Xmx</code> are
+often set to the same value. See the section "Ergonomics" in <em>Java SE
+HotSpot Virtual Machine Garbage Collection Tuning Guide</em> at
+`<code>http://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/index.html</code>.</p>
+</blockquote>
+<p>默认值是基于系统配置在运行时选择的,在服务部署时,-Xms与-Xmx一般被设置为同样的大小</p>
+<blockquote>
+<p>The following examples show how to set the maximum allowed size of
+allocated memory to 80 MB using various units:</p>
+</blockquote>
+<p>80MB的例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Xmx83886080</span><br><span class="line">-Xmx81920k</span><br><span class="line">-Xmx80m</span><br></pre></td></tr></table></figure>
+<p>The <code>-Xmx</code> option is equivalent to
+<code>-XX:MaxHeapSize</code>.</p>
+<p><strong>总结</strong></p>
+<ul>
+<li><p>-X:非标准VM选项</p></li>
+<li><p>m:最大 memory</p></li>
+<li><p>x:大小 maximum</p></li>
+</ul>
+<p>最大的容量</p>
+<h2 id="xss">-Xss</h2>
+<blockquote>
+<p>Sets the thread stack size (in bytes). Append the letter
+<code>k</code> or <code>K</code> to indicate KB, <code>m</code> or
+<code>M</code> to indicate MB, <code>g</code> or <code>G</code> to
+indicate GB. The default value depends on virtual memory.</p>
+</blockquote>
+<p>设置线程栈的大小,可以用不同的单位来设置,默认值取决于虚拟机.</p>
+<p>The following examples set the thread stack size to 1024 KB in
+different units:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Xss1m</span><br><span class="line">-Xss1024k</span><br><span class="line">-Xss1048576</span><br></pre></td></tr></table></figure>
+<p>This option is equivalent to <code>-XX:ThreadStackSize</code>.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1613,130 +1896,6 @@ North将这种架构风格称作“可更换的组件架构”，而不是微服
 Patterns)一书中，将其作为他的一条设计原则而强调出来。</p>
 <p>[15].
 当SOA这个词在本世纪初刚刚出现时，有人曾说：“我们很多年以来一直是这样做的。”有一派观点说，SOA这种风格，将企业级计算早期COBOL程序通过数据文件来进行通信的方式，视作自己的“根”。在另一个方向上，有人说“Erlang编程模型”与微服务是同一回事，只不过它被应用到一个企业应用的上下文中去了。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/02/Morris%20%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/02/Morris%20%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/" class="post-title-link" itemprop="url">Morris 中序遍历</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-02 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-02T13:42:25+08:00">2021-03-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:32:58" itemprop="dateModified" datetime="2022-07-18T01:32:58+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>二叉树的中序遍历，空间复杂度O(1)的算法</p>
-<p><strong>思路</strong></p>
-<p>关键：用一个节点记住根节点的前驱节点</p>
-<p>如何找到这个根节点的前驱节点呢？</p>
-<ol type="1">
-<li>如果根节点有左子树，那么前驱节点就是左子树的最右的叶子节点</li>
-<li>如果根节点没有左子树，那么就不用管，直接把root.val加入返回数组，然后继续判断右子树</li>
-</ol>
-<p>前驱节点有什么用？</p>
-<p>前驱节点可以用于连接当左子树遍历之后需要继续遍历右子树的情况</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;Integer&gt; <span class="title function_">inorderTraversal</span><span class="params">(TreeNode root)</span> &#123;</span><br><span class="line">        List&lt;Integer&gt; res = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">        <span class="type">TreeNode</span> <span class="variable">predecessor</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(root != <span class="literal">null</span>)&#123; <span class="comment">// root 的值就是需要加入返回数组的值，当root不等于null就说明还需要再遍历</span></span><br><span class="line">            <span class="keyword">if</span>(root.left != <span class="literal">null</span> &amp;&amp; root.left != predecessor)&#123; <span class="comment">// 如果有左子树并且左子树没有被遍历过</span></span><br><span class="line">                predecessor = root.left;</span><br><span class="line">                <span class="keyword">while</span>(predecessor.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                    predecessor = predecessor.right; <span class="comment">// 找到前驱节点</span></span><br><span class="line">                &#125;</span><br><span class="line">                predecessor.right = root; <span class="comment">// 创建连接</span></span><br><span class="line">                root = root.left; <span class="comment">// 因为这里所以要创建连接</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// 如果没有左子树</span></span><br><span class="line">                res.add(root.val); </span><br><span class="line">                root = root.right; <span class="comment">// 遍历右子树</span></span><br><span class="line">                <span class="keyword">if</span>(predecessor != <span class="literal">null</span>) <span class="comment">// 对遍历结束的子树断开连接，保证结构不改变</span></span><br><span class="line">                    predecessor.right = <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>给定一个二叉树的根节点 root ，返回它的 中序遍历。</p>
-<p>示例 1：</p>
-<p>输入：root = [1,null,2,3]</p>
-<p>输出：[1,3,2]</p>
-<figure>
-<img src="https://assets.leetcode.com/uploads/2020/09/15/inorder_1.jpg"
-alt="图一" />
-<figcaption aria-hidden="true">图一</figcaption>
-</figure>
-<p>示例 2：</p>
-<p>输入：root = []</p>
-<p>输出：[]</p>
-<p>示例 3：</p>
-<p>输入：root = [1]</p>
-<p>输出：[1]</p>
-<p>示例 4：</p>
-<figure>
-<img src="https://assets.leetcode.com/uploads/2020/09/15/inorder_5.jpg"
-alt="图二" />
-<figcaption aria-hidden="true">图二</figcaption>
-</figure>
-<p>输入：root = [1,2]</p>
-<p>输出：[2,1]</p>
-<p>示例 5：</p>
-<p>输入：root = [1,null,2]</p>
-<p>输出：[1,2]</p>
-<p>提示：</p>
-<p>树中节点数目在范围 [0, 100] 内 -100 &lt;= Node.val &lt;= 100</p>
-<p>https://leetcode-cn.com/problems/binary-tree-inorder-traversal/</p>
 
       
     </div>

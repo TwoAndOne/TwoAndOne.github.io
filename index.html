@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -298,6 +298,186 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/09/05/%E8%A2%AB%E5%AB%8C%E5%BC%83%E7%9A%84Arthas%E7%9A%84%E4%B8%80%E7%94%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/05/%E8%A2%AB%E5%AB%8C%E5%BC%83%E7%9A%84Arthas%E7%9A%84%E4%B8%80%E7%94%9F/" class="post-title-link" itemprop="url">被嫌弃的Arthas的一生</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-09-05 20:09:21" itemprop="dateCreated datePublished" datetime="2022-09-05T20:09:21+08:00">2022-09-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-09-06 10:26:29" itemprop="dateModified" datetime="2022-09-06T10:26:29+08:00">2022-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>Arthas 是一款线上监控诊断产品，通过全局视角实时查看应用
+load、内存、gc、线程的状态信息，并能在不修改应用代码的情况下，对业务问题进行诊断，包括查看方法调用的出入参、异常，监测方法执行耗时，类加载信息等，大大提升线上问题排查效率。</p>
+</blockquote>
+<p>没有深入研究过，但一般会用watch来监听某个参数的调用，来进行测试。</p>
+<p>比如这一次</p>
+<p>分别使用了以下两个命令</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">watch com.zhenai.payment.api.service.config.AbstractProductConfigService filter params -x1 -n1</span><br><span class="line"></span><br><span class="line">watch com.zhenai.payment.api.service.product.IProductService getProductConfigs &#123;params,returnObj&#125; -x2 -n1</span><br></pre></td></tr></table></figure>
+<p>第一个watch是用来监听<code>filter</code>这个方法的入参</p>
+<p>第二个watch是用来监听<code>getProductConfigs</code>这个方法的入参和返回值</p>
+<p>源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;ProductConfigResult&gt; <span class="title function_">configList</span><span class="params">(UserInfo userInfo, ProductType productType)</span> &#123;</span><br><span class="line">        <span class="comment">//这里大概的实现逻辑如下：</span></span><br><span class="line">        <span class="comment">//先找出对应产品的所有配置，然后经过系统过滤和业务过滤之后得到相应产品当前有效并符合条件的所有配置</span></span><br><span class="line">        List&lt;ProductConfigResult&gt; configs = filter(productService.getProductConfigs(productType.getTypeId()), userInfo);</span><br><span class="line">        <span class="comment">//然后按位置进行分组取每组优先级最高(优先级相同选择最新的)的那个配置，最后再根据位置排序获取最终结果</span></span><br><span class="line">        <span class="keyword">return</span> configs.stream().collect(Collectors.groupingBy(ProductConfigResult::getListPosition))</span><br><span class="line">                .values().stream().map(list -&gt; list.stream().max((v1,v2) -&gt; v1.getPriority().equals(v2.getPriority()) ? v1.getCreateTime().compareTo(v2.getCreateTime()) : Integer.compare(v1.getPriority(), v2.getPriority())))</span><br><span class="line">                .filter(Optional::isPresent).map(Optional::get).sorted(Comparator.comparing(ProductConfigResult::getListPosition)).collect(Collectors.toList());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;ProductConfigResult&gt; <span class="title function_">filter</span><span class="params">(List&lt;ProductConfigResult&gt; configs, UserInfo userInfo)</span> &#123;</span><br><span class="line">        <span class="comment">//统一基础数据过滤</span></span><br><span class="line">        configs = configs.stream()</span><br><span class="line">                .filter(c -&gt; ProductConfigFilter.getFilters(c).stream().allMatch(f -&gt; f.filter.filter(c, userInfo)))</span><br><span class="line">                .collect(Collectors.toList());</span><br><span class="line">        <span class="keyword">return</span> filterByBusiness(configs, userInfo);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>按理说，第一个watch入参与第二watch得到的结果，应该是一样的。</p>
+<p>可是，在实践中，第一个入参拿的是3个size的list，第二个拿到的是26个。</p>
+<p>百思不得其解，觉得Arthas有bug。</p>
+<p>先不要看下文，看客你也思考一下，为什么。</p>
+<p>如果你能思考出来，说明你比我厉害多了，接下来不用看了，节约时间。</p>
+<p>在询问mentor之后，终于豁然开朗。</p>
+<p>但凡我再看一遍Arthas的文档，也不会问出这个问题。不过还是加深了我对这个参数的印象，所以记录下来。</p>
+<p>watch 的参数比较多，主要是因为它能在 4
+个不同的场景观察对象。平时我们经常使用的就只是它默认的场景。</p>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 72%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">参数名称</th>
+<th style="text-align: left;">参数说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;"><em>class-pattern</em></td>
+<td style="text-align: left;">类名表达式匹配</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><em>method-pattern</em></td>
+<td style="text-align: left;">函数名表达式匹配</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"><em>express</em></td>
+<td
+style="text-align: left;">观察表达式，默认值：<code>&#123;params, target, returnObj&#125;</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><em>condition-express</em></td>
+<td style="text-align: left;">条件表达式</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">[b]</td>
+<td style="text-align: left;">在<strong>函数调用之前</strong>观察</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">[e]</td>
+<td style="text-align: left;">在<strong>函数异常之后</strong>观察</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">[s]</td>
+<td style="text-align: left;">在<strong>函数返回之后</strong>观察</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">[f]</td>
+<td
+style="text-align: left;">在<strong>函数结束之后</strong>(正常返回和异常返回)观察</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">[E]</td>
+<td style="text-align: left;">开启正则表达式匹配，默认为通配符匹配</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">[x:]</td>
+<td style="text-align: left;">指定输出结果的属性遍历深度，默认为
+1，最大值是 4</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>watch 命令定义了 4 个观察事件点，即 <code>-b</code>
+函数调用前，<code>-e</code> 函数异常后，<code>-s</code>
+函数返回后，<code>-f</code> 函数结束后</li>
+<li>4 个观察事件点 <code>-b</code>、<code>-e</code>、<code>-s</code>
+默认关闭，<code>-f</code>
+默认打开，当指定观察点被打开后，在相应事件点会对观察表达式进行求值并输出</li>
+<li>这里要注意<code>函数入参</code>和<code>函数出参</code>的区别，有可能在中间被修改导致前后不一致，除了
+<code>-b</code> 事件点 <code>params</code>
+代表函数入参外，其余事件都代表函数出参</li>
+<li>当使用 <code>-b</code>
+时，由于观察事件点是在函数调用前，此时返回值或异常均不存在</li>
+</ul>
+<p>回到我刚才的问题，为什么第一次watch与第二次watch的结果不一样呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> List&lt;ProductConfigResult&gt; <span class="title function_">filter</span><span class="params">(List&lt;ProductConfigResult&gt; configs, UserInfo userInfo)</span> &#123;</span><br><span class="line">  <span class="comment">//统一基础数据过滤</span></span><br><span class="line">  configs = configs.stream()</span><br><span class="line">    .filter(c -&gt; ProductConfigFilter.getFilters(c).stream().allMatch(f -&gt; f.filter.filter(c, userInfo)))</span><br><span class="line">    .collect(Collectors.toList());</span><br><span class="line">  <span class="keyword">return</span> filterByBusiness(configs, userInfo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三行的configs引用拿到了入参configs被过滤的结果（这个时候只剩3条），然后，Arthas默认情况下<code>-f</code>打开，也就是在<strong>函数结束之后</strong>(正常返回和异常返回)观察，我们观察的入参configs对象也就成了被过滤之后的对象了。</p>
+<p>参考文献：</p>
+<p>[1] https://arthas.aliyun.com/doc/</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/09/04/%E5%89%8D%E9%9D%A2%E7%9A%84%E8%B7%AF%E4%BB%A5%E5%90%8E%E5%86%8D%E6%9D%A5%E6%8E%A2%E7%B4%A2%E5%90%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -326,9 +506,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-09-04 16:00:14 / Modified: 17:06:19" itemprop="dateCreated datePublished" datetime="2022-09-04T16:00:14+08:00">2022-09-04</time>
+      <time title="Created: 2022-09-04 16:00:14" itemprop="dateCreated datePublished" datetime="2022-09-04T16:00:14+08:00">2022-09-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-09-05 20:13:21" itemprop="dateModified" datetime="2022-09-05T20:13:21+08:00">2022-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1353,109 +1539,6 @@ Design Pattern），简称原型模式。</p>
 <p>对文首的疑问，我是这样理解的：</p>
 <p>Java的权限访问控制，不是为了表明“这里你一定不能修改！”，而是为了给不懂这个类具体实现的使用者，一个安全使用的方式。</p>
 <p>而且代码是死的，而人是活的，死代码防不了活人。</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/07/20/%E5%B8%A6%E6%88%91%E7%9A%84%E8%80%81%E5%B8%88%E7%A6%BB%E8%81%8C%E4%BA%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/07/20/%E5%B8%A6%E6%88%91%E7%9A%84%E8%80%81%E5%B8%88%E7%A6%BB%E8%81%8C%E4%BA%86/" class="post-title-link" itemprop="url">带我的老师离职了</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-07-20 10:35:57" itemprop="dateCreated datePublished" datetime="2022-07-20T10:35:57+08:00">2022-07-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-09 17:37:09" itemprop="dateModified" datetime="2022-08-09T17:37:09+08:00">2022-08-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">life</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>2022年7月20日 11:10:04</p>
-<p>不行，我真的好想哭，好难过。</p>
-<p>2022年7月20日 10:35:57</p>
-<p>其实不是第一次经历同事离职，毕竟刚来公司时，跟我同期入职的同事，在工作2个月就离职，虽然问他原因他不说，但也因为好奇，联系了他好几次，不过内心并没有什么波动。</p>
-<p>不过这一次好像不一样。
-从一些蛛丝马迹中，大概提前了2个周猜测到了。由于一些不可名状的赌徒心理，不到黄河心不死，但到昨天大概心死的扎扎实实了。
-他走了，带我的老师走了。
-即使从什么书面意义或者名头上来讲，不见得是我的老师，但从实际意义上，他的确教了我很多，我愿意称他一声老师。
-直到昨天，他也嘱咐了我一些在职场生存的箴言。</p>
-<p>很难过，今天的心情是沮丧的。看到旁边工位空空如也，我的心里也空空的。
-再也没有为我撑腰、为我壮胆、为我兜底的人了。</p>
-<p>突然想起村上春树的一句话：</p>
-<blockquote>
-<p>你要做一个不动声色的大人了，不准情绪化，不准偷偷想念，不准回头看。</p>
-</blockquote>
-<p>那好吧，我只偷偷难过一上午，下午就好好干活。</p>
-<blockquote>
-<p>人有悲欢离合 月有阴晴圆缺 此事古难全 但愿人长久 千里共婵娟</p>
 </blockquote>
 
       
