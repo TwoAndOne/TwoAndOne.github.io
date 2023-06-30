@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpeg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpeg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"twoandone.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Redis Question 如果阅读完都能回答上来，那么此篇就不必看啦😊  了解Redis吗？说说它机制为什么快？✅ 有几种数据结构，底层分别是怎么存储的？✅ 用过哪些数据结构？分别用在什么场景？✅ Redis的zset是如何实现的？为什么使用跳表不使用别的数据结构？✅ Redis key 的过期策略？✅ zset如何实现排名？✅ Redis有几种持久化方式？✅ Redis数据幂等性是怎么保证">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis">
+<meta property="og:url" content="https://twoandone.github.io/2023/06/17/Redis%E9%9D%A2%E8%AF%95%E6%94%BB%E7%95%A5/">
+<meta property="og:site_name" content="Yussss">
+<meta property="og:description" content="Redis Question 如果阅读完都能回答上来，那么此篇就不必看啦😊  了解Redis吗？说说它机制为什么快？✅ 有几种数据结构，底层分别是怎么存储的？✅ 用过哪些数据结构？分别用在什么场景？✅ Redis的zset是如何实现的？为什么使用跳表不使用别的数据结构？✅ Redis key 的过期策略？✅ zset如何实现排名？✅ Redis有几种持久化方式？✅ Redis数据幂等性是怎么保证">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-06-17T03:43:33.000Z">
+<meta property="article:modified_time" content="2023-06-30T13:45:23.017Z">
+<meta property="article:author" content="Yus">
+<meta property="article:tag" content="java redis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://twoandone.github.io/2023/06/17/Redis%E9%9D%A2%E8%AF%95%E6%94%BB%E7%95%A5/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://twoandone.github.io/2023/06/17/Redis%E9%9D%A2%E8%AF%95%E6%94%BB%E7%95%A5/","path":"2023/06/17/Redis面试攻略/","title":"Redis"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Redis | Yussss</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Yussss</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">沧浪之水清兮，可以濯我缨。沧浪之水浊兮，可以濯我足</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#redis"><span class="nav-number">1.</span> <span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#question"><span class="nav-number">1.1.</span> <span class="nav-text">Question</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#data-structure"><span class="nav-number">1.2.</span> <span class="nav-text">Data Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#simple-dynamic-string-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.2.1.</span> <span class="nav-text">Simple Dynamic String:
+简单动态字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#question-1"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">Question</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dict%E5%AD%97%E5%85%B8"><span class="nav-number">1.2.2.</span> <span class="nav-text">Dict：字典</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">哈希算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rehash"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">Rehash</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ziplist-%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8"><span class="nav-number">1.2.3.</span> <span class="nav-text">ZipList: 压缩列表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8%E7%9A%84%E6%9E%84%E6%88%90ziplist"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">压缩列表的构成:ZipList</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8%E8%8A%82%E7%82%B9%E7%9A%84%E6%9E%84%E6%88%90ziplistentry"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">压缩列表节点的构成：ZipListEntry</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#question-2"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">Question</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#intset%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88"><span class="nav-number">1.2.4.</span> <span class="nav-text">IntSet:整数集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#quicklist"><span class="nav-number">1.2.5.</span> <span class="nav-text">QuickList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#skiplist"><span class="nav-number">1.2.6.</span> <span class="nav-text">SkipList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redisobject"><span class="nav-number">1.2.7.</span> <span class="nav-text">RedisObject</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#string"><span class="nav-number">1.3.1.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#list"><span class="nav-number">1.3.2.</span> <span class="nav-text">List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set"><span class="nav-number">1.3.3.</span> <span class="nav-text">Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zset"><span class="nav-number">1.3.4.</span> <span class="nav-text">ZSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hash"><span class="nav-number">1.3.5.</span> <span class="nav-text">Hash</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AD%96%E7%95%A5"><span class="nav-number">1.4.</span> <span class="nav-text">内存策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5"><span class="nav-number">1.4.1.</span> <span class="nav-text">过期策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#db%E7%BB%93%E6%9E%84"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">DB结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%83%B0%E6%80%A7%E5%88%A0%E9%99%A4"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">惰性删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%91%A8%E6%9C%9F%E5%88%A0%E9%99%A4"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">周期删除</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5"><span class="nav-number">1.4.2.</span> <span class="nav-text">淘汰策略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">1.5.</span> <span class="nav-text">持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rdb%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">1.5.1.</span> <span class="nav-text">RDB持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#aof%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">1.5.2.</span> <span class="nav-text">AOF持久化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E"><span class="nav-number">1.6.</span> <span class="nav-text">主从</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E9%87%8F%E5%90%8C%E6%AD%A5"><span class="nav-number">1.6.1.</span> <span class="nav-text">全量同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A2%9E%E9%87%8F%E5%90%8C%E6%AD%A5"><span class="nav-number">1.6.2.</span> <span class="nav-text">增量同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%A8%E5%85%B5"><span class="nav-number">1.6.3.</span> <span class="nav-text">哨兵</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%93%A8%E5%85%B5%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.6.3.1.</span> <span class="nav-text">哨兵的作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%8A%B6%E6%80%81%E7%9B%91%E6%8E%A7"><span class="nav-number">1.6.3.2.</span> <span class="nav-text">服务状态监控</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E4%B8%BE%E6%96%B0%E7%9A%84master"><span class="nav-number">1.6.3.3.</span> <span class="nav-text">选举新的master</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB"><span class="nav-number">1.6.3.4.</span> <span class="nav-text">如何实现故障转移</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%89%87%E9%9B%86%E7%BE%A4"><span class="nav-number">1.6.4.</span> <span class="nav-text">分片集群</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.7.</span> <span class="nav-text">网络模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4%E5%92%8C%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4"><span class="nav-number">1.7.1.</span> <span class="nav-text">用户空间和内核空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#io%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.7.2.</span> <span class="nav-text">IO模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#blocking-io"><span class="nav-number">1.7.2.1.</span> <span class="nav-text">Blocking IO</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nonblocking-io"><span class="nav-number">1.7.2.2.</span> <span class="nav-text">Nonblocking IO</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#io-mutiplexing"><span class="nav-number">1.7.2.3.</span> <span class="nav-text">IO Mutiplexing</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.7.3.</span> <span class="nav-text">Redis网络模型</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yus"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Yus</p>
+  <div class="site-description" itemprop="description">后端废物</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="mailto:2414655851@qq.com" title="E-Mail → mailto:2414655851@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2023/06/17/Redis%E9%9D%A2%E8%AF%95%E6%94%BB%E7%95%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Redis | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redis
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-06-17 11:43:33" itemprop="dateCreated datePublished" datetime="2023-06-17T11:43:33+08:00">2023-06-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-06-30 21:45:23" itemprop="dateModified" datetime="2023-06-30T21:45:23+08:00">2023-06-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="redis">Redis</h1>
+<h2 id="question">Question</h2>
+<p>如果阅读完都能回答上来，那么此篇就不必看啦😊</p>
+<ol type="1">
+<li>了解Redis吗？说说它机制为什么快？✅</li>
+<li><strong>有几种数据结构，底层分别是怎么存储的？</strong>✅</li>
+<li>用过哪些数据结构？分别用在什么场景？✅</li>
+<li><strong>Redis的zset是如何实现的？为什么使用跳表不使用别的数据结构？</strong>✅</li>
+<li>Redis key 的过期策略？✅</li>
+<li>zset如何实现排名？✅</li>
+<li><strong>Redis有几种持久化方式？</strong>✅</li>
+<li>Redis数据幂等性是怎么保证的？</li>
+<li>Redis分布式锁你们是怎么用的，原理知道吗？</li>
+<li>Redis的热Key知道吗？一个热Key导致单机访问量过高，该怎么办？</li>
+<li>分布多台Redis的话，如果某一台缓存过期了，流量过大该怎么办？</li>
+<li>Redis的集群方式，各有什么特点？</li>
+<li>Redis Cluster的通信机制，说一下蜂巢？（没听说过）</li>
+<li>Redis的aof文件过大怎么处理，怎么解决，开启aof的方式有几种？了解rewrite命令吗？✅</li>
+<li>布隆过滤器怎么实现的？能否有删除功能？</li>
+<li>说一下redis的主从复制过程？✅</li>
+<li>Redis 的哨兵和集群？✅</li>
+<li>一致性哈希算法说一下，具体扩容过程？✅</li>
+<li>Redis如何实现高可用？✅</li>
+</ol>
+<h2 id="data-structure">Data Structure</h2>
+<h3 id="simple-dynamic-string-简单动态字符串">Simple Dynamic String:
+简单动态字符串</h3>
+<p><strong>常数级字符串长度查询与杜绝缓冲区溢出</strong></p>
+<p>Redis的实现语言是C语言，为什么Redis不直接使用C语言内置的字符串呢？</p>
+<p>C语言不记录字符串长度，每次计算长度需要遍历找到\0为止，而且因为不知道为一个字符串分配了多少内存，有可能在进行拼接时产生缓冲区溢出。</p>
+<p>这种简单的字符串表示，在大多数情况下都能满足要求，但是，它并不能高效地支持长度计算和追加（append）这两种操作：</p>
+<ul>
+<li>每次计算字符串长度（<code>strlen(s)</code>）的复杂度为 θ(N) 。</li>
+<li>对字符串进行 N 次追加，必定需要对字符串进行 N
+次内存重分配（<code>realloc</code>）。</li>
+</ul>
+<p>在 Redis 内部， 字符串的追加和长度计算很常见， 而 <a
+target="_blank" rel="noopener" href="http://redis.readthedocs.org/en/latest/string/append.html#append">APPEND</a>
+和 <a
+target="_blank" rel="noopener" href="http://redis.readthedocs.org/en/latest/string/strlen.html#strlen">STRLEN</a>
+更是这两种操作，在 Redis 命令中的直接映射，
+这两个简单的操作不应该成为性能的瓶颈。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>* str = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"><span class="built_in">strlen</span>(str); <span class="comment">// 计算字符串长度</span></span><br><span class="line"><span class="type">char</span> *<span class="title function_">strcat</span><span class="params">(<span class="type">char</span> *dest, <span class="type">const</span> <span class="type">char</span> *src)</span>; <span class="comment">// 把src拼接到后面</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></span><br><span class="line">  <span class="type">int</span> len; <span class="comment">// 记录buf数组已使用的字节的数量</span></span><br><span class="line">  <span class="type">int</span> <span class="built_in">free</span>; <span class="comment">// 记录buf数组未使用的字节的数量</span></span><br><span class="line">  <span class="type">char</span> buf[]; <span class="comment">// 字节数组</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Redis3.0版本是这些字段，在最新版7.0已经变成</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr8</span> &#123;</span></span><br><span class="line">    <span class="type">uint8_t</span> len; <span class="comment">/* used */</span></span><br><span class="line">    <span class="type">uint8_t</span> alloc; <span class="comment">/* excluding the header and null terminator */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> flags; <span class="comment">/* 3 lsb of type, 5 unused bits */</span></span><br><span class="line">    <span class="type">char</span> buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>为了解决以上问题，SDS引入了len、free属性，len解决字符串长度问题，free+空间分配策略解决缓冲区溢出问题。</p>
+<p><strong>空间分配策略：</strong></p>
+<p>如果需要进行SDS修改，首先检查空间是否满足修改所需的大小，否则重新分配新的内存块。</p>
+<ol type="1">
+<li><p>空间预分配</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(len &lt; <span class="number">1</span>MB)&#123;</span><br><span class="line">	<span class="built_in">free</span> = len;</span><br><span class="line">&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="built_in">free</span> = <span class="number">1</span>MB</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当发生连续执行字符串增长操作时，可以减少内存重分配次数。再次扩展SDS空间之前，如果有足够的空间，那么就不用执行内存重分配。</p>
+<p>通过这种预分配策略，SDS将连续增长N次字符串所需要的内存重分配次数从必定N次降低为最多N次。</p>
+<blockquote>
+<p>一切都是为了更快的速度这个总目标。</p>
+<p>在空间不值钱的时候，那么用空间换时间是非常划算的。进行内存重分配还需要从用户态转换为内核态，底层还需要中断操作，这些都是非常耗时的。</p>
+<p>大家还能想起其它用空间换时间的🌰吗？</p>
+</blockquote></li>
+<li><p>惰性空间释放</p>
+<p>当修改SDS字符串时，如果是截断操作，Redis会及时释放多余的空间吗？</p>
+<p>为了更快的速度，既然在增加长度时都不在乎内存了，那么减少时也没有必要太节约。</p>
+<p>使用<code>free</code>属性记录这些多余的空间,未来的增减更得心应手。</p></li>
+</ol>
+<p><strong>二进制安全</strong></p>
+<p>C语言由于使用<code>'\0'</code>结束字符串，也就让C字符串无法保存图片、音频等二进制数据。</p>
+<p>SDS用二进制的方式处理buf数组的数据，所以SDS二进制安全。</p>
+<p><strong>兼容部分C字符串函数</strong></p>
+<p>Redis是C语言写的，所以和C语言字符串的运算不可避免啊，能重用当然更好咯。</p>
+<p>毕竟我们也只需要在保存的数据末尾加一个空字符就行咯。</p>
+<h4 id="question-1">Question</h4>
+<ol type="1">
+<li>Redis的SDS设计了len属性，便于常数复杂度获取一个SDS的长度，但是Redis需要这个设计吗？什么场景下会被用到？
+<ul>
+<li><code>strlen()</code>命令用于获取字符串长度，难道只是为了这个吗？</li>
+</ul></li>
+<li>Redis有惰性释放，那么真正释放的时机是多久呢？</li>
+</ol>
+<h3 id="dict字典">Dict：字典</h3>
+<p>字典可以结合Java中的HashMap进行学习，相似之处非常多。</p>
+<p>首先我们可以看一下，它的数据结构：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span></span><br><span class="line">  dictEntry **table; <span class="comment">// 哈希表数组</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> size; <span class="comment">// 哈希表大小</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> sizemask; <span class="comment">// size-1 ；哈希表大小掩码，用于计算哈希值</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> used; <span class="comment">// 该哈希表已有节点的数量</span></span><br><span class="line">&#125; dictth;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">  <span class="type">void</span> *key; <span class="comment">// 键</span></span><br><span class="line">  <span class="class"><span class="keyword">union</span>&#123;</span></span><br><span class="line">    <span class="type">void</span> *val;</span><br><span class="line">    unint64_tu64;</span><br><span class="line">    int64_ts64;</span><br><span class="line">  &#125; v; <span class="comment">// 值</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span> <span class="comment">// 拉链法，头结法</span></span><br><span class="line">&#125; dictEntry;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">  dictType *type; <span class="comment">// 类型特定函数</span></span><br><span class="line">  <span class="type">void</span> *private; <span class="comment">// 私有数据</span></span><br><span class="line">  dictht ht[<span class="number">2</span>]; <span class="comment">// 哈希表</span></span><br><span class="line">  <span class="type">int</span> rehashidx; <span class="comment">// rehash索引，也就是判断是否正在进行rehash，-1未进行</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230620011207518.png"
+alt="image-20230620011207518" />
+<figcaption aria-hidden="true">image-20230620011207518</figcaption>
+</figure>
+<p>对着图来看，平平无奇就是一个普通的使用拉链法的哈希表。</p>
+<p>唯一比较令人新奇的是sizemask是什么？为什么会有两个dictht，rehashidx是什么？</p>
+<h4 id="哈希算法">哈希算法</h4>
+<p>要了解sizemask就得了解如何计算哈希索引值</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hash = dict-&gt;type-&gt;hashFunction(key);</span><br><span class="line">index = hash &amp; dict-&gt;ht[x].sizemask;</span><br></pre></td></tr></table></figure>
+<p>首先使用<code>MurmurHash2</code>算法来计算键的哈希值，这个算法可以让有规律的键也给出很好的随机分布性。</p>
+<p>接着由于sizemask等于size-1，那么hash值与其相与就是求哈希值对size取余。</p>
+<h4 id="rehash">Rehash</h4>
+<p>如果一个哈希表不堪重负，也就是说查找效率开始降低了该怎么办？又或者一个容量巨大的哈希表却只有几个元素，太浪费空间了怎么办？</p>
+<p>这里的效率与浪费可以用负载因子来描述，为了让哈希表维持在进可攻退可守的状态，我们需要让负载因子(<span
+class="math inline">\(Loadfacter = used
+/size\)</span>)处在一个合理的水平。</p>
+<p>看公式，我们能决定的只有size而已，也就是说rehash其实是在重新分配空间。</p>
+<p><strong>什么情况下进行扩容：</strong></p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230620014053119.png"
+alt="image-20230620014053119" />
+<figcaption aria-hidden="true">image-20230620014053119</figcaption>
+</figure>
+<blockquote>
+<p>bgsave和bgrewrite是后台持久化操作，后续会讲，总之是一个消耗CPU资源的操作。</p>
+</blockquote>
+<p><strong>什么情况下进行缩容：</strong></p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230620014444494.png"
+alt="image-20230620014444494" />
+<figcaption aria-hidden="true">image-20230620014444494</figcaption>
+</figure>
+<p><strong>Rehash</strong></p>
+<p>无论是扩容还是缩容，都不可避免的会改变size和sizemask，而key的查询与sizemask有关，因此必须对每一个元素重新计算索引，引入新的哈希表。</p>
+<ol type="1">
+<li>找到新的size</li>
+<li>申请内存空间，并赋给dict.ht[1].table</li>
+<li>设置dict.rehashidx=0,标志正在rehash</li>
+<li>将dict.ht[0]的每一个元素都rehash到dict.ht[1]</li>
+<li>讲dict.ht[1]赋值给dict.ht[0]，dict.ht[1]指向空，释放原来dict.ht[0]的内存</li>
+</ol>
+<p>我们可以想想上述过程有什么隐患吗？</p>
+<p>如果当哈希表数据有几百万上千万，第四步还能顺利完成吗？</p>
+<p>由此引入了渐进式rehash</p>
+<p><strong>渐进式Rehash</strong></p>
+<ol type="1">
+<li>找到新的size</li>
+<li>申请内存空间，并赋给dict.ht[1].table</li>
+<li>设置dict.rehashidx=0,标志正在rehash</li>
+<li><em>每次对字典执行添加、删除、查找或者更新操作时，程序除了执行指定的操作以外，都检查一下dict.rehashidx是否大于-1，如果是，将ht[0].table[rehashidx]的Entry链表rehash到ht[1]，当rehash工作完成之后，并且将rehashidx属性的值增一。</em></li>
+<li>将dict.ht[1]赋值给dict.ht[0]，dict.ht[1]指向空，释放原来dict.ht[0]的内存</li>
+<li>将dict.rehashidx赋值为-1，代表结束rehash</li>
+<li>新增操作直接写入ht[1]，查询和删除需要依次查找，这样ht[1]不停的在增加，ht[0]不停的在减少最终为空。</li>
+</ol>
+<h3 id="ziplist-压缩列表">ZipList: 压缩列表</h3>
+<p><code>ZipList</code>是一种连续内存空间的“双端链表”，由一系列特殊编码的内存块组成，可以在任意一端进行压入与弹出，且时间复杂度为O(1)</p>
+<h4 id="压缩列表的构成ziplist">压缩列表的构成:ZipList</h4>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621011234057.png"
+alt="image-20230621011234057" />
+<figcaption aria-hidden="true">image-20230621011234057</figcaption>
+</figure>
+<p>zllen：最大值为65535，如果超过，那么就只能遍历才能知道，但是一般不会超过，因为ZipList设计初衷不是用来存很多东西的。</p>
+<p>固定不变的就是总字节数、尾偏移量、entry节点数、结束标识，这些一共占11个字节。</p>
+<p>尾偏移量用总字节数减去tail节点长度再减1</p>
+<h4
+id="压缩列表节点的构成ziplistentry">压缩列表节点的构成：ZipListEntry</h4>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621011755420.png"
+alt="image-20230621011755420" />
+<figcaption aria-hidden="true">image-20230621011755420</figcaption>
+</figure>
+<p><code>previous_entry_length</code>：前一个节点的长度，如果前一节点的长度小于254字节，就用1个字节存储，否则用5个字节存储，其中第一个字节为0xfe用来标识。</p>
+<blockquote>
+<p><code>previous_entry_length</code>的设计是为了能够向前访问，由于它长度不固定，导致连锁更新的罪魁祸首就是它。连锁更新稍微想想当每个entry的长度都是253，如果某个entry增加至少一个字节之后的更新操作，就明白了。</p>
+</blockquote>
+<p><code>encoding</code>：编码属性占一个字节或2个字节或5个字节</p>
+<p><code>content</code>：保存节点的数据，字符串或整数。可以没有（当数字小于14）</p>
+<blockquote>
+<p>ZipList中所有存储长度的数值均采用小端字节序，低位字节在前，高位字节在后。</p>
+</blockquote>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621013348769.png"
+alt="image-20230621013348769" />
+<figcaption aria-hidden="true">image-20230621013348769</figcaption>
+</figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621013417294.png"
+alt="image-20230621013417294" />
+<figcaption aria-hidden="true">image-20230621013417294</figcaption>
+</figure>
+<h4 id="question-2">Question</h4>
+<ol type="1">
+<li><p>如何实现的双向？</p>
+<p>记录了上一个节点的长度与当前节点长度。</p></li>
+<li><p>有什么优点和缺点？</p>
+<p>优点和缺点都是由存储结构导致的，优点就是节省内存，缺点就是无法随机访问，增删可能会发生连续更新问题影响性能。</p></li>
+</ol>
+<h3 id="intset整数集合">IntSet:整数集合</h3>
+<p>IntSet是Redis中set集合的一种实现方式，基于整数数组实现，并且具备长度、有序等特征</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">intset</span> &#123;</span></span><br><span class="line">  <span class="type">uint32_t</span> encoding; <span class="comment">// 决定保存的整数的大小 16、32、64位</span></span><br><span class="line">  <span class="type">uint32_t</span> length; <span class="comment">// 长度</span></span><br><span class="line">  <span class="type">int8_t</span> contents[]; <span class="comment">// 上面提到的数组，实际上存储的是encoding决定的类型数据</span></span><br><span class="line">&#125; intset;</span><br></pre></td></tr></table></figure>
+<p>为了查找方便，所有整数按照升序排列，既然有序了那么查找就可以使用二分查找。数据在集合内唯一，编码取所有整数的公倍数，俗称IntSet升级，但只会升级不会降级。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622005603455.png"
+alt="image-20230622005603455" />
+<figcaption aria-hidden="true">image-20230622005603455</figcaption>
+</figure>
+<h3 id="quicklist">QuickList</h3>
+<p>链表➕数组</p>
+<p>数组是ZipList，为了解决长时间使用ZipList无法获取到大块内存的弊端。还可以进一步压缩，比如除了头尾节点其他ziplist都压缩。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624214436076.png"
+alt="image-20230624214436076" />
+<figcaption aria-hidden="true">image-20230624214436076</figcaption>
+</figure>
+<h3 id="skiplist">SkipList</h3>
+<p>一种有序数据结构，它通过在每个节点中维持多个指向其它节点的指针，从而达到快速访问节点的目的。维持多个指向其它的节点的指针其实与mysql中的索引有异曲同工之妙。时间复杂度与平衡树媲美，但是实现方式更简单。</p>
+<p>Redis只在两个地方用到了跳表：</p>
+<ol type="1">
+<li>有序集合键：集合数量较多或者成员是长字符串时</li>
+<li>在集群中用作内部数据结构</li>
+</ol>
+<p>本质链表</p>
+<ul>
+<li>元素按升序排列</li>
+<li>节点可能包含多个指针，指针跨度不同</li>
+<li>空间换时间，加索引</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span> <span class="comment">// 前进节点</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> span; <span class="comment">// 跨度</span></span><br><span class="line">  &#125; level[]; <span class="comment">// 层</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span> <span class="comment">// 后退节点</span></span><br><span class="line">  <span class="type">double</span> score; <span class="comment">// 分值</span></span><br><span class="line">  robj *obj; <span class="comment">// 成员对象</span></span><br><span class="line">&#125; zskiplistNode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">skiplistNode</span> *<span class="title">header</span>, *<span class="title">tail</span>;</span> <span class="comment">// 头节点、尾节点</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> length; <span class="comment">// 节点数量</span></span><br><span class="line">  <span class="type">int</span> level; <span class="comment">// 表中层数最大的节点的层数</span></span><br><span class="line">&#125; zskiplist;</span><br></pre></td></tr></table></figure>
+<p>跳表由两个结构组成，zskiplist和zskiplistNode，每个跳表节点的层高都是1～32的随机数，每个成员对象必须唯一，按分值大小排序。</p>
+<p>其实就是链表每次只保存下一个节点的地址，但是跳表保存了多个节点的地址，在查找的时候就可以一次性排除很多数据，，也是空间换时间的做法。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622144543868.png"
+alt="image-20230622144543868" />
+<figcaption aria-hidden="true">image-20230622144543868</figcaption>
+</figure>
+<h3 id="redisobject">RedisObject</h3>
+<p>Redis中的任意数据的键和值都会封装为一个RedisObject，叫做Redis对象。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622144936198.png"
+alt="image-20230622144936198" />
+<figcaption aria-hidden="true">image-20230622144936198</figcaption>
+</figure>
+<p>ptr占用8个字节，</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622145034088.png"
+alt="image-20230622145034088" />
+<figcaption aria-hidden="true">image-20230622145034088</figcaption>
+</figure>
+<p>Redis创建了一个对象系统，这个系统包含字符串对象、列表对象、哈希对象、集合对象和有序集合对象，每种对象都用到了前面所介绍的数据结构。</p>
+<p>对于数据库保存的键值对来说，键总是字符串对象，而值可以是任意一种。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type akey  # 查看键对象类型</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622145110574.png"
+alt="image-20230622145110574" />
+<figcaption aria-hidden="true">image-20230622145110574</figcaption>
+</figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">object encoding akey # 查看一个数据库键对象的编码</span><br></pre></td></tr></table></figure>
+<h2 id="数据类型">数据类型</h2>
+<h3 id="string">String</h3>
+<p>String是Redis最常见的数据存储类型：</p>
+<ul>
+<li><p>其最基本的编码方式是<code>RAW</code>，基于简单动态字符串实现，存储上限是512mb</p>
+<blockquote>
+<p>需要申请两次内存，一次是RedisObject，一次是SDS</p>
+</blockquote></li>
+<li><p>如果存储的SDS长度小于44字节，则会采用<code>EMBSTR</code>编码，此时object
+head与SDS是一段连续空间（64字节）。申请内存时只需要调用一次内存分配函数，效率更高。</p>
+<blockquote>
+<p>以2的n次方进行内存分配，64字节正好是一片。</p>
+<p>所以建议不要存储超过44字节的字符串，容易产生内存碎片</p>
+</blockquote></li>
+<li><p>如果存储的字符串是整数值，并且大小在LONG_MAX范围内，则会采用<code>INT</code>编码：直接将数据保存在RedisObject的ptr指针位置（刚好8字节），不再需要SDS了。</p></li>
+</ul>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624183146469.png"
+alt="image-20230624183146469" />
+<figcaption aria-hidden="true">image-20230624183146469</figcaption>
+</figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624183451136.png"
+alt="image-20230624183451136" />
+<figcaption aria-hidden="true">image-20230624183451136</figcaption>
+</figure>
+<p>也就是说，能用数值用数值，能小于44字节就小于。</p>
+<h3 id="list">List</h3>
+<p>Redis的类型可以从首位操作列表中的元素：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">LPUSH l1 e3 e2 e1</span><br><span class="line">RPUSH</span><br><span class="line">LRANGE L1 0 2 // 取指定范围内的元素</span><br><span class="line">LPOP L1 1</span><br><span class="line">RPOP L1 </span><br></pre></td></tr></table></figure>
+<ul>
+<li>LinkedList:普通链表、双端访问，内存占用高，内存碎片多</li>
+<li>ZipList：压缩列表，双端访问，内存占用低，存储上限低</li>
+<li>QuickList：LinkedList+ZipList，双端访问，内存占用较低，存储上限高</li>
+</ul>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624214436076.png"
+alt="image-20230624214436076" />
+<figcaption aria-hidden="true">image-20230624214436076</figcaption>
+</figure>
+<h3 id="set">Set</h3>
+<p>Set是Redis中的集合，不一定确保元素有序，也不一定确保元素无序，满足元素唯一。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SADD s1 v1 v2 v3 // 添加</span><br><span class="line">SISMEMBER // 释放存在</span><br><span class="line">SINTER //交集</span><br></pre></td></tr></table></figure>
+<p>可以知道，set的操作中几乎都包含对某元素的查找，所以我们需要找一个查找效率高的数据结构来实现。</p>
+<p>从我们学过的：SDS、IntSet、Dict、ZipList、SkipList中找，发现Dict是效率最高的</p>
+<ul>
+<li>为了查询效率和唯一性，set采用Dict。key存储元素，value统一为null。</li>
+<li>当存储的所有数据都是整数时，并且元素数量不超过set_max_intset_entries时，Set会采用IntSet</li>
+</ul>
+<p>IntSet有序使用二分查找，查询效率也还可以，存储整数时可以减少内存占用</p>
+<p>Dict效率最高，但是内存占用大啊，每个Entry都有好多指针。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624221349310.png"
+alt="image-20230624221349310" />
+<figcaption aria-hidden="true">image-20230624221349310</figcaption>
+</figure>
+<p>但是IntSet不是永久的，一旦有新加入的元素不是整数或者超过了数量限制就会转换为Dict</p>
+<h3 id="zset">ZSet</h3>
+<p>ZSet也就是SortedSet，其中每一个元素都需要指定一个score值和member值，它的特点是：</p>
+<ul>
+<li>根据score排序</li>
+<li>唯一并且提交覆盖</li>
+<li>可以根据member查询score</li>
+</ul>
+<p>因此，zst底层数据结构必须满足键值存储、键唯一、可排序</p>
+<p>有序的数据结构：<code>SkipList</code>,<code>IntSet</code></p>
+<p>键值关系：<code>Dict</code>，<code>SkipList</code></p>
+<p>键唯一：<code>Dict</code>,</p>
+<p>IntSet只能存整数，所以排除。剩下的SkipList和Dict其实都能满足，但是都需要在性能上做些让步，比如SkipList在查询键时时间负责度降为链表，Dict在排序上也捉襟见肘。</p>
+<p>鉴于Redis的终极目标：FAST；不难猜到它全都要。但其实不用过于担心对内存的浪费，因为两者都只是存实际数据的指针而已。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ZADD z1 <span class="number">10</span> m1 <span class="number">20</span> m2</span><br><span class="line">ZSCORE z1 m1</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230625150541007.png"
+alt="image-20230625150541007" />
+<figcaption aria-hidden="true">image-20230625150541007</figcaption>
+</figure>
+<p>不过由于元素数量不多时，HT和SkipList的优势并不明显，而且指针也挺费的，要8字节呢。</p>
+<p>因此zst还会采用ZipList结构来节省内存，需要同时满足两个条件：</p>
+<ol type="1">
+<li>元素数量小于zst_max_ziplist_entries=128</li>
+<li>每个元素都小于zset_max_ziplist_value=64字节</li>
+</ol>
+<h3 id="hash">Hash</h3>
+<p>Hash结构与Reids中的Zset非常类似</p>
+<ul>
+<li>都是键值存储</li>
+<li>都需要根据键获取值</li>
+<li>键必须唯一</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hset user name yus age <span class="number">21</span></span><br><span class="line">hget user name</span><br></pre></td></tr></table></figure>
+<p>区别如下：</p>
+<ul>
+<li>zset的键是member，值时score；hash的键和值都是任意值</li>
+<li>zset要根据score排序；hash则无需排序</li>
+</ul>
+<p>因此，Hash底层采用的编码与Zset也基本一致，只需要把排序相关的SkipList去掉即可</p>
+<ul>
+<li><p>Hash结构默认采用ZipList编码，用以节约内存。ZipList中相邻的两个entry分别保存field和value</p></li>
+<li><p>当数据量较大时，hash结构会转换为HT编码</p>
+<ul>
+<li>ZipList中的数量超过了hash_max_ziplist_entry=512</li>
+<li>ZipList中的任意entry大小超过了hash_max_ziplist_value=64字节</li>
+</ul>
+<blockquote>
+<p>为什么这里比Zset的数量少？</p>
+<p>因为hash只需要存就行了，不需要排序等操作，所以存多点也没关系</p>
+</blockquote></li>
+</ul>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230625161200201.png"
+alt="image-20230625161200201" />
+<figcaption aria-hidden="true">image-20230625161200201</figcaption>
+</figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230625161408072.png"
+alt="image-20230625161408072" />
+<figcaption aria-hidden="true">image-20230625161408072</figcaption>
+</figure>
+<h2 id="内存策略">内存策略</h2>
+<p>Redis之所以性能强，最主要的原因是基于内存存储，然而单节点的Redis其内存大小不宜过大，会影响持久化，或主从同步性能。</p>
+<p>可以通过配置文件来设置Redis的最大内存：</p>
+<p><code>maxmemory 1gb</code></p>
+<p>当内存使用达到上限时，就无法存储更多的数据了。</p>
+<p>所以我们Redis就提供了两种不同的策略</p>
+<ul>
+<li>过期策略</li>
+<li>淘汰策略</li>
+</ul>
+<h3 id="过期策略">过期策略</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> name jack</span><br><span class="line">expire name 5 <span class="comment"># 设置ttl为5s</span></span><br></pre></td></tr></table></figure>
+<p>这里有两个问题需要我们思考：</p>
+<ol type="1">
+<li>Redis是如何知道一个key是否过期？</li>
+<li>是不是TTL到期就立即删除了呢？</li>
+</ol>
+<h4 id="db结构">DB结构</h4>
+<p>Redis本身是一个典型的k-v结构，因此所有的key、value都保存在之前学习的Dict中。不过在database结构体中，有两个Dict：一个用来记录k-v，一个用来记录k-ttl</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisDb</span> &#123;</span></span><br><span class="line">  dict *dict;</span><br><span class="line">  dict *expires;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230625201220167.png"
+alt="image-20230625201220167" />
+<figcaption aria-hidden="true">image-20230625201220167</figcaption>
+</figure>
+<h4 id="惰性删除">惰性删除</h4>
+<p>每次访问一个key的时候，检查该key的存活时间，如果已经过期才执行删除。</p>
+<h4 id="周期删除">周期删除</h4>
+<p>通过一个定时任务，周期性的抽样部分过期的key，然后执行删除。执行周期有两种：</p>
+<ul>
+<li>SLOW模式执行频率默认为10，每次不超过25ms</li>
+<li>FAST模式执行频率不固定，但两次间隔不低于2ms，每次耗时不超过1ms</li>
+</ul>
+<blockquote>
+<p>删除的算法与渐进式hash有异曲同工之妙，也会记录上一次删到哪了，然后慢慢删</p>
+</blockquote>
+<ol type="1">
+<li><p>Redis是如何知道一个key是否过期？</p>
+<p>通过记录的ttl知道</p></li>
+<li><p>是不是TTL到期就立即删除了呢？</p>
+<p>惰性删除➕周期删除</p></li>
+</ol>
+<h3 id="淘汰策略">淘汰策略</h3>
+<p>内存淘汰：当Redis内存使用设置的阈值时，Redis主动挑选部分key删除以释放更多内存的流程。</p>
+<p>LRU（Least Recently
+Used），最少最近使用。用当前时间减去最后一次访问时间，这个值越大则淘汰优先级越高。</p>
+<p>LFU（Least Frequently
+Used），最少频率使用。会统计每个Key的访问频率，值越少淘汰优先级越高。</p>
+<p>都是保存在RedisObject对象的lru属性中。</p>
+<p>Redis是有内存上限的，为了避免到达内存上限，它有两种不同的策略，一个是内存过期，一个是内存淘汰。内存过期呢其实是设置一个key的过期时间，到期以后我们就可以想办法把它删掉，删的策略呢有两种，一种是惰性删除，就是指当你访问的那一刻我检查一下有没有过期，过期了就删除；另外一个呢是周期删除，Redis有周期性任务，每隔一段时间就尝试去清理一部分过期的key。这就是所谓的过期策略，这样的策略只能把那些过期的key删掉，如果说我们这些key都没过期，而Redis内存又已经跑到上限了，又该怎么办呢？这时候就应该采用内存淘汰策略。内存淘汰策略有8种，一种是不做驱逐，内存不足就报错；还有七种呢？包括两个随机的，两个LRU，两个LFU和一个TTL，所谓的两个是指，它可以从所有key淘汰，也可以从过期key里淘汰</p>
+<p><strong>单节点Redis的问题</strong></p>
+<ol type="1">
+<li><p>数据丢失问题：实现Redis数据持久化</p>
+<p>Redis是内存存储，服务重启可能会丢失数据</p></li>
+<li><p>并发能力问题：搭建主从集群，实现读写分离</p>
+<p>单节点Redis并发能力虽然不错，但也无法满足如618这样的高并发场景</p></li>
+<li><p>故障恢复问题：利用Redis哨兵，实现健康检测和自动恢复</p>
+<p>如果Redis宕机，则服务不可用，需要一种自动的故障恢复手段</p></li>
+<li><p>存储能力问题：搭建分片集群，利用插槽机制实现动态扩容</p>
+<p>Redis基于内存，单节点能存储的数据难以满足海量数据的要求</p></li>
+</ol>
+<h2 id="持久化">持久化</h2>
+<h3 id="rdb持久化">RDB持久化</h3>
+<p>RDB全称Redis Database Backup
+file，也被叫做Redis数据快照。简单来说就是把内存中的所有数据都记录在磁盘中。当Redis实例故障重启后，从磁盘读取快照文件，恢复数据。</p>
+<p>快照文件称为RDB文件，默认是保存在当前运行目录。</p>
+<ul>
+<li>save ：由Redis主进程执行RDB，会阻塞所有命令</li>
+<li>bgsave：开启子进程执行RDB，避免主进程受到影响</li>
+</ul>
+<p>bgsave开始时会fork主进程得到子进程，子进程共享主进程的内存数据，完成fork后读取内存数据并写入RDB文件。</p>
+<p>fork采用的是copy-on-write技术：</p>
+<ul>
+<li>当主进程执行读操作时，访问共享内存；</li>
+<li>当主进程执行写操作时，则会拷贝一份数据，执行写操作</li>
+</ul>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230628145725421.png"
+alt="image-20230628145725421" />
+<figcaption aria-hidden="true">image-20230628145725421</figcaption>
+</figure>
+<p>所有进程都无法操作物理内存，而是由操作系统给每个进程分配一个虚拟内存。操作系统会维护一个虚拟内存与物理内存的地址映射表，这个表称之为页表。</p>
+<p>fork会拷贝映射关系页表，将共享内存设置为只读，如果主进程要修改，就得拷贝一份新的去修改。</p>
+<ol type="1">
+<li><p>RDB会在什么时候执行？</p>
+<p>默认是服务停止时。</p></li>
+<li><p>save 60 1000 代表什么含义？</p>
+<p>代表60s内至少执行1000次修改则触发RDB</p></li>
+<li><p>RDB的缺点？</p>
+<p>RDB执行间隔长，两次RDB之间写入数据有丢失的风险</p>
+<p>fork子进程，压缩，写出RDB文件都比较耗时</p></li>
+</ol>
+<h3 id="aof持久化">AOF持久化</h3>
+<p>AOF全称为Append Only
+File（追加文件）。Redis处理的每一个命令都会记录在AOF文件，可以看做是命令日志文件。</p>
+<p>因为是记录命令，AOF文件比RDB文件大得多。而且AOF会记录同一个key的多次写操作，但只有最后一次写操作才有意义。通过<code>bgrewrited</code>命令，可以让AOF文件执行重写功能，用最少的命令达到相同效果。</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 42%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>RDB</th>
+<th>AOF</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>持久化方式</td>
+<td>定时对整个内存做快照</td>
+<td>记录每一次执行命令</td>
+</tr>
+<tr class="even">
+<td>数据完整性</td>
+<td>不完整，两次备份之间会丢失</td>
+<td>相对完整，取决于刷盘策略</td>
+</tr>
+<tr class="odd">
+<td>宕机恢复速度</td>
+<td>快</td>
+<td>慢</td>
+</tr>
+<tr class="even">
+<td>数据恢复优先级</td>
+<td>低，因为完整性不如AOF</td>
+<td>高</td>
+</tr>
+<tr class="odd">
+<td>系统资源占用</td>
+<td>高，大量CPU和内存消耗</td>
+<td>低，主要是磁盘IO，但AOF重写会占用大量CPU和内存</td>
+</tr>
+<tr class="even">
+<td>使用场景</td>
+<td>可用容忍分钟级的数据丢失，追求更高的启动速度</td>
+<td>对数据安全性要求较高</td>
+</tr>
+<tr class="odd">
+<td>文件大小</td>
+<td>会有压缩，体积小</td>
+<td>记录命令，体积大</td>
+</tr>
+</tbody>
+</table>
+<h2 id="主从">主从</h2>
+<p>单节点Redis的并发能力是有上限的，要进一步提高Redis的并发能力，就需要搭建主从集群，实现读写分离。</p>
+<h3 id="全量同步">全量同步</h3>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629201452329.png"
+alt="image-20230629201452329" />
+<figcaption aria-hidden="true">image-20230629201452329</figcaption>
+</figure>
+<p><u>master
+如何判断slave是不是第一次来同步数据？</u>这里会用到两个很重要的概念：</p>
+<ul>
+<li>Replication
+Id：简称replid，是数据集的标记，id一致则说明是同一数据集。每一个master都有唯一的replid，slave则会继承master节点的replid</li>
+<li>offset：偏移量，随着记录在repl_baklog的数据增多而逐渐增大。slave完成同步时也会记录当前同步的offset。如果slave的offset小于master的offset，说明slave数据落后于master，需要更新。</li>
+</ul>
+<p>因此slave做数据同步，必须向master声明字节的replication
+id和offset，master才可以判断到底需要同步哪些数据</p>
+<p><strong>master如何判断slave节点是不是第一次来做数据同步？</strong></p>
+<p>首先slave带着replication
+id来同步，如果id与自己的相同，说明就是之前来过了，然后就可以根据offset来判断同步哪些数据。</p>
+<p>主从第一次同步是全量同步</p>
+<ol type="1">
+<li>slave节点请求增量同步</li>
+<li>master节点判断replid，发现不一致，拒绝增量同步</li>
+<li>master将完整的内存数据生成RDB，发送到slave</li>
+<li>slave清空本地数据，加载master到RDB</li>
+<li>master将RDB期间的命令记录在repl_baklog，并持续将log中的命令发送给slave</li>
+</ol>
+<h3 id="增量同步">增量同步</h3>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629202453611.png"
+alt="image-20230629202453611" />
+<figcaption aria-hidden="true">image-20230629202453611</figcaption>
+</figure>
+<p>repl_baklog大小有上限，写满后会覆盖最早的数据。如果slave断开时间过久，导致未备份的数据被覆盖，则无法基于log做增量同步，只能再次全量同步。</p>
+<h3 id="哨兵">哨兵</h3>
+<p><strong>slave节点宕机恢复后可以找master节点同步数据，那master节点宕机怎么办？</strong></p>
+<h4 id="哨兵的作用">哨兵的作用</h4>
+<p>Redis提供了哨兵（Sentinel）机制来实现主从集群的自动故障恢复。</p>
+<ul>
+<li>监控：Sentinel会不断检查您的master和slave是否按预期工作</li>
+<li>自动故障恢复：如果master故障，Sentinel会将一个slave提升为master。当故障实例恢复后也以新的master为主。</li>
+<li>通知：Sentinel充当reids客户端的服务发现来源，当集群发生故障转移时，会将最新消息推送给Redis的客户端。</li>
+</ul>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629203541757.png"
+alt="image-20230629203541757" />
+<figcaption aria-hidden="true">image-20230629203541757</figcaption>
+</figure>
+<h4 id="服务状态监控">服务状态监控</h4>
+<p>Sentinel基于心跳机制监测服务状态，每隔1s向集群的每个实例发送ping命令：</p>
+<ul>
+<li>主观下线：如果某sentinel节点发现某实例未在规定时间响应，则认为该实例主观下线</li>
+<li>客观下线：若超过指定数量（quorum）的sentinel都认为该实例主观下线，则该实例客观下线。quorum值最好超过半数</li>
+</ul>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629203837398.png"
+alt="image-20230629203837398" />
+<figcaption aria-hidden="true">image-20230629203837398</figcaption>
+</figure>
+<h4 id="选举新的master">选举新的master</h4>
+<p>一旦发现master故障，sentinel需要在slave中选择一个作为新的master，选择依据如下：</p>
+<ol type="1">
+<li>首先判断slave节点<strong>与master节点断开的时间</strong>长短，如果超过指定值（down-after-milliseconds*10)则会排除该slave节点</li>
+<li>然后判断slave节点的<strong>slave-priority值</strong>，越小优先级越高，如果是0则永不参与选举</li>
+<li>如果slave-prority一样，则判断slave节点的<strong>offset值</strong>，越大说明数据越新，优先级越高</li>
+<li>最后是判断slave节点的运行id大小，越小优先级越高</li>
+</ol>
+<h4 id="如何实现故障转移">如何实现故障转移</h4>
+<p>当选中了其中一个slave为新的master后，故障的转移的步骤如下：</p>
+<ul>
+<li>首先选定一个slave作为新的master，执行slaveof no one</li>
+<li>然后让所有节点都执行slaveof 新的master</li>
+<li>修改故障节点配置，添加slaveof 新master</li>
+</ul>
+<h3 id="分片集群">分片集群</h3>
+<p>主从和哨兵可以解决高可用、高并发读的问题。但是依然有两个问题没有解决：</p>
+<ul>
+<li>海量数据存储问题</li>
+<li>高并发写的问题</li>
+</ul>
+<p>使用分片集群可以解决上述问题，分片集群特征：</p>
+<ul>
+<li>集群中有多个master，每个master保存不同数据</li>
+<li>每个master都可以有多个slave节点</li>
+<li>master之间通过ping监测彼此健康状态</li>
+<li>客户端请求可以访问集群任意节点，最终都会到达正确的节点</li>
+</ul>
+<h2 id="网络模型">网络模型</h2>
+<h3 id="用户空间和内核空间">用户空间和内核空间</h3>
+<p>为了避免用户应用导致冲突甚至内核崩溃，用户空间与内核是分离的：</p>
+<ul>
+<li><p>进程的寻址空间会划分两部分：内核空间、用户空间</p>
+<p>这个地址是一个无符号整数，最大值取决于</p></li>
+</ul>
+<h3 id="io模型">IO模型</h3>
+<ul>
+<li>Blocking IO</li>
+<li>Nonblocking IO</li>
+<li>IO Multiplexing</li>
+<li>Signal Driven IO</li>
+<li>Asynchronous IO</li>
+</ul>
+<h4 id="blocking-io">Blocking IO</h4>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629183958383.png"
+alt="image-20230629183958383" />
+<figcaption aria-hidden="true">image-20230629183958383</figcaption>
+</figure>
+<p>两个阶段用户进程都在阻塞。</p>
+<h4 id="nonblocking-io">Nonblocking IO</h4>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629184153087.png"
+alt="image-20230629184153087" />
+<figcaption aria-hidden="true">image-20230629184153087</figcaption>
+</figure>
+<p>非阻塞IO模型，用户进程在第一个阶段是非阻塞，第二个阶段是阻塞状态。虽然是非阻塞，但性能并没有得到提高。而且忙等机制会导致CPU空转，CPU使用率暴增。</p>
+<h4 id="io-mutiplexing">IO Mutiplexing</h4>
+<p>无论是阻塞IO合适非阻塞IO，用户应用在第一个阶段都需要调用recvfrom来获取数据，差别在无数据时的处理方案：</p>
+<ul>
+<li>如果调用recvfrom时，恰好没有数据，阻塞IO会使进程阻塞，非阻塞IO会使CPU空转，都不能充分发挥CPU的作用。</li>
+<li>如果调用recvfrom时，恰好有数据，则用户进程可以直接进入第二阶段，读取并处理数据。</li>
+</ul>
+<p>比如服务端处理客户端Socket请求时，在单线程情况下，只能依次处理每一个socket，如果正在处理的socket恰好未就绪，线程就会阻塞，所有其他客户端socket都必须等待，性能自然会很差。</p>
+<p>要提高有几种方法？</p>
+<ol type="1">
+<li>每个socket准备一个线程：多线程</li>
+<li>哪个socket准备好了，就先去处理它</li>
+</ol>
+<h3 id="redis网络模型">Redis网络模型</h3>
+<p>Redis到底是单线程还是多线程？</p>
+<ul>
+<li>如果仅仅是聊Reids的核心业务（命令处理），答案是单线程</li>
+<li>如果是聊整个Redis，那么答案是多线程</li>
+</ul>
+<p>在Redis版本迭代过程中，在两个重要的时间节点引入了多线程的支持：</p>
+<ul>
+<li>4.0；引入了多线程异步处理一些耗时较长的任务，例如异步删除命令unlink</li>
+<li>6.0；在核心网络模块引入了多线程，进一步提高了对于多核CPU的利用率</li>
+</ul>
+<p><strong>为什么Reids要选择单线程？</strong></p>
+<ol type="1">
+<li>抛开持久化不谈，Reids是纯内存操作，执行速度非常快，它的性能瓶颈是网络延迟而不是执行速度，因此多线程并不会带来巨大的性能提升。</li>
+<li>多线程会导致过多的上下文切换，带来不必要的开销</li>
+<li>引入多线程会面临线程安全问题，必然要引入线程锁这样的安全手段，实现复杂度增高，而且性能也会大打折扣。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java-redis/" rel="tag"># java redis</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/13/try-catch-%E7%A9%B6%E7%AB%9F%E6%98%AF%E5%9C%A8%E5%BE%AA%E7%8E%AF%E5%A4%96%E6%80%A7%E8%83%BD%E5%A5%BD%E8%BF%98%E6%98%AF%E5%9C%A8%E5%BE%AA%E7%8E%AF%E5%86%85/" rel="prev" title="try catch 究竟是在循环外性能好还是在循环内">
+                  <i class="fa fa-chevron-left"></i> try catch 究竟是在循环外性能好还是在循环内
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/9999/08/09/%E8%85%B9%E6%9C%89%E8%AF%97%E4%B9%A6%E6%B0%94%E8%87%AA%E5%8D%8E/" rel="next" title="腹有诗书气自华">
+                  腹有诗书气自华 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+<!--  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+-->
+ by 
+  <span class="author" itemprop="copyrightHolder">Yus</span>
+</div>
+
+<!-- -->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -28,7 +28,7 @@
 <meta property="og:description" content="从极客时间抄的笔记  如果我们把写出的代码看作产品，那做产品的时候，我们先要思考痛点在哪里，用户的真正需求在哪里，然后再看要开发哪些功能去满足，而不是先拍脑袋想出一个花哨的功能，再去东搬西凑硬编出一个需求来。 代码设计也是类似的。我们先要去分析代码存在的痛点，比如可读性不好、可扩展性不好等等，然后再针对性地利用设计模式去改善，而不是看到某个场景之后，觉得跟之前在某本书中看到的某个设计模式的应用场景">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-08-10T10:51:17.000Z">
-<meta property="article:modified_time" content="2022-08-25T03:01:27.750Z">
+<meta property="article:modified_time" content="2023-06-17T03:31:16.128Z">
 <meta property="article:author" content="Yus">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -117,7 +117,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%81%8C%E8%B4%A3%E9%93%BE"><span class="nav-number">1.</span> <span class="nav-text">职责链</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">模版方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">装饰器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%AB%E5%85%83"><span class="nav-number">4.</span> <span class="nav-text">享元</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85"><span class="nav-number">5.</span> <span class="nav-text">建造者</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B"><span class="nav-number">6.</span> <span class="nav-text">原型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82"><span class="nav-number">7.</span> <span class="nav-text">工厂</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%81%8C%E8%B4%A3%E9%93%BE"><span class="nav-number">1.</span> <span class="nav-text">职责链</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">模版方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">装饰器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%AB%E5%85%83"><span class="nav-number">4.</span> <span class="nav-text">享元</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85"><span class="nav-number">5.</span> <span class="nav-text">建造者</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B"><span class="nav-number">6.</span> <span class="nav-text">原型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82"><span class="nav-number">7.</span> <span class="nav-text">工厂</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F"><span class="nav-number">8.</span> <span class="nav-text">组合模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F"><span class="nav-number">9.</span> <span class="nav-text">代理模式</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -132,7 +132,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -141,7 +141,7 @@
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -221,7 +221,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-25 11:01:27" itemprop="dateModified" datetime="2022-08-25T11:01:27+08:00">2022-08-25</time>
+      <time title="Modified: 2023-06-17 11:31:16" itemprop="dateModified" datetime="2023-06-17T11:31:16+08:00">2023-06-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -272,6 +272,8 @@ Interceptor这三者可以从不同权限检查的范围大小的视角来应用
 <li>AOP</li>
 </ol>
 <p>业务应用内权限检查，可以把权限检查在统一模块中实现，通过配置由AOP加插拦截检查。</p>
+<p>珍爱中用到职责链的情况：</p>
+<p>消息模块，</p>
 <h1 id="模版方法">模版方法</h1>
 <p>模板方法模式在一个方法中定义一个算法骨架，并将某些步骤推迟到子类中实现。模板方法模式可以让子类在不改变算法整体结构的情况下，重新定义算法中的某些步骤。这里的“算法”，我们可以理解为广义上的“业务逻辑”，并不特指数据结构和算法中的“算法”。这里的算法骨架就是“模板”，包含算法骨架的方法就是“模板方法”，这也是模板方法模式名字的由来。在模板模式经典的实现中，模板方法定义为
 final，可以避免被子类重写。需要子类重写的方法定义为
@@ -304,6 +306,25 @@ set() 方法。构造函数配合 set() 方法来设置属性值的方式就不�
 <p>CopyOnWrite</p>
 <h1 id="工厂">工厂</h1>
 <p>JDK的Calendar</p>
+<h1 id="组合模式">组合模式</h1>
+<p><strong>一、定义（理解）：</strong></p>
+<p>将一组对象组织（Compose）成树形结构，以表示一种“部分 -
+整体”的层次结构。组合让客户端（在很多设计模式书籍中，“客户端”代指代码的使用者。）可以统一单个对象和组合对象的处理逻辑。
+对业务场景的一种数据结构和算法的抽象。其中，数据可以表示成树这种数据结构，业务需求可以通过在树上的递归遍历算法来实现。</p>
+<p><strong>二、使用场景：</strong></p>
+<p>业务场景必须能够表示成树形结构。</p>
+<p>文件系统可以使用，Tomcat的容器设计也是用了</p>
+<p><strong>三、实现方式：</strong></p>
+<p>组合模式，将一组对象组织成树形结构，将单个对象和组合对象都看做树中的节点，以统一处理逻辑，并且它利用树形结构的特点，递归地处理每个子树，依次简化代码实现。（在这里一般可以抽象出一个抽象类，叶子节点和中间节点（根节点）继承与抽象类，对中间节点（根节点）处理就是递归的调用）</p>
+<h1 id="代理模式">代理模式</h1>
+<p><strong>1. 代理模式的原理与实现</strong></p>
+<p>在不改变原始类（或叫被代理类）的情况下，通过引入代理类来给原始类附加功能。一般情况下，我们让代理类和原始类实现同样的接口。但是，如果原始类并没有定义接口，并且原始类代码并不是我们开发维护的。在这种情况下，我们可以通过让代理类继承原始类的方法来实现代理模式。</p>
+<p><strong>2. 动态代理的原理与实现</strong></p>
+<p>静态代理需要针对每个类都创建一个代理类，并且每个代理类中的代码都有点像模板式的“重复”代码，增加了维护成本和开发成本。对于静态代理存在的问题，我们可以通过动态代理来解决。我们不事先为每个原始类编写代理类，而是在运行的时候动态地创建原始类对应的代理类，然后在系统中用代理类替换掉原始类。</p>
+<p><strong>3. 代理模式的应用场景</strong></p>
+<p>代理模式常用在业务系统中开发一些非功能性需求，比如：监控、统计、鉴权、限流、事务、幂等、日志。我们将这些附加功能与业务功能解耦，放到代理类统一处理，让程序员只需要关注业务方面的开发。除此之外，代理模式还可以用在
+RPC、缓存等应用场景中。</p>
+<p>Spring的AOP就是通过jdk的反射来实现动态代理，反射可以通过</p>
 
     </div>
 
@@ -348,7 +369,7 @@ set() 方法。构造函数配合 set() 方法来设置属性值的方式就不�
 
 <div class="copyright">
   &copy; 2017 – 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
 <!--  <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

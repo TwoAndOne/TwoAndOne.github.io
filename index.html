@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -138,7 +138,7 @@
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -290,6 +290,1195 @@
 <p>“损之又损，以至于无为”，一切都空，空到了最后连空也把它空掉，空到一无所有；然后无所不有，一切皆知，一切皆有，就是这个简单的道理。文字很简单，意义也很简单，一说就明白了。问题是，做起来很难！如何能够把自己损之又损，放弃了又放弃，放到了一无所有之处，才能到达无所不知无所不有的境界！</p>
 <p>老子在这里清楚地告诉我们，人生在世能够学问成就，或修道成就，就要有两种能力：“提得起”是做学问要“为学日益”；“放得下”是修道要“为道日损”，一切放下。但是普通一个人，能够具备这两种能力，两种智慧，两种勇气，所谓智勇双全，就太难了。普通的人，叫他做学问，才用功读了一个礼拜的书，便觉得很累，就停下来去玩了，为学不能日益。去修道做工夫的话，放不下，刚打坐几天，又觉得一天到晚坐着，淡而无味，浪费时间，也要跑出去玩玩，所以“为道日损”也做不到。<strong>因此，一般人多半都在为学未益、为道未损的情况下，提也提不起，放也放不下，就那样过了一生。</strong>这就是我们读了《老子》以后，自己应该反省的地方。</p>
 </blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2023/06/17/Redis%E9%9D%A2%E8%AF%95%E6%94%BB%E7%95%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/06/17/Redis%E9%9D%A2%E8%AF%95%E6%94%BB%E7%95%A5/" class="post-title-link" itemprop="url">Redis</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-06-17 11:43:33" itemprop="dateCreated datePublished" datetime="2023-06-17T11:43:33+08:00">2023-06-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-06-30 21:45:23" itemprop="dateModified" datetime="2023-06-30T21:45:23+08:00">2023-06-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="redis">Redis</h1>
+<h2 id="question">Question</h2>
+<p>如果阅读完都能回答上来，那么此篇就不必看啦😊</p>
+<ol type="1">
+<li>了解Redis吗？说说它机制为什么快？✅</li>
+<li><strong>有几种数据结构，底层分别是怎么存储的？</strong>✅</li>
+<li>用过哪些数据结构？分别用在什么场景？✅</li>
+<li><strong>Redis的zset是如何实现的？为什么使用跳表不使用别的数据结构？</strong>✅</li>
+<li>Redis key 的过期策略？✅</li>
+<li>zset如何实现排名？✅</li>
+<li><strong>Redis有几种持久化方式？</strong>✅</li>
+<li>Redis数据幂等性是怎么保证的？</li>
+<li>Redis分布式锁你们是怎么用的，原理知道吗？</li>
+<li>Redis的热Key知道吗？一个热Key导致单机访问量过高，该怎么办？</li>
+<li>分布多台Redis的话，如果某一台缓存过期了，流量过大该怎么办？</li>
+<li>Redis的集群方式，各有什么特点？</li>
+<li>Redis Cluster的通信机制，说一下蜂巢？（没听说过）</li>
+<li>Redis的aof文件过大怎么处理，怎么解决，开启aof的方式有几种？了解rewrite命令吗？✅</li>
+<li>布隆过滤器怎么实现的？能否有删除功能？</li>
+<li>说一下redis的主从复制过程？✅</li>
+<li>Redis 的哨兵和集群？✅</li>
+<li>一致性哈希算法说一下，具体扩容过程？✅</li>
+<li>Redis如何实现高可用？✅</li>
+</ol>
+<h2 id="data-structure">Data Structure</h2>
+<h3 id="simple-dynamic-string-简单动态字符串">Simple Dynamic String:
+简单动态字符串</h3>
+<p><strong>常数级字符串长度查询与杜绝缓冲区溢出</strong></p>
+<p>Redis的实现语言是C语言，为什么Redis不直接使用C语言内置的字符串呢？</p>
+<p>C语言不记录字符串长度，每次计算长度需要遍历找到\0为止，而且因为不知道为一个字符串分配了多少内存，有可能在进行拼接时产生缓冲区溢出。</p>
+<p>这种简单的字符串表示，在大多数情况下都能满足要求，但是，它并不能高效地支持长度计算和追加（append）这两种操作：</p>
+<ul>
+<li>每次计算字符串长度（<code>strlen(s)</code>）的复杂度为 θ(N) 。</li>
+<li>对字符串进行 N 次追加，必定需要对字符串进行 N
+次内存重分配（<code>realloc</code>）。</li>
+</ul>
+<p>在 Redis 内部， 字符串的追加和长度计算很常见， 而 <a
+target="_blank" rel="noopener" href="http://redis.readthedocs.org/en/latest/string/append.html#append">APPEND</a>
+和 <a
+target="_blank" rel="noopener" href="http://redis.readthedocs.org/en/latest/string/strlen.html#strlen">STRLEN</a>
+更是这两种操作，在 Redis 命令中的直接映射，
+这两个简单的操作不应该成为性能的瓶颈。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>* str = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"><span class="built_in">strlen</span>(str); <span class="comment">// 计算字符串长度</span></span><br><span class="line"><span class="type">char</span> *<span class="title function_">strcat</span><span class="params">(<span class="type">char</span> *dest, <span class="type">const</span> <span class="type">char</span> *src)</span>; <span class="comment">// 把src拼接到后面</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></span><br><span class="line">  <span class="type">int</span> len; <span class="comment">// 记录buf数组已使用的字节的数量</span></span><br><span class="line">  <span class="type">int</span> <span class="built_in">free</span>; <span class="comment">// 记录buf数组未使用的字节的数量</span></span><br><span class="line">  <span class="type">char</span> buf[]; <span class="comment">// 字节数组</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Redis3.0版本是这些字段，在最新版7.0已经变成</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr8</span> &#123;</span></span><br><span class="line">    <span class="type">uint8_t</span> len; <span class="comment">/* used */</span></span><br><span class="line">    <span class="type">uint8_t</span> alloc; <span class="comment">/* excluding the header and null terminator */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> flags; <span class="comment">/* 3 lsb of type, 5 unused bits */</span></span><br><span class="line">    <span class="type">char</span> buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>为了解决以上问题，SDS引入了len、free属性，len解决字符串长度问题，free+空间分配策略解决缓冲区溢出问题。</p>
+<p><strong>空间分配策略：</strong></p>
+<p>如果需要进行SDS修改，首先检查空间是否满足修改所需的大小，否则重新分配新的内存块。</p>
+<ol type="1">
+<li><p>空间预分配</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(len &lt; <span class="number">1</span>MB)&#123;</span><br><span class="line">	<span class="built_in">free</span> = len;</span><br><span class="line">&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="built_in">free</span> = <span class="number">1</span>MB</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当发生连续执行字符串增长操作时，可以减少内存重分配次数。再次扩展SDS空间之前，如果有足够的空间，那么就不用执行内存重分配。</p>
+<p>通过这种预分配策略，SDS将连续增长N次字符串所需要的内存重分配次数从必定N次降低为最多N次。</p>
+<blockquote>
+<p>一切都是为了更快的速度这个总目标。</p>
+<p>在空间不值钱的时候，那么用空间换时间是非常划算的。进行内存重分配还需要从用户态转换为内核态，底层还需要中断操作，这些都是非常耗时的。</p>
+<p>大家还能想起其它用空间换时间的🌰吗？</p>
+</blockquote></li>
+<li><p>惰性空间释放</p>
+<p>当修改SDS字符串时，如果是截断操作，Redis会及时释放多余的空间吗？</p>
+<p>为了更快的速度，既然在增加长度时都不在乎内存了，那么减少时也没有必要太节约。</p>
+<p>使用<code>free</code>属性记录这些多余的空间,未来的增减更得心应手。</p></li>
+</ol>
+<p><strong>二进制安全</strong></p>
+<p>C语言由于使用<code>'\0'</code>结束字符串，也就让C字符串无法保存图片、音频等二进制数据。</p>
+<p>SDS用二进制的方式处理buf数组的数据，所以SDS二进制安全。</p>
+<p><strong>兼容部分C字符串函数</strong></p>
+<p>Redis是C语言写的，所以和C语言字符串的运算不可避免啊，能重用当然更好咯。</p>
+<p>毕竟我们也只需要在保存的数据末尾加一个空字符就行咯。</p>
+<h4 id="question-1">Question</h4>
+<ol type="1">
+<li>Redis的SDS设计了len属性，便于常数复杂度获取一个SDS的长度，但是Redis需要这个设计吗？什么场景下会被用到？
+<ul>
+<li><code>strlen()</code>命令用于获取字符串长度，难道只是为了这个吗？</li>
+</ul></li>
+<li>Redis有惰性释放，那么真正释放的时机是多久呢？</li>
+</ol>
+<h3 id="dict字典">Dict：字典</h3>
+<p>字典可以结合Java中的HashMap进行学习，相似之处非常多。</p>
+<p>首先我们可以看一下，它的数据结构：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span></span><br><span class="line">  dictEntry **table; <span class="comment">// 哈希表数组</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> size; <span class="comment">// 哈希表大小</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> sizemask; <span class="comment">// size-1 ；哈希表大小掩码，用于计算哈希值</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> used; <span class="comment">// 该哈希表已有节点的数量</span></span><br><span class="line">&#125; dictth;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">  <span class="type">void</span> *key; <span class="comment">// 键</span></span><br><span class="line">  <span class="class"><span class="keyword">union</span>&#123;</span></span><br><span class="line">    <span class="type">void</span> *val;</span><br><span class="line">    unint64_tu64;</span><br><span class="line">    int64_ts64;</span><br><span class="line">  &#125; v; <span class="comment">// 值</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span> <span class="comment">// 拉链法，头结法</span></span><br><span class="line">&#125; dictEntry;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">  dictType *type; <span class="comment">// 类型特定函数</span></span><br><span class="line">  <span class="type">void</span> *private; <span class="comment">// 私有数据</span></span><br><span class="line">  dictht ht[<span class="number">2</span>]; <span class="comment">// 哈希表</span></span><br><span class="line">  <span class="type">int</span> rehashidx; <span class="comment">// rehash索引，也就是判断是否正在进行rehash，-1未进行</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230620011207518.png"
+alt="image-20230620011207518" />
+<figcaption aria-hidden="true">image-20230620011207518</figcaption>
+</figure>
+<p>对着图来看，平平无奇就是一个普通的使用拉链法的哈希表。</p>
+<p>唯一比较令人新奇的是sizemask是什么？为什么会有两个dictht，rehashidx是什么？</p>
+<h4 id="哈希算法">哈希算法</h4>
+<p>要了解sizemask就得了解如何计算哈希索引值</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hash = dict-&gt;type-&gt;hashFunction(key);</span><br><span class="line">index = hash &amp; dict-&gt;ht[x].sizemask;</span><br></pre></td></tr></table></figure>
+<p>首先使用<code>MurmurHash2</code>算法来计算键的哈希值，这个算法可以让有规律的键也给出很好的随机分布性。</p>
+<p>接着由于sizemask等于size-1，那么hash值与其相与就是求哈希值对size取余。</p>
+<h4 id="rehash">Rehash</h4>
+<p>如果一个哈希表不堪重负，也就是说查找效率开始降低了该怎么办？又或者一个容量巨大的哈希表却只有几个元素，太浪费空间了怎么办？</p>
+<p>这里的效率与浪费可以用负载因子来描述，为了让哈希表维持在进可攻退可守的状态，我们需要让负载因子(<span
+class="math inline">\(Loadfacter = used
+/size\)</span>)处在一个合理的水平。</p>
+<p>看公式，我们能决定的只有size而已，也就是说rehash其实是在重新分配空间。</p>
+<p><strong>什么情况下进行扩容：</strong></p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230620014053119.png"
+alt="image-20230620014053119" />
+<figcaption aria-hidden="true">image-20230620014053119</figcaption>
+</figure>
+<blockquote>
+<p>bgsave和bgrewrite是后台持久化操作，后续会讲，总之是一个消耗CPU资源的操作。</p>
+</blockquote>
+<p><strong>什么情况下进行缩容：</strong></p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230620014444494.png"
+alt="image-20230620014444494" />
+<figcaption aria-hidden="true">image-20230620014444494</figcaption>
+</figure>
+<p><strong>Rehash</strong></p>
+<p>无论是扩容还是缩容，都不可避免的会改变size和sizemask，而key的查询与sizemask有关，因此必须对每一个元素重新计算索引，引入新的哈希表。</p>
+<ol type="1">
+<li>找到新的size</li>
+<li>申请内存空间，并赋给dict.ht[1].table</li>
+<li>设置dict.rehashidx=0,标志正在rehash</li>
+<li>将dict.ht[0]的每一个元素都rehash到dict.ht[1]</li>
+<li>讲dict.ht[1]赋值给dict.ht[0]，dict.ht[1]指向空，释放原来dict.ht[0]的内存</li>
+</ol>
+<p>我们可以想想上述过程有什么隐患吗？</p>
+<p>如果当哈希表数据有几百万上千万，第四步还能顺利完成吗？</p>
+<p>由此引入了渐进式rehash</p>
+<p><strong>渐进式Rehash</strong></p>
+<ol type="1">
+<li>找到新的size</li>
+<li>申请内存空间，并赋给dict.ht[1].table</li>
+<li>设置dict.rehashidx=0,标志正在rehash</li>
+<li><em>每次对字典执行添加、删除、查找或者更新操作时，程序除了执行指定的操作以外，都检查一下dict.rehashidx是否大于-1，如果是，将ht[0].table[rehashidx]的Entry链表rehash到ht[1]，当rehash工作完成之后，并且将rehashidx属性的值增一。</em></li>
+<li>将dict.ht[1]赋值给dict.ht[0]，dict.ht[1]指向空，释放原来dict.ht[0]的内存</li>
+<li>将dict.rehashidx赋值为-1，代表结束rehash</li>
+<li>新增操作直接写入ht[1]，查询和删除需要依次查找，这样ht[1]不停的在增加，ht[0]不停的在减少最终为空。</li>
+</ol>
+<h3 id="ziplist-压缩列表">ZipList: 压缩列表</h3>
+<p><code>ZipList</code>是一种连续内存空间的“双端链表”，由一系列特殊编码的内存块组成，可以在任意一端进行压入与弹出，且时间复杂度为O(1)</p>
+<h4 id="压缩列表的构成ziplist">压缩列表的构成:ZipList</h4>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621011234057.png"
+alt="image-20230621011234057" />
+<figcaption aria-hidden="true">image-20230621011234057</figcaption>
+</figure>
+<p>zllen：最大值为65535，如果超过，那么就只能遍历才能知道，但是一般不会超过，因为ZipList设计初衷不是用来存很多东西的。</p>
+<p>固定不变的就是总字节数、尾偏移量、entry节点数、结束标识，这些一共占11个字节。</p>
+<p>尾偏移量用总字节数减去tail节点长度再减1</p>
+<h4
+id="压缩列表节点的构成ziplistentry">压缩列表节点的构成：ZipListEntry</h4>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621011755420.png"
+alt="image-20230621011755420" />
+<figcaption aria-hidden="true">image-20230621011755420</figcaption>
+</figure>
+<p><code>previous_entry_length</code>：前一个节点的长度，如果前一节点的长度小于254字节，就用1个字节存储，否则用5个字节存储，其中第一个字节为0xfe用来标识。</p>
+<blockquote>
+<p><code>previous_entry_length</code>的设计是为了能够向前访问，由于它长度不固定，导致连锁更新的罪魁祸首就是它。连锁更新稍微想想当每个entry的长度都是253，如果某个entry增加至少一个字节之后的更新操作，就明白了。</p>
+</blockquote>
+<p><code>encoding</code>：编码属性占一个字节或2个字节或5个字节</p>
+<p><code>content</code>：保存节点的数据，字符串或整数。可以没有（当数字小于14）</p>
+<blockquote>
+<p>ZipList中所有存储长度的数值均采用小端字节序，低位字节在前，高位字节在后。</p>
+</blockquote>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621013348769.png"
+alt="image-20230621013348769" />
+<figcaption aria-hidden="true">image-20230621013348769</figcaption>
+</figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621013417294.png"
+alt="image-20230621013417294" />
+<figcaption aria-hidden="true">image-20230621013417294</figcaption>
+</figure>
+<h4 id="question-2">Question</h4>
+<ol type="1">
+<li><p>如何实现的双向？</p>
+<p>记录了上一个节点的长度与当前节点长度。</p></li>
+<li><p>有什么优点和缺点？</p>
+<p>优点和缺点都是由存储结构导致的，优点就是节省内存，缺点就是无法随机访问，增删可能会发生连续更新问题影响性能。</p></li>
+</ol>
+<h3 id="intset整数集合">IntSet:整数集合</h3>
+<p>IntSet是Redis中set集合的一种实现方式，基于整数数组实现，并且具备长度、有序等特征</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">intset</span> &#123;</span></span><br><span class="line">  <span class="type">uint32_t</span> encoding; <span class="comment">// 决定保存的整数的大小 16、32、64位</span></span><br><span class="line">  <span class="type">uint32_t</span> length; <span class="comment">// 长度</span></span><br><span class="line">  <span class="type">int8_t</span> contents[]; <span class="comment">// 上面提到的数组，实际上存储的是encoding决定的类型数据</span></span><br><span class="line">&#125; intset;</span><br></pre></td></tr></table></figure>
+<p>为了查找方便，所有整数按照升序排列，既然有序了那么查找就可以使用二分查找。数据在集合内唯一，编码取所有整数的公倍数，俗称IntSet升级，但只会升级不会降级。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622005603455.png"
+alt="image-20230622005603455" />
+<figcaption aria-hidden="true">image-20230622005603455</figcaption>
+</figure>
+<h3 id="quicklist">QuickList</h3>
+<p>链表➕数组</p>
+<p>数组是ZipList，为了解决长时间使用ZipList无法获取到大块内存的弊端。还可以进一步压缩，比如除了头尾节点其他ziplist都压缩。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624214436076.png"
+alt="image-20230624214436076" />
+<figcaption aria-hidden="true">image-20230624214436076</figcaption>
+</figure>
+<h3 id="skiplist">SkipList</h3>
+<p>一种有序数据结构，它通过在每个节点中维持多个指向其它节点的指针，从而达到快速访问节点的目的。维持多个指向其它的节点的指针其实与mysql中的索引有异曲同工之妙。时间复杂度与平衡树媲美，但是实现方式更简单。</p>
+<p>Redis只在两个地方用到了跳表：</p>
+<ol type="1">
+<li>有序集合键：集合数量较多或者成员是长字符串时</li>
+<li>在集群中用作内部数据结构</li>
+</ol>
+<p>本质链表</p>
+<ul>
+<li>元素按升序排列</li>
+<li>节点可能包含多个指针，指针跨度不同</li>
+<li>空间换时间，加索引</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span> <span class="comment">// 前进节点</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> span; <span class="comment">// 跨度</span></span><br><span class="line">  &#125; level[]; <span class="comment">// 层</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span> <span class="comment">// 后退节点</span></span><br><span class="line">  <span class="type">double</span> score; <span class="comment">// 分值</span></span><br><span class="line">  robj *obj; <span class="comment">// 成员对象</span></span><br><span class="line">&#125; zskiplistNode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">skiplistNode</span> *<span class="title">header</span>, *<span class="title">tail</span>;</span> <span class="comment">// 头节点、尾节点</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> length; <span class="comment">// 节点数量</span></span><br><span class="line">  <span class="type">int</span> level; <span class="comment">// 表中层数最大的节点的层数</span></span><br><span class="line">&#125; zskiplist;</span><br></pre></td></tr></table></figure>
+<p>跳表由两个结构组成，zskiplist和zskiplistNode，每个跳表节点的层高都是1～32的随机数，每个成员对象必须唯一，按分值大小排序。</p>
+<p>其实就是链表每次只保存下一个节点的地址，但是跳表保存了多个节点的地址，在查找的时候就可以一次性排除很多数据，，也是空间换时间的做法。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622144543868.png"
+alt="image-20230622144543868" />
+<figcaption aria-hidden="true">image-20230622144543868</figcaption>
+</figure>
+<h3 id="redisobject">RedisObject</h3>
+<p>Redis中的任意数据的键和值都会封装为一个RedisObject，叫做Redis对象。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622144936198.png"
+alt="image-20230622144936198" />
+<figcaption aria-hidden="true">image-20230622144936198</figcaption>
+</figure>
+<p>ptr占用8个字节，</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622145034088.png"
+alt="image-20230622145034088" />
+<figcaption aria-hidden="true">image-20230622145034088</figcaption>
+</figure>
+<p>Redis创建了一个对象系统，这个系统包含字符串对象、列表对象、哈希对象、集合对象和有序集合对象，每种对象都用到了前面所介绍的数据结构。</p>
+<p>对于数据库保存的键值对来说，键总是字符串对象，而值可以是任意一种。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type akey  # 查看键对象类型</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622145110574.png"
+alt="image-20230622145110574" />
+<figcaption aria-hidden="true">image-20230622145110574</figcaption>
+</figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">object encoding akey # 查看一个数据库键对象的编码</span><br></pre></td></tr></table></figure>
+<h2 id="数据类型">数据类型</h2>
+<h3 id="string">String</h3>
+<p>String是Redis最常见的数据存储类型：</p>
+<ul>
+<li><p>其最基本的编码方式是<code>RAW</code>，基于简单动态字符串实现，存储上限是512mb</p>
+<blockquote>
+<p>需要申请两次内存，一次是RedisObject，一次是SDS</p>
+</blockquote></li>
+<li><p>如果存储的SDS长度小于44字节，则会采用<code>EMBSTR</code>编码，此时object
+head与SDS是一段连续空间（64字节）。申请内存时只需要调用一次内存分配函数，效率更高。</p>
+<blockquote>
+<p>以2的n次方进行内存分配，64字节正好是一片。</p>
+<p>所以建议不要存储超过44字节的字符串，容易产生内存碎片</p>
+</blockquote></li>
+<li><p>如果存储的字符串是整数值，并且大小在LONG_MAX范围内，则会采用<code>INT</code>编码：直接将数据保存在RedisObject的ptr指针位置（刚好8字节），不再需要SDS了。</p></li>
+</ul>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624183146469.png"
+alt="image-20230624183146469" />
+<figcaption aria-hidden="true">image-20230624183146469</figcaption>
+</figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624183451136.png"
+alt="image-20230624183451136" />
+<figcaption aria-hidden="true">image-20230624183451136</figcaption>
+</figure>
+<p>也就是说，能用数值用数值，能小于44字节就小于。</p>
+<h3 id="list">List</h3>
+<p>Redis的类型可以从首位操作列表中的元素：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">LPUSH l1 e3 e2 e1</span><br><span class="line">RPUSH</span><br><span class="line">LRANGE L1 0 2 // 取指定范围内的元素</span><br><span class="line">LPOP L1 1</span><br><span class="line">RPOP L1 </span><br></pre></td></tr></table></figure>
+<ul>
+<li>LinkedList:普通链表、双端访问，内存占用高，内存碎片多</li>
+<li>ZipList：压缩列表，双端访问，内存占用低，存储上限低</li>
+<li>QuickList：LinkedList+ZipList，双端访问，内存占用较低，存储上限高</li>
+</ul>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624214436076.png"
+alt="image-20230624214436076" />
+<figcaption aria-hidden="true">image-20230624214436076</figcaption>
+</figure>
+<h3 id="set">Set</h3>
+<p>Set是Redis中的集合，不一定确保元素有序，也不一定确保元素无序，满足元素唯一。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SADD s1 v1 v2 v3 // 添加</span><br><span class="line">SISMEMBER // 释放存在</span><br><span class="line">SINTER //交集</span><br></pre></td></tr></table></figure>
+<p>可以知道，set的操作中几乎都包含对某元素的查找，所以我们需要找一个查找效率高的数据结构来实现。</p>
+<p>从我们学过的：SDS、IntSet、Dict、ZipList、SkipList中找，发现Dict是效率最高的</p>
+<ul>
+<li>为了查询效率和唯一性，set采用Dict。key存储元素，value统一为null。</li>
+<li>当存储的所有数据都是整数时，并且元素数量不超过set_max_intset_entries时，Set会采用IntSet</li>
+</ul>
+<p>IntSet有序使用二分查找，查询效率也还可以，存储整数时可以减少内存占用</p>
+<p>Dict效率最高，但是内存占用大啊，每个Entry都有好多指针。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624221349310.png"
+alt="image-20230624221349310" />
+<figcaption aria-hidden="true">image-20230624221349310</figcaption>
+</figure>
+<p>但是IntSet不是永久的，一旦有新加入的元素不是整数或者超过了数量限制就会转换为Dict</p>
+<h3 id="zset">ZSet</h3>
+<p>ZSet也就是SortedSet，其中每一个元素都需要指定一个score值和member值，它的特点是：</p>
+<ul>
+<li>根据score排序</li>
+<li>唯一并且提交覆盖</li>
+<li>可以根据member查询score</li>
+</ul>
+<p>因此，zst底层数据结构必须满足键值存储、键唯一、可排序</p>
+<p>有序的数据结构：<code>SkipList</code>,<code>IntSet</code></p>
+<p>键值关系：<code>Dict</code>，<code>SkipList</code></p>
+<p>键唯一：<code>Dict</code>,</p>
+<p>IntSet只能存整数，所以排除。剩下的SkipList和Dict其实都能满足，但是都需要在性能上做些让步，比如SkipList在查询键时时间负责度降为链表，Dict在排序上也捉襟见肘。</p>
+<p>鉴于Redis的终极目标：FAST；不难猜到它全都要。但其实不用过于担心对内存的浪费，因为两者都只是存实际数据的指针而已。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ZADD z1 <span class="number">10</span> m1 <span class="number">20</span> m2</span><br><span class="line">ZSCORE z1 m1</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230625150541007.png"
+alt="image-20230625150541007" />
+<figcaption aria-hidden="true">image-20230625150541007</figcaption>
+</figure>
+<p>不过由于元素数量不多时，HT和SkipList的优势并不明显，而且指针也挺费的，要8字节呢。</p>
+<p>因此zst还会采用ZipList结构来节省内存，需要同时满足两个条件：</p>
+<ol type="1">
+<li>元素数量小于zst_max_ziplist_entries=128</li>
+<li>每个元素都小于zset_max_ziplist_value=64字节</li>
+</ol>
+<h3 id="hash">Hash</h3>
+<p>Hash结构与Reids中的Zset非常类似</p>
+<ul>
+<li>都是键值存储</li>
+<li>都需要根据键获取值</li>
+<li>键必须唯一</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hset user name yus age <span class="number">21</span></span><br><span class="line">hget user name</span><br></pre></td></tr></table></figure>
+<p>区别如下：</p>
+<ul>
+<li>zset的键是member，值时score；hash的键和值都是任意值</li>
+<li>zset要根据score排序；hash则无需排序</li>
+</ul>
+<p>因此，Hash底层采用的编码与Zset也基本一致，只需要把排序相关的SkipList去掉即可</p>
+<ul>
+<li><p>Hash结构默认采用ZipList编码，用以节约内存。ZipList中相邻的两个entry分别保存field和value</p></li>
+<li><p>当数据量较大时，hash结构会转换为HT编码</p>
+<ul>
+<li>ZipList中的数量超过了hash_max_ziplist_entry=512</li>
+<li>ZipList中的任意entry大小超过了hash_max_ziplist_value=64字节</li>
+</ul>
+<blockquote>
+<p>为什么这里比Zset的数量少？</p>
+<p>因为hash只需要存就行了，不需要排序等操作，所以存多点也没关系</p>
+</blockquote></li>
+</ul>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230625161200201.png"
+alt="image-20230625161200201" />
+<figcaption aria-hidden="true">image-20230625161200201</figcaption>
+</figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230625161408072.png"
+alt="image-20230625161408072" />
+<figcaption aria-hidden="true">image-20230625161408072</figcaption>
+</figure>
+<h2 id="内存策略">内存策略</h2>
+<p>Redis之所以性能强，最主要的原因是基于内存存储，然而单节点的Redis其内存大小不宜过大，会影响持久化，或主从同步性能。</p>
+<p>可以通过配置文件来设置Redis的最大内存：</p>
+<p><code>maxmemory 1gb</code></p>
+<p>当内存使用达到上限时，就无法存储更多的数据了。</p>
+<p>所以我们Redis就提供了两种不同的策略</p>
+<ul>
+<li>过期策略</li>
+<li>淘汰策略</li>
+</ul>
+<h3 id="过期策略">过期策略</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> name jack</span><br><span class="line">expire name 5 <span class="comment"># 设置ttl为5s</span></span><br></pre></td></tr></table></figure>
+<p>这里有两个问题需要我们思考：</p>
+<ol type="1">
+<li>Redis是如何知道一个key是否过期？</li>
+<li>是不是TTL到期就立即删除了呢？</li>
+</ol>
+<h4 id="db结构">DB结构</h4>
+<p>Redis本身是一个典型的k-v结构，因此所有的key、value都保存在之前学习的Dict中。不过在database结构体中，有两个Dict：一个用来记录k-v，一个用来记录k-ttl</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisDb</span> &#123;</span></span><br><span class="line">  dict *dict;</span><br><span class="line">  dict *expires;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230625201220167.png"
+alt="image-20230625201220167" />
+<figcaption aria-hidden="true">image-20230625201220167</figcaption>
+</figure>
+<h4 id="惰性删除">惰性删除</h4>
+<p>每次访问一个key的时候，检查该key的存活时间，如果已经过期才执行删除。</p>
+<h4 id="周期删除">周期删除</h4>
+<p>通过一个定时任务，周期性的抽样部分过期的key，然后执行删除。执行周期有两种：</p>
+<ul>
+<li>SLOW模式执行频率默认为10，每次不超过25ms</li>
+<li>FAST模式执行频率不固定，但两次间隔不低于2ms，每次耗时不超过1ms</li>
+</ul>
+<blockquote>
+<p>删除的算法与渐进式hash有异曲同工之妙，也会记录上一次删到哪了，然后慢慢删</p>
+</blockquote>
+<ol type="1">
+<li><p>Redis是如何知道一个key是否过期？</p>
+<p>通过记录的ttl知道</p></li>
+<li><p>是不是TTL到期就立即删除了呢？</p>
+<p>惰性删除➕周期删除</p></li>
+</ol>
+<h3 id="淘汰策略">淘汰策略</h3>
+<p>内存淘汰：当Redis内存使用设置的阈值时，Redis主动挑选部分key删除以释放更多内存的流程。</p>
+<p>LRU（Least Recently
+Used），最少最近使用。用当前时间减去最后一次访问时间，这个值越大则淘汰优先级越高。</p>
+<p>LFU（Least Frequently
+Used），最少频率使用。会统计每个Key的访问频率，值越少淘汰优先级越高。</p>
+<p>都是保存在RedisObject对象的lru属性中。</p>
+<p>Redis是有内存上限的，为了避免到达内存上限，它有两种不同的策略，一个是内存过期，一个是内存淘汰。内存过期呢其实是设置一个key的过期时间，到期以后我们就可以想办法把它删掉，删的策略呢有两种，一种是惰性删除，就是指当你访问的那一刻我检查一下有没有过期，过期了就删除；另外一个呢是周期删除，Redis有周期性任务，每隔一段时间就尝试去清理一部分过期的key。这就是所谓的过期策略，这样的策略只能把那些过期的key删掉，如果说我们这些key都没过期，而Redis内存又已经跑到上限了，又该怎么办呢？这时候就应该采用内存淘汰策略。内存淘汰策略有8种，一种是不做驱逐，内存不足就报错；还有七种呢？包括两个随机的，两个LRU，两个LFU和一个TTL，所谓的两个是指，它可以从所有key淘汰，也可以从过期key里淘汰</p>
+<p><strong>单节点Redis的问题</strong></p>
+<ol type="1">
+<li><p>数据丢失问题：实现Redis数据持久化</p>
+<p>Redis是内存存储，服务重启可能会丢失数据</p></li>
+<li><p>并发能力问题：搭建主从集群，实现读写分离</p>
+<p>单节点Redis并发能力虽然不错，但也无法满足如618这样的高并发场景</p></li>
+<li><p>故障恢复问题：利用Redis哨兵，实现健康检测和自动恢复</p>
+<p>如果Redis宕机，则服务不可用，需要一种自动的故障恢复手段</p></li>
+<li><p>存储能力问题：搭建分片集群，利用插槽机制实现动态扩容</p>
+<p>Redis基于内存，单节点能存储的数据难以满足海量数据的要求</p></li>
+</ol>
+<h2 id="持久化">持久化</h2>
+<h3 id="rdb持久化">RDB持久化</h3>
+<p>RDB全称Redis Database Backup
+file，也被叫做Redis数据快照。简单来说就是把内存中的所有数据都记录在磁盘中。当Redis实例故障重启后，从磁盘读取快照文件，恢复数据。</p>
+<p>快照文件称为RDB文件，默认是保存在当前运行目录。</p>
+<ul>
+<li>save ：由Redis主进程执行RDB，会阻塞所有命令</li>
+<li>bgsave：开启子进程执行RDB，避免主进程受到影响</li>
+</ul>
+<p>bgsave开始时会fork主进程得到子进程，子进程共享主进程的内存数据，完成fork后读取内存数据并写入RDB文件。</p>
+<p>fork采用的是copy-on-write技术：</p>
+<ul>
+<li>当主进程执行读操作时，访问共享内存；</li>
+<li>当主进程执行写操作时，则会拷贝一份数据，执行写操作</li>
+</ul>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230628145725421.png"
+alt="image-20230628145725421" />
+<figcaption aria-hidden="true">image-20230628145725421</figcaption>
+</figure>
+<p>所有进程都无法操作物理内存，而是由操作系统给每个进程分配一个虚拟内存。操作系统会维护一个虚拟内存与物理内存的地址映射表，这个表称之为页表。</p>
+<p>fork会拷贝映射关系页表，将共享内存设置为只读，如果主进程要修改，就得拷贝一份新的去修改。</p>
+<ol type="1">
+<li><p>RDB会在什么时候执行？</p>
+<p>默认是服务停止时。</p></li>
+<li><p>save 60 1000 代表什么含义？</p>
+<p>代表60s内至少执行1000次修改则触发RDB</p></li>
+<li><p>RDB的缺点？</p>
+<p>RDB执行间隔长，两次RDB之间写入数据有丢失的风险</p>
+<p>fork子进程，压缩，写出RDB文件都比较耗时</p></li>
+</ol>
+<h3 id="aof持久化">AOF持久化</h3>
+<p>AOF全称为Append Only
+File（追加文件）。Redis处理的每一个命令都会记录在AOF文件，可以看做是命令日志文件。</p>
+<p>因为是记录命令，AOF文件比RDB文件大得多。而且AOF会记录同一个key的多次写操作，但只有最后一次写操作才有意义。通过<code>bgrewrited</code>命令，可以让AOF文件执行重写功能，用最少的命令达到相同效果。</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 42%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>RDB</th>
+<th>AOF</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>持久化方式</td>
+<td>定时对整个内存做快照</td>
+<td>记录每一次执行命令</td>
+</tr>
+<tr class="even">
+<td>数据完整性</td>
+<td>不完整，两次备份之间会丢失</td>
+<td>相对完整，取决于刷盘策略</td>
+</tr>
+<tr class="odd">
+<td>宕机恢复速度</td>
+<td>快</td>
+<td>慢</td>
+</tr>
+<tr class="even">
+<td>数据恢复优先级</td>
+<td>低，因为完整性不如AOF</td>
+<td>高</td>
+</tr>
+<tr class="odd">
+<td>系统资源占用</td>
+<td>高，大量CPU和内存消耗</td>
+<td>低，主要是磁盘IO，但AOF重写会占用大量CPU和内存</td>
+</tr>
+<tr class="even">
+<td>使用场景</td>
+<td>可用容忍分钟级的数据丢失，追求更高的启动速度</td>
+<td>对数据安全性要求较高</td>
+</tr>
+<tr class="odd">
+<td>文件大小</td>
+<td>会有压缩，体积小</td>
+<td>记录命令，体积大</td>
+</tr>
+</tbody>
+</table>
+<h2 id="主从">主从</h2>
+<p>单节点Redis的并发能力是有上限的，要进一步提高Redis的并发能力，就需要搭建主从集群，实现读写分离。</p>
+<h3 id="全量同步">全量同步</h3>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629201452329.png"
+alt="image-20230629201452329" />
+<figcaption aria-hidden="true">image-20230629201452329</figcaption>
+</figure>
+<p><u>master
+如何判断slave是不是第一次来同步数据？</u>这里会用到两个很重要的概念：</p>
+<ul>
+<li>Replication
+Id：简称replid，是数据集的标记，id一致则说明是同一数据集。每一个master都有唯一的replid，slave则会继承master节点的replid</li>
+<li>offset：偏移量，随着记录在repl_baklog的数据增多而逐渐增大。slave完成同步时也会记录当前同步的offset。如果slave的offset小于master的offset，说明slave数据落后于master，需要更新。</li>
+</ul>
+<p>因此slave做数据同步，必须向master声明字节的replication
+id和offset，master才可以判断到底需要同步哪些数据</p>
+<p><strong>master如何判断slave节点是不是第一次来做数据同步？</strong></p>
+<p>首先slave带着replication
+id来同步，如果id与自己的相同，说明就是之前来过了，然后就可以根据offset来判断同步哪些数据。</p>
+<p>主从第一次同步是全量同步</p>
+<ol type="1">
+<li>slave节点请求增量同步</li>
+<li>master节点判断replid，发现不一致，拒绝增量同步</li>
+<li>master将完整的内存数据生成RDB，发送到slave</li>
+<li>slave清空本地数据，加载master到RDB</li>
+<li>master将RDB期间的命令记录在repl_baklog，并持续将log中的命令发送给slave</li>
+</ol>
+<h3 id="增量同步">增量同步</h3>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629202453611.png"
+alt="image-20230629202453611" />
+<figcaption aria-hidden="true">image-20230629202453611</figcaption>
+</figure>
+<p>repl_baklog大小有上限，写满后会覆盖最早的数据。如果slave断开时间过久，导致未备份的数据被覆盖，则无法基于log做增量同步，只能再次全量同步。</p>
+<h3 id="哨兵">哨兵</h3>
+<p><strong>slave节点宕机恢复后可以找master节点同步数据，那master节点宕机怎么办？</strong></p>
+<h4 id="哨兵的作用">哨兵的作用</h4>
+<p>Redis提供了哨兵（Sentinel）机制来实现主从集群的自动故障恢复。</p>
+<ul>
+<li>监控：Sentinel会不断检查您的master和slave是否按预期工作</li>
+<li>自动故障恢复：如果master故障，Sentinel会将一个slave提升为master。当故障实例恢复后也以新的master为主。</li>
+<li>通知：Sentinel充当reids客户端的服务发现来源，当集群发生故障转移时，会将最新消息推送给Redis的客户端。</li>
+</ul>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629203541757.png"
+alt="image-20230629203541757" />
+<figcaption aria-hidden="true">image-20230629203541757</figcaption>
+</figure>
+<h4 id="服务状态监控">服务状态监控</h4>
+<p>Sentinel基于心跳机制监测服务状态，每隔1s向集群的每个实例发送ping命令：</p>
+<ul>
+<li>主观下线：如果某sentinel节点发现某实例未在规定时间响应，则认为该实例主观下线</li>
+<li>客观下线：若超过指定数量（quorum）的sentinel都认为该实例主观下线，则该实例客观下线。quorum值最好超过半数</li>
+</ul>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629203837398.png"
+alt="image-20230629203837398" />
+<figcaption aria-hidden="true">image-20230629203837398</figcaption>
+</figure>
+<h4 id="选举新的master">选举新的master</h4>
+<p>一旦发现master故障，sentinel需要在slave中选择一个作为新的master，选择依据如下：</p>
+<ol type="1">
+<li>首先判断slave节点<strong>与master节点断开的时间</strong>长短，如果超过指定值（down-after-milliseconds*10)则会排除该slave节点</li>
+<li>然后判断slave节点的<strong>slave-priority值</strong>，越小优先级越高，如果是0则永不参与选举</li>
+<li>如果slave-prority一样，则判断slave节点的<strong>offset值</strong>，越大说明数据越新，优先级越高</li>
+<li>最后是判断slave节点的运行id大小，越小优先级越高</li>
+</ol>
+<h4 id="如何实现故障转移">如何实现故障转移</h4>
+<p>当选中了其中一个slave为新的master后，故障的转移的步骤如下：</p>
+<ul>
+<li>首先选定一个slave作为新的master，执行slaveof no one</li>
+<li>然后让所有节点都执行slaveof 新的master</li>
+<li>修改故障节点配置，添加slaveof 新master</li>
+</ul>
+<h3 id="分片集群">分片集群</h3>
+<p>主从和哨兵可以解决高可用、高并发读的问题。但是依然有两个问题没有解决：</p>
+<ul>
+<li>海量数据存储问题</li>
+<li>高并发写的问题</li>
+</ul>
+<p>使用分片集群可以解决上述问题，分片集群特征：</p>
+<ul>
+<li>集群中有多个master，每个master保存不同数据</li>
+<li>每个master都可以有多个slave节点</li>
+<li>master之间通过ping监测彼此健康状态</li>
+<li>客户端请求可以访问集群任意节点，最终都会到达正确的节点</li>
+</ul>
+<h2 id="网络模型">网络模型</h2>
+<h3 id="用户空间和内核空间">用户空间和内核空间</h3>
+<p>为了避免用户应用导致冲突甚至内核崩溃，用户空间与内核是分离的：</p>
+<ul>
+<li><p>进程的寻址空间会划分两部分：内核空间、用户空间</p>
+<p>这个地址是一个无符号整数，最大值取决于</p></li>
+</ul>
+<h3 id="io模型">IO模型</h3>
+<ul>
+<li>Blocking IO</li>
+<li>Nonblocking IO</li>
+<li>IO Multiplexing</li>
+<li>Signal Driven IO</li>
+<li>Asynchronous IO</li>
+</ul>
+<h4 id="blocking-io">Blocking IO</h4>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629183958383.png"
+alt="image-20230629183958383" />
+<figcaption aria-hidden="true">image-20230629183958383</figcaption>
+</figure>
+<p>两个阶段用户进程都在阻塞。</p>
+<h4 id="nonblocking-io">Nonblocking IO</h4>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629184153087.png"
+alt="image-20230629184153087" />
+<figcaption aria-hidden="true">image-20230629184153087</figcaption>
+</figure>
+<p>非阻塞IO模型，用户进程在第一个阶段是非阻塞，第二个阶段是阻塞状态。虽然是非阻塞，但性能并没有得到提高。而且忙等机制会导致CPU空转，CPU使用率暴增。</p>
+<h4 id="io-mutiplexing">IO Mutiplexing</h4>
+<p>无论是阻塞IO合适非阻塞IO，用户应用在第一个阶段都需要调用recvfrom来获取数据，差别在无数据时的处理方案：</p>
+<ul>
+<li>如果调用recvfrom时，恰好没有数据，阻塞IO会使进程阻塞，非阻塞IO会使CPU空转，都不能充分发挥CPU的作用。</li>
+<li>如果调用recvfrom时，恰好有数据，则用户进程可以直接进入第二阶段，读取并处理数据。</li>
+</ul>
+<p>比如服务端处理客户端Socket请求时，在单线程情况下，只能依次处理每一个socket，如果正在处理的socket恰好未就绪，线程就会阻塞，所有其他客户端socket都必须等待，性能自然会很差。</p>
+<p>要提高有几种方法？</p>
+<ol type="1">
+<li>每个socket准备一个线程：多线程</li>
+<li>哪个socket准备好了，就先去处理它</li>
+</ol>
+<h3 id="redis网络模型">Redis网络模型</h3>
+<p>Redis到底是单线程还是多线程？</p>
+<ul>
+<li>如果仅仅是聊Reids的核心业务（命令处理），答案是单线程</li>
+<li>如果是聊整个Redis，那么答案是多线程</li>
+</ul>
+<p>在Redis版本迭代过程中，在两个重要的时间节点引入了多线程的支持：</p>
+<ul>
+<li>4.0；引入了多线程异步处理一些耗时较长的任务，例如异步删除命令unlink</li>
+<li>6.0；在核心网络模块引入了多线程，进一步提高了对于多核CPU的利用率</li>
+</ul>
+<p><strong>为什么Reids要选择单线程？</strong></p>
+<ol type="1">
+<li>抛开持久化不谈，Reids是纯内存操作，执行速度非常快，它的性能瓶颈是网络延迟而不是执行速度，因此多线程并不会带来巨大的性能提升。</li>
+<li>多线程会导致过多的上下文切换，带来不必要的开销</li>
+<li>引入多线程会面临线程安全问题，必然要引入线程锁这样的安全手段，实现复杂度增高，而且性能也会大打折扣。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2023/02/13/try-catch-%E7%A9%B6%E7%AB%9F%E6%98%AF%E5%9C%A8%E5%BE%AA%E7%8E%AF%E5%A4%96%E6%80%A7%E8%83%BD%E5%A5%BD%E8%BF%98%E6%98%AF%E5%9C%A8%E5%BE%AA%E7%8E%AF%E5%86%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/13/try-catch-%E7%A9%B6%E7%AB%9F%E6%98%AF%E5%9C%A8%E5%BE%AA%E7%8E%AF%E5%A4%96%E6%80%A7%E8%83%BD%E5%A5%BD%E8%BF%98%E6%98%AF%E5%9C%A8%E5%BE%AA%E7%8E%AF%E5%86%85/" class="post-title-link" itemprop="url">try catch 究竟是在循环外性能好还是在循环内</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-02-13 18:56:41" itemprop="dateCreated datePublished" datetime="2023-02-13T18:56:41+08:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-02-16 14:20:19" itemprop="dateModified" datetime="2023-02-16T14:20:19+08:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>有时候经常会遇到这样的任务，给一批指定的用户发送短信，或者给一批指定的用户发送推送。之前一直没有注意到的一点，最近在CR自己代码的时候，产生了一个新疑问。</p>
+<p>我是把try catch
+语句写在循环内部的，这会对性能造成什么影响，会耗费堆栈空间吗？</p>
+<blockquote>
+<p>无知让人自信也让人自卑。</p>
+</blockquote>
+<p>带着这样的问题，我开始测试了一番。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="variable">timeEnd</span> <span class="operator">=</span> Long.parseLong(sendTime) + <span class="number">2</span>;</span><br><span class="line">   <span class="type">long</span> <span class="variable">timeBegin</span> <span class="operator">=</span> timeEnd-<span class="number">4</span>; <span class="comment">// 正负2小时的误差，也就是4小时内只有一次push</span></span><br><span class="line">   <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">10000</span>;</span><br><span class="line">   <span class="type">int</span> <span class="variable">currentCount</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">   <span class="type">long</span> <span class="variable">lastId</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">   <span class="type">long</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">do</span>&#123;</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           memberIds = discountUserFacade.getCurrentDiscountUser(lastId, count,timeBegin,timeEnd);</span><br><span class="line">           <span class="keyword">if</span>(memberIds == <span class="literal">null</span>)&#123;</span><br><span class="line">               <span class="keyword">break</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">for</span> (Long memberId : memberIds) &#123;</span><br><span class="line">               pushProducer.send(assembleParam(memberId, message));</span><br><span class="line">           &#125;</span><br><span class="line">           currentCount = memberIds.size();</span><br><span class="line">           <span class="keyword">if</span>(currentCount &gt; <span class="number">0</span>)&#123;</span><br><span class="line">               lastId = memberIds.get(currentCount-<span class="number">1</span>);</span><br><span class="line">           &#125;</span><br><span class="line">           sum += currentCount;</span><br><span class="line">       &#125;<span class="keyword">catch</span> (Throwable throwable)&#123;</span><br><span class="line">           XxlJobLogger.log(<span class="string">&quot;push Failed &#123;0&#125;&quot;</span>, throwable.getMessage());</span><br><span class="line">       &#125;</span><br><span class="line">   &#125; <span class="keyword">while</span> (currentCount == count); <span class="comment">// 基础数据类型 比较值</span></span><br></pre></td></tr></table></figure>
+<p>一开始我使用了最朴素的方法,如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestAll</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">1000000</span>; i++) &#123;</span><br><span class="line">                Math.cos(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">long</span> <span class="variable">end</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(end-start);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">1000000</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Math.cos(i);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">long</span> <span class="variable">end</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(end-start);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        test1();</span><br><span class="line">        test2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可是上面两个方法，运行了几十次，结果完全没有规律性。</p>
+<p>第一次：</p>
+<p>41 23</p>
+<p>第二次：</p>
+<p>36 31</p>
+<p>第三次：</p>
+<p>28 39</p>
+<p>......</p>
+<p>我能考虑到的原因有两点：</p>
+<ol type="1">
+<li>没有去除JIT的干扰。JIT会对热点代码进行编译，这两个方法都循环了1000000次，满足回边计数器的要求。</li>
+<li>System.currentTimeMillis()测量的只是逝去的时间，并没有反映出cpu执行该函数真正消耗的时间。这导致线程未被分配cpu资源时，等待cpu的时间也会被计算进去</li>
+</ol>
+<p>对于第一点可以通过简单的加vm参数看看</p>
+<p><code>-Xbatch -XX:-TieredCompilation -XX:+PrintCompilation</code></p>
+<p>-Xbatch
+可以强迫JIT编译器使用主线程。这样我们的输出日志就是井然有序的。（因为默认情况下，JIT编译器会使用和主线程完全不同的线程）</p>
+<p>-XX:-TieredCompilation
+停止分层编译。因为要控制变量所以，这里选择禁用。</p>
+<blockquote>
+<p>分层编译可以分为三层：</p>
+<ul>
+<li>第一层就是禁用C1和C2编译器，这个时候没有JIT进行。</li>
+<li>第二层就是只开启C1编译器，因为C1编译器只会进行一些简单的JIT优化，所以这个可以应对常规情况。</li>
+<li>第三层就是同时开启C1和C2编译器。</li>
+</ul>
+<p>在JDK8中，分层编译是默认开启的。因为不同的编译级别处理编译的时间是不一样的，后面层级的编译器启动的要比前面层级的编译器要慢，但是优化的程度更高。当关闭分层编译的情况下，JVM会直接使用C2</p>
+</blockquote>
+<p>-XX:+PrintCompilation
+输出被编译方法的统计信息，因此使用PrintCompilation可以很方便的看出哪些是热点代码。热点代码也就意味着存在着被优化的可能性。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230214143006164.png"
+alt="image-20230214143006164" />
+<figcaption aria-hidden="true">image-20230214143006164</figcaption>
+</figure>
+<p>上图是执行结果</p>
+<p>第一列：方法开始编译的时间</p>
+<p>第二列：index JVM维护的编译ID</p>
+<p>第三列：flag组合</p>
+<p>第四列：方法名和方法的长度</p>
+<p>解释一下第三列</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">b    Blocking <span class="title function_">compiler</span> <span class="params">(always set <span class="keyword">for</span> client)</span></span><br><span class="line">*    Generating a <span class="keyword">native</span> wrapper</span><br><span class="line">%    On stack <span class="title function_">replacement</span> <span class="params">(where the compiled code is running)</span>栈上替换</span><br><span class="line">!    Method has exception handlers 包含异常处理器</span><br><span class="line">s    Method declared as <span class="keyword">synchronized</span> </span><br><span class="line">n    Method declared as <span class="keyword">native</span></span><br><span class="line">made non entrant    compilation was wrong/incomplete, no future callers will use <span class="built_in">this</span> version</span><br><span class="line">made zombie         code is not in use and ready <span class="keyword">for</span> GC</span><br></pre></td></tr></table></figure>
+<p>发生了栈上替换，说明这是一段被JIT优化后的代码。</p>
+<p>对于第二点，想要完全去除变量的干扰，只有使用工具了</p>
+<p>下面是JMH测试的结果：</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230215113917389.png"
+alt="image-20230215113917389" />
+<figcaption aria-hidden="true">image-20230215113917389</figcaption>
+</figure>
+<p>结果显示，两者并没有什么差别。在误差0.002毫秒下，居然完全相同。</p>
+<p><strong>报告的参数介绍</strong></p>
+<ul>
+<li>Benchmark 就是对应的测试方法。</li>
+<li>Mode 测试的模式。</li>
+<li>Cnt 循环了多少次。</li>
+<li>Score
+是指测试的得分，这里因为选择了以thrpt的模式进行测试，所以分值越高表示吞吐率越高。</li>
+<li>Error
+代表并不是表示执行用例过程中出现了多少异常，而是指这个Score的精度可能存在误差，所以前边还有个±
+的符号。</li>
+</ul>
+<p>那么是不是证明我们可以不再关心，try catch 在循环内外的写法了呢？</p>
+<p>以目前我的知识储备，可以确认此事，不过我会保证try
+catch覆盖的范围尽量小，毕竟最朴素的认知。</p>
+<blockquote>
+<p>对未知保持敬畏吧！</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2023/02/06/%E5%BF%AB%E9%80%9F%E5%B9%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/06/%E5%BF%AB%E9%80%9F%E5%B9%82/" class="post-title-link" itemprop="url">快速幂</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-02-06 14:07:24 / Modified: 15:31:38" itemprop="dateCreated datePublished" datetime="2023-02-06T14:07:24+08:00">2023-02-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>快速幂</strong>（<strong>Exponentiation by
+squaring</strong>，平方求幂）是一种简单而有效的小算法，它可以以<span
+class="math inline">\(O(logN)\)</span>的时间复杂度计算乘方。</p>
+<p>我们以<span
+class="math inline">\(5^{13}\)</span>为例，怎么算才比较快？</p>
+<h5 id="直接算">1、直接算。</h5>
+<p>需要CPU12次乘法运算,显然是最慢的方式</p>
+<h5 id="分治">2、分治</h5>
+<p><span
+class="math inline">\(5^{13}=5\times5^{12},5^{12}=5^{6}\times5^{6},5^{6}=5^{3}\times5^{3},5^{3}=5\times5^{2},5^{2}=5\times5\)</span></p>
+<p>这里可以写出一个递归公式：</p>
+<p><span class="math display">\[
+a^n=\begin{cases}a\times a^{n-1},n是奇数 \\ a^{\frac{n}{2}}\times
+a^{\frac{n}{2}},n是非0偶数\\1,n=0 \end{cases}
+\]</span></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">qrow</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> n)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(n==<span class="number">0</span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(n&amp;<span class="number">1</span> == <span class="number">1</span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> a * qrow(a,n-<span class="number">1</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> qrow(a,n/<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">return</span> temp * temp;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>递归的方式虽然简洁，但是会对空间的消耗比较大。所以可以选择把递归优化成循环的方式。</p>
+<p>13 用二进制表示的话，是 1101</p>
+<p><span class="math inline">\((1000)_{2}\)</span> 是8，<span
+class="math inline">\((100)_2\)</span>是4，<span
+class="math inline">\((1)_2\)</span>是1</p>
+<p>那么<span class="math inline">\(5^{13}\)</span>可以用<span
+class="math inline">\(5^{8}\times 5^{4}\times 5\)</span>来实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">qrow</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> n )</span>&#123;</span><br><span class="line">  <span class="type">int</span> <span class="variable">ans</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span>(n &gt; <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&amp;<span class="number">1</span>=<span class="number">1</span>)&#123; <span class="comment">// 取最后一位</span></span><br><span class="line">      ans = ans * a;</span><br><span class="line">    &#125;</span><br><span class="line">    a = a*a;</span><br><span class="line">    n = n &gt;&gt; <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一次循环取1101 的1，得到5</p>
+<p>第二次循环取1101 的0，得到5</p>
+<p>第三次循环取1101 的1，得到<span class="math inline">\(5\times
+5^{4}\)</span></p>
+<p>第四次循环取1101 的1，得到<span class="math inline">\(5\times 5^{4}
+\times 5^{8}\)</span></p>
+<p>把12次乘法减少到了7次，当n越大的时候，优化的程度越明显。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/10/12/%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8BElastic%E7%9A%84%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/10/12/%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8BElastic%E7%9A%84%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">记录一下Elastic的安装</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-10-12 16:49:21 / Modified: 16:55:31" itemprop="dateCreated datePublished" datetime="2022-10-12T16:49:21+08:00">2022-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>安装 elasticsearch 使用 brew 安装适用 M1 芯片的 elasticsearch</p>
+<p>brew tap elastic/tap</p>
+<p>brew install elastic/tap/elasticsearch-full
+安装成功后显示使用帮助：</p>
+<p>相关安装文件位置</p>
+<p>Data: /opt/homebrew/var/lib/elasticsearch/elasticsearch_zhangminglei/
+Logs: /opt/homebrew/var/log/elasticsearch/elasticsearch_zhangminglei.log
+Plugins: /opt/homebrew/var/elasticsearch/plugins/ Config:
+/opt/homebrew/etc/elasticsearch/</p>
+<p>brew services start elastic/tap/elasticsearch-full</p>
+<p>brew services start elastic/tap/elasticsearch-full
+运行后验证，使用浏览器访问：http://localhost:9200/
+，出现以下响应内容：</p>
+<p>curl 127.0.0.1:9200 { "name" : "MacBook-Pro-Yus.local",
+"cluster_name" : "elasticsearch_yus", "cluster_uuid" :
+"OJRA-Tv4QzOlk-jEa_sW6w", "version" : { "number" : "7.17.4",
+"build_flavor" : "default", "build_type" : "tar", "build_hash" :
+"79878662c54c886ae89206c685d9f1051a9d6411", "build_date" :
+"2022-05-18T18:04:20.964345128Z", "build_snapshot" : false,
+"lucene_version" : "8.11.1", "minimum_wire_compatibility_version" :
+"6.8.0", "minimum_index_compatibility_version" : "6.0.0-beta1" },
+"tagline" : "You Know, for Search" }</p>
+<p>安装 kibana 使用 brew 安装适用 M1 芯片的 kibana</p>
+<p>brew tap elastic/tap</p>
+<p>brew install elastic/tap/kibana-full</p>
+<p>To start elastic/tap/kibana-full now and restart at login: brew
+services start elastic/tap/kibana-full</p>
+<p>brew services start elastic/tap/kibana-full 浏览器访问
+http://localhost:5601/</p>
+<p>brew services restart elastic/tap/kibana-full 调整系统内存占用 ES
+服务默认会占用系统一半以上的内存，可以通过修改配置文件，进行限制：</p>
+<p>所需修改文件在服务配置路径当中：/opt/homebrew/etc/elasticsearch/</p>
+<p>所需修改文件：jvm.options</p>
+<p>修改前：</p>
+<p>jvm.options.d directory containing these lines:</p>
+<h2 id="section"></h2>
+<p>-Xms4g</p>
+<p>-Xmx4g</p>
+<h2 id="section-1"></h2>
+<p>修改后：</p>
+<p>jvm.options.d directory containing these lines:</p>
+<h2 id="section-2"></h2>
+<p>-Xms4g -Xmx4g ## 重启 ES 服务，即可在系统的【活动监视器】看到 java
+内存占用已经受限:</p>
+<p>brew services restart elastic/tap/elasticsearch-full 设置密码保护
+注：可参考官方文档：https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-minimal-setup.html</p>
+<p>step1：关闭运行中的 elasticsearch、kibana 2 项服务</p>
+<p>step2：修改 elasticsearch.yml 文件，启用密码保护，设置为单节点</p>
+<p>进入配置文件夹</p>
+<p>/opt/homebrew/etc/elasticsearch/</p>
+<p>编辑配置文件</p>
+<p>elasticsearch.yml</p>
+<p>文件末尾追加以下2行内容：</p>
+<p>xpack.security.enabled: true discovery.type: single-node</p>
+<p>step3: 利用 elasticsearch 内置工具自动生成账号、密码 #1 启动
+elasticsearch 服务： brew services start
+elastic/tap/elasticsearch-full</p>
+<p>#2 进入es可执行文件目录：
+/opt/homebrew/Cellar/elasticsearch-full/7.17.1/bin</p>
+<p>#3 在以上目录打开终端，执行自动生成密码命令：
+./elasticsearch-setup-passwords auto</p>
+<p>#4 记录下控制台输出的账号密码内容，后面会用到
+生成的账号密码示例：</p>
+<p>Changed password for user elastic</p>
+<p>PASSWORD elastic = fuORhjujLlhGARxUemHL</p>
+<p>step4: 将以上自动生成的账号密码配置到 Kibana ，使其可以访问 es #1
+进入 Kibana 配置文件目录： /opt/homebrew/etc/kibana/</p>
+<p>#2 修改 Kibana 配置文件，追加内容: elasticsearch.username:
+"kibana_system"</p>
+<p>#3 进入 Kibana 可执行文件目录：
+/opt/homebrew/Cellar/kibana-full/7.17.1/bin</p>
+<p>#4 在以上目录打开终端，依次执行： ./kibana-keystore create
+./kibana-keystore add elasticsearch.password 输入以上生成的
+kibana_system 密码</p>
+<p>#5 重启 Kibana 服务： brew services start elastic/tap/kibana-full
+step5: 使用以上自动生成的 elastic 账号密码登录 kibana 地址：
+http://localhost:5601/</p>
 
       
     </div>
@@ -1052,532 +2241,8 @@ com.zhenai.framework.base.response.ReturnResponse的toString方法，这个方�
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/08/12/Coding-refer-to-the-North/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/12/Coding-refer-to-the-North/" class="post-title-link" itemprop="url">Coding refer to the North</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-08-12 11:07:32" itemprop="dateCreated datePublished" datetime="2022-08-12T11:07:32+08:00">2022-08-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-14 01:35:29" itemprop="dateModified" datetime="2022-08-14T01:35:29+08:00">2022-08-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>通过看测试同学的Wiki，发现一些可以在Coding中可以考虑的方向。</p>
-<p>测试点：</p>
-<ul>
-<li>性能测试
-<ul>
-<li>服务器性能：接口测试</li>
-<li>客户端测试：资源占用、页面渲染</li>
-</ul></li>
-<li>网络测试
-<ul>
-<li>2G、3G、4G、5G、Wi-Fi下的网络切换</li>
-<li>有网、无网切换</li>
-<li>弱网</li>
-</ul></li>
-<li>兼容性测试
-<ul>
-<li>操作系统</li>
-<li>版本</li>
-<li>尺寸</li>
-</ul></li>
-<li>功能测试
-<ul>
-<li>业务逻辑</li>
-<li>数据流向</li>
-<li>功能入口</li>
-<li>交互</li>
-</ul></li>
-</ul>
-<p>对于后端开发，比较容易忽略的点：兼容和性能</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/08/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">小🌧️设计模式</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-08-10 18:51:17" itemprop="dateCreated datePublished" datetime="2022-08-10T18:51:17+08:00">2022-08-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-25 11:01:27" itemprop="dateModified" datetime="2022-08-25T11:01:27+08:00">2022-08-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>从极客时间抄的笔记</p>
-<blockquote>
-<p>如果我们把写出的代码看作产品，那做产品的时候，我们先要思考痛点在哪里，用户的真正需求在哪里，然后再看要开发哪些功能去满足，而不是先拍脑袋想出一个花哨的功能，再去东搬西凑硬编出一个需求来。</p>
-<p>代码设计也是类似的。我们先要去分析代码存在的痛点，比如可读性不好、可扩展性不好等等，然后再针对性地利用设计模式去改善，而不是看到某个场景之后，觉得跟之前在某本书中看到的某个设计模式的应用场景很相似，就套用上去，也不考虑到底合不合适，最后如果有人问起了，就再找几个不痛不痒、很不具体的伪需求来搪塞，比如提高了代码的扩展性、满足了开闭原则等等。</p>
-<p>实际上，很多没有太多开发经验的新手，往往在学完设计模式之后会非常“学生气”，拿原理当真理，不懂得具体问题具体分析，手里拿着锤子看哪都是钉子，不分青红皂白，上来就是套用某个设计模式。写完之后，看着自己写的很复杂的代码，还沾沾自喜，甚至到处炫耀。这完全是无知地炫技，半瓶子不满大抵就是这个样子的。等你慢慢成长之后，回过头来再看自己当年的代码，我相信你应该会感到脸红的。这里我的话说得有点重，我主要还是担心你以后在项目中，过度设计被别人鄙视，所以提前给你打个预防针！</p>
-</blockquote>
-<p>上面是《设计模式之美》里面提到的。确实，我之前也有过这样的行为，“拿着锤子🔨看哪都是钉子”，上来就看看这个需求能不能套用某个设计模式，套用之后还沾沾自喜。</p>
-<p>也不是自我宽慰，如果不找机会实践，不找机会犯错，那么永远也不知道什么时候该用锤子。有个网友说的对：往往只有过度设计之后，才会学会适度设计。</p>
-<h1 id="职责链">职责链</h1>
-<p>在职责链模式中，多个处理器依次处理同一个请求。 一个请求先经过 A
-处理器处理，然后再把请求传递给 B 处理器，B 处理器处理完后再传递给 C
-处理器，以此类推，形成一个链条。链条上的每个处理器各自承担各自的处理职责，所以叫作职责链模式。
-在 GoF
-的定义中，一旦某个处理器能处理这个请求，就不会继续将请求传递给后续的处理器了。当然，在实际的开发中，也存在对这个模式的变体，那就是请求不会中途终止传递，而是会被所有的处理器都处理一遍。
-职责链模式有两种常用的实现。一种是使用链表来存储处理器，另一种是使用数组来存储处理器，后面一种实现方式更加简单。</p>
-<p>AOP、Servlet Filter、Spring
-Interceptor这三者可以从不同权限检查的范围大小的视角来应用：</p>
-<ol type="1">
-<li>Servlet Filter</li>
-</ol>
-<p>运维部门需要对只供内部访问的服务进行IP限制或访问审查时，在容器这一层增加一个Filter，在发布时发布系统自动加挂这个Filter，这样对上层应用就是透明的，内网IP地址段增减或审查规则调整都不需要上层应用的开发人员去关心。</p>
-<ol start="2" type="1">
-<li>Spring Interceptor</li>
-</ol>
-<p>由框架或基础服务部门来提供的微服务间相互调用的授权检查时，可以提供统一的SDK，由程序员在需要的服务上配置。</p>
-<ol start="3" type="1">
-<li>AOP</li>
-</ol>
-<p>业务应用内权限检查，可以把权限检查在统一模块中实现，通过配置由AOP加插拦截检查。</p>
-<h1 id="模版方法">模版方法</h1>
-<p>模板方法模式在一个方法中定义一个算法骨架，并将某些步骤推迟到子类中实现。模板方法模式可以让子类在不改变算法整体结构的情况下，重新定义算法中的某些步骤。这里的“算法”，我们可以理解为广义上的“业务逻辑”，并不特指数据结构和算法中的“算法”。这里的算法骨架就是“模板”，包含算法骨架的方法就是“模板方法”，这也是模板方法模式名字的由来。在模板模式经典的实现中，模板方法定义为
-final，可以避免被子类重写。需要子类重写的方法定义为
-abstract，可以强迫子类去实现。不过，在实际项目开发中，模板模式的实现比较灵活，以上两点都不是必须的。模板模式有两大作用：复用和扩展。其中，复用指的是，所有的子类可以复用父类中提供的模板方法的代码。扩展指的是，框架通过模板模式提供功能扩展点，让框架用户可以在不修改框架源码的情况下，基于扩展点定制化框架的功能。</p>
-<p>从应用场景上来看，同步回调跟模板模式几乎一致。它们都是在一个大的算法骨架中，自由替换其中的某个步骤，起到代码复用和扩展的目的。而异步回调跟模板模式有较大差别，更像是观察者模式。</p>
-<p>从代码实现上来看，回调和模板模式完全不同。回调基于组合关系来实现，把一个对象传递给另一个对象，是一种对象之间的关系；模板模式基于继承关系来实现，子类重写父类的抽象方法，是一种类之间的关系。</p>
-<p>前面我们也讲到，组合优于继承。</p>
-<p>实际上，这里也不例外。在代码实现上，回调相对于模板模式会更加灵活，主要体现在下面几点。</p>
-<p>像 Java
-这种只支持单继承的语言，基于模板模式编写的子类，已经继承了一个父类，不再具有继承的能力。</p>
-<p>回调可以使用匿名类来创建回调对象，可以不用事先定义类；而模板模式针对不同的实现都要定义不同的子类。</p>
-<p>如果某个类中定义了多个模板方法，每个方法都有对应的抽象方法，那即便我们只用到其中的一个模板方法，子类也必须实现所有的抽象方法。而回调就更加灵活，我们只需要往用到的模板方法中注入回调对象即可。</p>
-<h1 id="装饰器">装饰器</h1>
-<p>jdk里IO用了</p>
-<h1 id="享元">享元</h1>
-<p>基本数据类型用了，如IntegerCache</p>
-<h1 id="建造者">建造者</h1>
-<p>如果一个类中有很多属性，为了避免构造函数的参数列表过长，影响代码的可读性和易用性，我们可以通过构造函数配合
-set() 方法来解决。</p>
-<p>但是，如果存在下面情况中的任意一种，我们就要考虑使用建造者模式了。</p>
-<p>我们把类的必填属性放到构造函数中，强制创建对象的时候就设置。如果必填的属性有很多，把这些必填属性都放到构造函数中设置，那构造函数就又会出现参数列表很长的问题。如果我们把必填属性通过
-set() 方法设置，那校验这些必填属性是否已经填写的逻辑就无处安放了。</p>
-<p>如果类的属性之间有一定的依赖关系或者约束条件，我们继续使用构造函数配合
-set()
-方法的设计思路，那这些依赖关系或约束条件的校验逻辑就无处安放了。</p>
-<p>如果我们希望创建不可变对象，也就是说，对象在创建好之后，就不能再修改内部的属性值，要实现这个功能，我们就不能在类中暴露
-set() 方法。构造函数配合 set() 方法来设置属性值的方式就不适用了。</p>
-<h1 id="原型">原型</h1>
-<p>如果对象的创建成本比较大，而同一个类的不同对象之间差别不大（大部分字段都相同），在这种情况下，我们可以利用对已有对象（原型）进行复制（或者叫拷贝）的方式，来创建新对象，以达到节省创建时间的目的。这种基于原型来创建对象的方式就叫作原型设计模式，简称原型模式。</p>
-<p>CopyOnWrite</p>
-<h1 id="工厂">工厂</h1>
-<p>JDK的Calendar</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/08/09/copy-on-write/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/09/copy-on-write/" class="post-title-link" itemprop="url">浅析原型模式</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-08-09 19:02:55" itemprop="dateCreated datePublished" datetime="2022-08-09T19:02:55+08:00">2022-08-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-10 17:52:41" itemprop="dateModified" datetime="2022-08-10T17:52:41+08:00">2022-08-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>今天学了设计模式-原型模式，解释如下：</p>
-<blockquote>
-<p>原型模式是创建型模式的一种，其特点在于通过「复制」一个已经存在的实例来返回新的实例,而不是新建实例。
-被复制的实例就是我们所称的「原型」，这个原型是可定制的。
-原型模式多用于创建复杂的或者耗时的实例，因为这种情况下，复制一个已经存在的实例使程序运行更高效；或者创建值相等，只是命名不一样的同类数据。</p>
-<p>———Wiki</p>
-<p>geekbang:
-如果对象的创建成本比较大，而同一个类的不同对象之间差别不大（大部分字段都相同），在这种情况下，我们可以利用对已有对象（原型）进行复制（或者叫拷贝）的方式来创建新对象，以达到节省创建时间的目的。这种基于原型来创建对象的方式就叫作原型设计模式（Prototype
-Design Pattern），简称原型模式。</p>
-<p>———Geekbang</p>
-</blockquote>
-<p>在脑海中能想到好几种与之相关的实现，但我不是很理解为什么这会成为一种设计模式。</p>
-<ol type="1">
-<li>Java分层架构中各层对象的转换</li>
-<li>spring框架的BeanUtils.copyProperties()</li>
-<li>Linux的fork</li>
-<li>JUC的copy-on-write</li>
-</ol>
-<p><strong>Java分层架构中各层对象的转换</strong></p>
-<p>VO ——DTO——BO——PO</p>
-<p>按照数据流向，从左到右就是这些咯。这些对象就是属于大部分字段相同，我司一般使用工具类<code>ConvertBeanUtils.convert()</code>,
-底层其实也是使用的Spring框架的BeanUtils.copyProperties（）方法进行复制。</p>
-<p><strong>BeanUtils.copyProperties()</strong></p>
-<p>这其实是对“复制”的一种实现，我们知道复制在Java中有，浅克隆和深克隆。那么BeanUtils.copyProperties()是浅克隆还是深克隆呢？</p>
-<p>检测方式有两种：</p>
-<ol type="1">
-<li>实战测试，写ClassA、ClassB，B作为A的成员变量，然后创建一个A对象，调用BeanUtils.copyProperties()生成C，比较A、C里B的引用地址</li>
-<li>直接看源码</li>
-</ol>
-<p>介于我很懒，所以我选择了看源码。</p>
-<p>看这个第18行for循环，很明显的浅克隆，因为只有一层，通过反射拿到对象source的值复制到target。</p>
-<p><u>看很多人说，反射性能很差，要少用。但是为什么反射性能差呢？有多差？什么时候可以用什么时候不可以用？</u></p>
-<p>为什么这个是浅克隆，我们还一直在使用呢？两个原因</p>
-<p>首先对于读操作，浅克隆不影响。</p>
-<p>然后是dubbo调用时，会对对象进行序列化，序列化与反序列化的过程是深克隆。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">copyProperties</span><span class="params">(Object source, Object target, <span class="meta">@Nullable</span> Class&lt;?&gt; editable,</span></span><br><span class="line"><span class="params">		<span class="meta">@Nullable</span> String... ignoreProperties)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line"></span><br><span class="line">	Assert.notNull(source, <span class="string">&quot;Source must not be null&quot;</span>);</span><br><span class="line">	Assert.notNull(target, <span class="string">&quot;Target must not be null&quot;</span>);</span><br><span class="line"></span><br><span class="line">	Class&lt;?&gt; actualEditable = target.getClass();</span><br><span class="line">	<span class="keyword">if</span> (editable != <span class="literal">null</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (!editable.isInstance(target)) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Target class [&quot;</span> + target.getClass().getName() +</span><br><span class="line">					<span class="string">&quot;] not assignable to Editable class [&quot;</span> + editable.getName() + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		actualEditable = editable;</span><br><span class="line">	&#125;</span><br><span class="line">	PropertyDescriptor[] targetPds = getPropertyDescriptors(actualEditable);</span><br><span class="line">	List&lt;String&gt; ignoreList = (ignoreProperties != <span class="literal">null</span> ? Arrays.asList(ignoreProperties) : <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (PropertyDescriptor targetPd : targetPds) &#123;</span><br><span class="line">		<span class="type">Method</span> <span class="variable">writeMethod</span> <span class="operator">=</span> targetPd.getWriteMethod();</span><br><span class="line">		<span class="keyword">if</span> (writeMethod != <span class="literal">null</span> &amp;&amp; (ignoreList == <span class="literal">null</span> || !ignoreList.contains(targetPd.getName()))) &#123;</span><br><span class="line">			<span class="type">PropertyDescriptor</span> <span class="variable">sourcePd</span> <span class="operator">=</span> getPropertyDescriptor(source.getClass(), targetPd.getName());</span><br><span class="line">			<span class="keyword">if</span> (sourcePd != <span class="literal">null</span>) &#123;</span><br><span class="line">				<span class="type">Method</span> <span class="variable">readMethod</span> <span class="operator">=</span> sourcePd.getReadMethod();</span><br><span class="line">				<span class="keyword">if</span> (readMethod != <span class="literal">null</span> &amp;&amp;</span><br><span class="line">						ClassUtils.isAssignable(writeMethod.getParameterTypes()[<span class="number">0</span>], readMethod.getReturnType())) &#123;</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">						<span class="keyword">if</span> (!Modifier.isPublic(readMethod.getDeclaringClass().getModifiers())) &#123;</span><br><span class="line">							readMethod.setAccessible(<span class="literal">true</span>);</span><br><span class="line">						&#125;</span><br><span class="line">						<span class="type">Object</span> <span class="variable">value</span> <span class="operator">=</span> readMethod.invoke(source);</span><br><span class="line">						<span class="keyword">if</span> (!Modifier.isPublic(writeMethod.getDeclaringClass().getModifiers())) &#123;</span><br><span class="line">							writeMethod.setAccessible(<span class="literal">true</span>);</span><br><span class="line">						&#125;</span><br><span class="line">						writeMethod.invoke(target, value);</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">						<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">FatalBeanException</span>(</span><br><span class="line">								<span class="string">&quot;Could not copy property &#x27;&quot;</span> + targetPd.getName() + <span class="string">&quot;&#x27; from source to target&quot;</span>, ex);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>fork</strong></p>
-<p>从词义上理解，fork是叉子的意思，很容易想到一个分支有很多分叉的样子。</p>
-<p>在GitHub中，fork表示拷贝到自己仓库</p>
-<p>在Linux中也有类似的意义：运行着的程序分成2个完全一样的进程，每个进程都启动一个从代码同一位置开始执行的线程，这两个进程的线程继续执行，就像是两个用户同时启动了该程序的两个副本。</p>
-<p>举个例子</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span>  </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span>  </span></span><br><span class="line"> </span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">()</span>   </span><br><span class="line">&#123;   </span><br><span class="line">    <span class="type">pid_t</span> fpid; <span class="comment">//fpid表示fork函数返回的值  </span></span><br><span class="line">    <span class="type">int</span> count=<span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 调用fork，创建出子进程  </span></span><br><span class="line">    fpid=fork();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 所以下面的代码有两个进程执行！</span></span><br><span class="line">    <span class="keyword">if</span> (fpid &lt; <span class="number">0</span>)   </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;创建进程失败!/n&quot;</span>);   </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (fpid == <span class="number">0</span>) &#123;  </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;我是子进程，由父进程fork出来/n&quot;</span>);   </span><br><span class="line">        count++;  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">else</span> &#123;  </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;我是父进程/n&quot;</span>);   </span><br><span class="line">        count++;  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;统计结果是: %d/n&quot;</span>,count);  </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
-<p>输出结果：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">我是子进程，由父进程fork出来</span><br><span class="line"></span><br><span class="line">统计结果是: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">我是父进程</span><br><span class="line"></span><br><span class="line">统计结果是: <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>fork作为一个函数被调用。这个函数会有两次返回，将子进程的PID返回给父进程，0返回给子进程。(如果小于0，则说明创建子进程失败)。</li>
-<li>再次说明：当前进程调用<code>fork()</code>，会创建一个跟当前进程完全相同的子进程(除了pid)，所以子进程同样是会执行<code>fork()</code>之后的代码。</li>
-</ul>
-<p>所以说：</p>
-<ul>
-<li>父进程在执行if代码块的时候，<code>fpid变量</code>的值是子进程的pid</li>
-<li>子进程在执行if代码块的时候，<code>fpid变量</code>的值是0</li>
-</ul>
-<p>简单解释一下为什么fpid会有不同的返回值</p>
-<p>我们可以把创建进程的过程想象成一棵树🌲，root创建一个子节点，root就可以指向这个子节点，那么这个fpid就是子进程的进程id，因为子进程没有子进程，所以它的fpid是0，相当于叶子节点。</p>
-<p>子进程可以根据getppid取得父进程的id，但是父进程可以有许多子进程，所以就无法获得各个子进程的进程id。</p>
-<p>父进程中调用fork之前打开所有的描述字在fork返回之后由子进程分享。我们将看到网络服务器便利用了这个特性：父进程调用accept之后调用fork。所接受的已连接的套接口随后就在父进程与子进程之间分享。通常情况下，子进程接着读和写这个套接口，父进程则关闭这个已连接套接口。</p>
-<p>fork的用法： 1
-一个进程创建一个自身的拷贝，这样每个拷贝都可以在另一个拷贝执行其他任务的同时处理各自的某个操作。这是网络服务器的典型用法。
-2
-一个进程想要执行另一个程序。既然创建新进程的唯一方法为调用fork，该进程于是首先调用fork创建一个自身的拷贝，然后其中一个拷贝（通常为子进程）调用exec把自身替换成新的程序。这是诸如shell之类程序的典型用法。</p>
-<p>对于第二种用法，创建子进程时复制过去的数据没有任何作用，因为exec会清空原来的数据。</p>
-<p>所以就有了Copy On Write！</p>
-<p>fork创建出的子进程，与父进程共享内存空间。也就是说，如果子进程不对内存空间进行写入操作的话，内存空间中的数据并不会复制给子进程，这样创建子进程的速度就很快了！(不用复制，直接引用父进程的物理空间)。相当于先浅拷贝，需要写的时候再深拷贝。</p>
-<p>并且如果在fork函数返回之后，子进程第一时间exec一个新的可执行映像，那么也不会浪费时间和内存空间了。</p>
-<blockquote>
-<p>fork()之后，kernel把父进程中所有的内存页的权限都设为read-only，然后子进程的地址空间指向父进程。当父子进程都只读内存时，相安无事。当其中某个进程写内存时，CPU硬件检测到内存页是read-only的，于是触发页异常中断（page-fault），陷入kernel的一个中断例程。中断例程中，kernel就会把触发的异常的页复制一份，于是父子进程各自持有独立的一份。</p>
-</blockquote>
-<p>COW在文件系统中也有应用，当我要修改数据块A的内容的时候，我先把A读出来，写到B块里，如果写的过程掉电了，原来A的内容还在，如果是还写到原来的位置上，那么写入的数据究竟写了多少就不确定了，会不会破坏原来的数据也不好说。</p>
-<p><strong>JUC的Cpoy-On-Write</strong></p>
-<p>写累了</p>
-<p>简单说说，ReentryLock 和 复制一个数组来实现</p>
-<p><strong>总结：</strong></p>
-<p>想了这么多也还是没想出来，为什么这玩意儿要提炼成一个设计模式。</p>
-<p>参考文献：</p>
-<p>[1] https://www.zhihu.com/question/20431718/answer/74250205</p>
-<p>[2] https://time.geekbang.org/column/article/200786</p>
-<p>[3] https://www.cnblogs.com/tison/p/7840647.html</p>
-<p>[4] https://zhuanlan.zhihu.com/p/102389552</p>
-<p>[5] https://blog.csdn.net/jason314/article/details/5640969</p>
-<p>[6] https://blog.csdn.net/bad_good_man/article/details/49364947</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/07/26/setAccessible-%E7%9A%84%E4%BD%9C%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/07/26/setAccessible-%E7%9A%84%E4%BD%9C%E7%94%A8/" class="post-title-link" itemprop="url">setAccessible(true)之我见</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2022-07-26 15:06:02 / Modified: 16:32:48" itemprop="dateCreated datePublished" datetime="2022-07-26T15:06:02+08:00">2022-07-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>最近写的代码用了Field，介于经常在看源码的时候看到</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">field.setAccessible(<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>在今天以前我都以为是用这个方法来突破权限访问控制，还生出：既然可以用反射来突破权限访问控制，为什么要设计这个功能的疑问。</p>
-</blockquote>
-<p>实际上这个方法只是安全管理器的开关，为true的时候就关闭检查。</p>
-<p>我们来跟踪一下代码，以Field为例：</p>
-<p>可以看到 flag 被传入到了AccessibleObject当前对象的overide属性</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># java.lang.reflect.AccessibleObject</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAccessible</span><span class="params">(<span class="type">boolean</span> flag)</span> <span class="keyword">throws</span> SecurityException &#123;</span><br><span class="line">        <span class="type">SecurityManager</span> <span class="variable">sm</span> <span class="operator">=</span> System.getSecurityManager();</span><br><span class="line">        <span class="keyword">if</span> (sm != <span class="literal">null</span>) sm.checkPermission(ACCESS_PERMISSION);</span><br><span class="line">        setAccessible0(<span class="built_in">this</span>, flag);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">setAccessible0</span><span class="params">(AccessibleObject obj, <span class="type">boolean</span> flag)</span></span><br><span class="line">        <span class="keyword">throws</span> SecurityException</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Constructor &amp;&amp; flag == <span class="literal">true</span>) &#123;</span><br><span class="line">            Constructor&lt;?&gt; c = (Constructor&lt;?&gt;)obj;</span><br><span class="line">            <span class="keyword">if</span> (c.getDeclaringClass() == Class.class) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Cannot make a java.lang.Class&quot;</span> +</span><br><span class="line">                                            <span class="string">&quot; constructor accessible&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        obj.override = flag;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>再来看 Field
-，Field类继承了AccessibleObject类，也就继承了成员变量override。</p>
-<p>在get方法中，就判断了override的值，如果为true
-就不会执行一系列check。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Field</span> <span class="keyword">extends</span> <span class="title class_">AccessibleObject</span> <span class="keyword">implements</span> <span class="title class_">Member</span>&#123;</span><br><span class="line">  <span class="type">boolean</span> override;</span><br><span class="line">  <span class="keyword">public</span> Object <span class="title function_">get</span><span class="params">(Object obj)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!override) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!Reflection.quickCheckMemberAccess(clazz, modifiers)) &#123;</span><br><span class="line">                Class&lt;?&gt; caller = Reflection.getCallerClass();</span><br><span class="line">                checkAccess(caller, clazz, obj, modifiers);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> getFieldAccessor(obj).get(obj);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>实际上修饰符为 <code>public</code>的属性或者方法的
-<code>Accessible</code>仍然是<code>false</code>的，我们之所以有所误解，在于修饰符如果为<code>public</code>的确可以不检查，<code>Reflection.quickCheckMemberAccess(clazz, modifiers)</code>方法先对<code>public</code>进行了检查，如果是<code>public</code>就不进行后续的检查了。</p>
-<p>看到这里，很明显，<strong><code>setAccessible(true)</code>的作用是关闭安全检查</strong></p>
-<p>由于JDK的安全检查耗时较多，所以通过setAccessible(true)的方式关闭安全检查也可以提升反射速度</p>
-<blockquote>
-<p>对文首的疑问，我是这样理解的：</p>
-<p>Java的权限访问控制，不是为了表明“这里你一定不能修改！”，而是为了给不懂这个类具体实现的使用者，一个安全使用的方式。</p>
-<p>而且代码是死的，而人是活的，死代码防不了活人。</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 </div>
@@ -1589,7 +2254,7 @@ Design Pattern），简称原型模式。</p>
 
 <div class="copyright">
   &copy; 2017 – 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
 <!--  <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
