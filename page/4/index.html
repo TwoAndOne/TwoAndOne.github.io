@@ -129,16 +129,16 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -172,6 +172,873 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/" class="post-title-link" itemprop="url">JVM GC参数(Xmn,Xms,Xmx,Xss)助记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-23 12:18:20" itemprop="dateCreated datePublished" datetime="2021-03-23T12:18:20+08:00">2021-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-03-28 13:52:45" itemprop="dateModified" datetime="2021-03-28T13:52:45+08:00">2021-03-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="overview">Overview</h2>
+<p><strong>太长不看总结:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-</td>
+<td>标准VM 选项</td>
+</tr>
+<tr class="even">
+<td>-X</td>
+<td>非标准VM选项</td>
+</tr>
+<tr class="odd">
+<td>-Xms</td>
+<td>maximum size 设置堆的最大初始初始值</td>
+</tr>
+<tr class="even">
+<td>-Xmn</td>
+<td>maximum nursery 设置堆中新生代的最大初始值</td>
+</tr>
+<tr class="odd">
+<td>-Xmx</td>
+<td>memory maximum 设置堆的最大值</td>
+</tr>
+<tr class="even">
+<td>-Xss</td>
+<td>stack size 设置线程中栈的内容大小</td>
+</tr>
+</tbody>
+</table>
+<p>-Xms, -Xms, -Xmn, -Xss</p>
+<p>在看技术博客时,看到到这些参数是不是很无语,完全不知道说的是啥,根本无法理解!</p>
+<p>但是仔细想想写JDK的那群神仙会像我们这种菜鸟随便命名吗?</p>
+<p>所以我放下书本去翻了一下文档</p>
+<p>https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html</p>
+<blockquote>
+<p>OptionsThe <code>java</code> command supports a wide range of options
+that can be divided into the following categories:</p>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDJJFI">Standard
+Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI">Non-Standard
+Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABCBGHF">Advanced
+Runtime Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDDFII">Advanced
+JIT Compiler Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABFJDIC">Advanced
+Serviceability Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABFAFAE">Advanced
+Garbage Collection Options</a></li>
+</ul>
+<p>Standard options are guaranteed to be supported by all
+implementations of the Java Virtual Machine (JVM). They are used for
+common actions, such as checking the version of the JRE, setting the
+class path, enabling verbose output, and so on.</p>
+<p>Non-standard options are general purpose options that are specific to
+the Java HotSpot Virtual Machine, so they are not guaranteed to be
+supported by all JVM implementations, and are subject to change. These
+options start with <code>-X</code>.</p>
+<p>Advanced options are not recommended for casual use. These are
+developer options used for tuning specific areas of the Java HotSpot
+Virtual Machine operation that often have specific system requirements
+and may require privileged access to system configuration parameters.
+They are also not guaranteed to be supported by all JVM implementations,
+and are subject to change. Advanced options start with
+<code>-XX</code>.</p>
+</blockquote>
+<p>翻译一下,大概就是java提供了很多命令,有标准的,有非标准的,非标准的就得用<code>-X</code>开头,进阶一点不建议平时使用的用<code>-XX</code>开头</p>
+<p>好的,我们已经明白这几个命令的开头是什么意思了</p>
+<ul>
+<li>- : 标准VM选项，VM规范的选项</li>
+<li>-X: 非标准VM选项，不保证所有VM支持</li>
+<li>-XX: 高级选项，高级特性，但属于不稳定的选项</li>
+</ul>
+<h2 id="xmn">-Xmn</h2>
+<blockquote>
+<p>Sets the initial and maximum size (in bytes) of the heap for the
+young generation (nursery).</p>
+</blockquote>
+<p>为新生代设置在堆上的初始最大值</p>
+<blockquote>
+<p>Append the letter <code>k</code> or <code>K</code> to indicate
+kilobytes, <code>m</code> or <code>M</code> to indicate megabytes,
+<code>g</code> or <code>G</code> to indicate gigabytes.</p>
+</blockquote>
+<p>参数后可以指定单位,比如用k、m、g</p>
+<blockquote>
+<p>The young generation region of the heap is used for new objects. GC
+is performed in this region more often than in other regions. If the
+size for the young generation is too small, then a lot of minor garbage
+collections will be performed. If the size is too large, then only full
+garbage collections will be performed, which can take a long time to
+complete.</p>
+</blockquote>
+<p>堆的新生代区域用于新对象。GC在这个区域执行的频率高于其他区域。如果年轻代size太小，那么将执行大量次要的垃圾收集。如果size太大，则只有完整的垃圾收集才会被执行，这可能需要很长时间才能完成。</p>
+<blockquote>
+<p>Oracle recommends that you keep the size for the young generation
+between a half and a quarter of the overall heap size.</p>
+</blockquote>
+<p>Oracle建议将新生代的堆的size保持在总体堆size的二分之一到四分之一之间。</p>
+<blockquote>
+<p>The following examples show how to set the initial and maximum size
+of young generation to 256 MB using various units:</p>
+<p>-Xmn256m</p>
+<p>-Xmn262144k</p>
+<p>-Xmn268435456</p>
+<p>Instead of the <code>-Xmn</code> option to set both the initial and
+maximum size of the heap for the young generation, you can use
+<code>-XX:NewSize</code> to set the initial size and
+<code>-XX:MaxNewSize</code> to set the maximum size.</p>
+</blockquote>
+<p>下面是使用不同的单位设置新生代的例子,不翻译了,都能看懂.</p>
+<p><strong>总结</strong></p>
+<p>-Xmn 指的是,</p>
+<ul>
+<li><p>-X:非标准VM选项</p></li>
+<li><p>m:maximum 最大</p></li>
+<li><p>n: nursery :托儿所</p></li>
+</ul>
+<p>最大的托儿所,就是新生代最大size</p>
+<h2 id="xms">-Xms</h2>
+<blockquote>
+<p>Sets the initial size (in bytes) of the heap. This value must be a
+multiple of 1024 and greater than 1 MB. Append the letter <code>k</code>
+or <code>K</code> to indicate kilobytes, <code>m</code> or
+<code>M</code> to indicate megabytes, <code>g</code> or <code>G</code>
+to indicate gigabytes.</p>
+</blockquote>
+<p>设置堆的初始最大size,这个值必须是1024的倍数,必须大于1MB,可以用k、m、g做参数后面的单位</p>
+<blockquote>
+<p>The following examples show how to set the size of allocated memory
+to 6 MB using various units:</p>
+<p><code>-Xms6291456 -Xms6144k -Xms6m</code></p>
+</blockquote>
+<p>下面是一些例子,用不同单位设置6MB的最大内存</p>
+<p><strong>总结</strong></p>
+<ul>
+<li><p>-X:非标准VM选项</p></li>
+<li><p>m:最大 maximum</p></li>
+<li><p>s:大小 size</p></li>
+</ul>
+<p>在堆上初始最大的容量</p>
+<h2 id="xmx">-Xmx</h2>
+<blockquote>
+<p>Specifies the maximum size (in bytes) of the memory allocation pool
+in bytes. This value must be a multiple of 1024 and greater than 2 MB.
+Append the letter <code>k</code> or <code>K</code> to indicate
+kilobytes, <code>m</code> or <code>M</code> to indicate megabytes,
+<code>g</code> or <code>G</code> to indicate gigabytes.</p>
+</blockquote>
+<p>指定堆的最大值,跟-Xms的区别是,ms是初始值,这个是可容纳的最大值</p>
+<blockquote>
+<p>The default value is chosen at runtime based on system configuration.
+For server deployments, <code>-Xms</code> and <code>-Xmx</code> are
+often set to the same value. See the section "Ergonomics" in <em>Java SE
+HotSpot Virtual Machine Garbage Collection Tuning Guide</em> at
+`<code>http://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/index.html</code>.</p>
+</blockquote>
+<p>默认值是基于系统配置在运行时选择的,在服务部署时,-Xms与-Xmx一般被设置为同样的大小</p>
+<blockquote>
+<p>The following examples show how to set the maximum allowed size of
+allocated memory to 80 MB using various units:</p>
+</blockquote>
+<p>80MB的例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Xmx83886080</span><br><span class="line">-Xmx81920k</span><br><span class="line">-Xmx80m</span><br></pre></td></tr></table></figure>
+<p>The <code>-Xmx</code> option is equivalent to
+<code>-XX:MaxHeapSize</code>.</p>
+<p><strong>总结</strong></p>
+<ul>
+<li><p>-X:非标准VM选项</p></li>
+<li><p>m:最大 memory</p></li>
+<li><p>x:大小 maximum</p></li>
+</ul>
+<p>最大的容量</p>
+<h2 id="xss">-Xss</h2>
+<blockquote>
+<p>Sets the thread stack size (in bytes). Append the letter
+<code>k</code> or <code>K</code> to indicate KB, <code>m</code> or
+<code>M</code> to indicate MB, <code>g</code> or <code>G</code> to
+indicate GB. The default value depends on virtual memory.</p>
+</blockquote>
+<p>设置线程栈的大小,可以用不同的单位来设置,默认值取决于虚拟机.</p>
+<p>The following examples set the thread stack size to 1024 KB in
+different units:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Xss1m</span><br><span class="line">-Xss1024k</span><br><span class="line">-Xss1048576</span><br></pre></td></tr></table></figure>
+<p>This option is equivalent to <code>-XX:ThreadStackSize</code>.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/23/%E7%90%86%E8%A7%A3%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/23/%E7%90%86%E8%A7%A3%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/" class="post-title-link" itemprop="url">理解强引用、软引用、弱引用、虚引用</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-23 12:03:09" itemprop="dateCreated datePublished" datetime="2021-03-23T12:03:09+08:00">2021-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:03:09" itemprop="dateModified" datetime="2022-07-18T01:03:09+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="强引用">强引用</h1>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">reference</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span>  <span class="keyword">void</span> <span class="title function_">testReference</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">ListNode</span> <span class="variable">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ListNode</span>(<span class="number">3</span>);</span><br><span class="line">        test = <span class="literal">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ListNode</span> &#123;</span><br><span class="line">	<span class="comment">//......</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;test被回收了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>强引用是最普遍的引用,在代码中随处可见,只要某个对象与强引用关联,这个对象就不会被回收,JVM宁愿抛出OOM也不会回收.</p>
+<p>那么什么时候才能被回收呢?</p>
+<p>手动把引用指向null,比如上述代码中</p>
+<p><code>test = null</code></p>
+<h1 id="软引用">软引用</h1>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323132537741.png"
+alt="image-20210323132537741" />
+<figcaption aria-hidden="true">image-20210323132537741</figcaption>
+</figure>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323132606414.png"
+alt="image-20210323132606414" />
+<figcaption aria-hidden="true">image-20210323132606414</figcaption>
+</figure>
+<p>软引用需要用SoftReference对象包装一下</p>
+<p>它的特点是,当内存不足时,就会触发JVM的GC,如果GC后内存还是不足,就会把软引用包裹的对象回收.也就是说只有当内存不足时,JVM才会回收软引用</p>
+<p>解释一下图片的例子:</p>
+<p>创建一个软引用对象,里面包裹byte[],byte[]占用10M,设置JVM运行参数,-Xmx,表示堆内存最大容量</p>
+<p>这个参数不懂的可以参考笔者另一篇文章</p>
+<p>第一次用softReference.get()方法获取该引用的地址</p>
+<p>手动打开GC</p>
+<p>GC后,测试发现该引用还是存在,这是因为内存还比较充足</p>
+<p>接着再创建一个10M的byte[]对象</p>
+<p>再次用softReference.get()方法获取软引用的地址,发现已经为null了</p>
+<p><strong>软引用的作用</strong></p>
+<p>做缓存吧,内存够就正常拿缓存,内存不够就干掉它,不至于马上抛出OOM</p>
+<h2 id="弱引用">弱引用</h2>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323133735452.png"
+alt="image-20210323133735452" />
+<figcaption aria-hidden="true">image-20210323133735452</figcaption>
+</figure>
+<p>弱引用是用WeakReference来包裹对象</p>
+<p>无论有没有内存,gc遇到它就回收</p>
+<p><strong>什么时候用呢</strong></p>
+<p>ThreadLocal,WeakHashMap</p>
+<p>ThreadLocal是一个本地线程副本变量工具类。内部是一个<strong>弱引用</strong>的Map来维护。</p>
+<p>WeakHashMap其实和HashMap大多数行为是一样的，只是WeakHashMap不会阻止GC回收key对象（不是value）</p>
+<h2 id="虚引用">虚引用</h2>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323134603056.png"
+alt="image-20210323134603056" />
+<figcaption aria-hidden="true">image-20210323134603056</figcaption>
+</figure>
+<p>运行完直接返回null,说明根本拿不到虚引用指向的对象</p>
+<p>看图中,创建虚引用不仅需要传入被包裹对象,还得传入一个ReferenceQueue ,
+当GC准备回收一个对象时,如果发现它还有虚引用,就会在回收之前,把这个虚引用加入到与之关联的ReferenceQueue中.</p>
+<p>平时没用到虚引用,所以我也不是很懂,待续.......</p>
+<p>NIO中好像使用了虚引用管理堆外内存.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/22/cmd%E5%91%BD%E4%BB%A4%E4%B8%8ELinux%E5%91%BD%E4%BB%A4%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/22/cmd%E5%91%BD%E4%BB%A4%E4%B8%8ELinux%E5%91%BD%E4%BB%A4%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">cmd命令与Linux命令的区别</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-22 21:03:16" itemprop="dateCreated datePublished" datetime="2021-03-22T21:03:16+08:00">2021-03-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-03-28 13:52:56" itemprop="dateModified" datetime="2021-03-28T13:52:56+08:00">2021-03-28</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>太长不看总结</strong></p>
+<p>cmd是.exe程序,windows系统拿来模拟Dos系统的</p>
+<p>Linux命令也就是shell,是用户态于内核态的交互层,功能更强大.</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>功能</strong></th>
+<th><strong>cmd</strong></th>
+<th><strong>linux</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>复制文件</td>
+<td>copy</td>
+<td>cp</td>
+</tr>
+<tr class="even">
+<td>移动文件</td>
+<td>move</td>
+<td>mv</td>
+</tr>
+<tr class="odd">
+<td>列举文件</td>
+<td>dir</td>
+<td>ls</td>
+</tr>
+<tr class="even">
+<td>清除屏幕</td>
+<td>cls</td>
+<td>clear</td>
+</tr>
+<tr class="odd">
+<td>退出</td>
+<td>exit</td>
+<td>exit</td>
+</tr>
+<tr class="even">
+<td>显示修改日期</td>
+<td>date</td>
+<td>date</td>
+</tr>
+<tr class="odd">
+<td>删除文件</td>
+<td>del</td>
+<td>rm</td>
+</tr>
+<tr class="even">
+<td>回响信息到屏幕</td>
+<td>echo</td>
+<td>echo</td>
+</tr>
+<tr class="odd">
+<td>用编辑器编辑文件</td>
+<td>edit</td>
+<td>vi</td>
+</tr>
+<tr class="even">
+<td>比较文件内容</td>
+<td>fc</td>
+<td>diff</td>
+</tr>
+<tr class="odd">
+<td>在文件中查找字符串</td>
+<td>find</td>
+<td>grep</td>
+</tr>
+<tr class="even">
+<td>显示命令帮助</td>
+<td>命令/?</td>
+<td>man 命令</td>
+</tr>
+<tr class="odd">
+<td>创建目录</td>
+<td>mkdir</td>
+<td>mkdir</td>
+</tr>
+<tr class="even">
+<td>删除目录</td>
+<td>rd</td>
+<td>rmdir</td>
+</tr>
+<tr class="odd">
+<td>目录更名</td>
+<td>move</td>
+<td>mv</td>
+</tr>
+<tr class="even">
+<td>拷贝目录</td>
+<td>xcopy</td>
+<td>copy</td>
+</tr>
+<tr class="odd">
+<td>查看文件</td>
+<td>more</td>
+<td>less</td>
+</tr>
+<tr class="even">
+<td>重命名文件</td>
+<td>ren</td>
+<td>mv</td>
+</tr>
+<tr class="odd">
+<td>切换目录</td>
+<td>cd</td>
+<td>cd</td>
+</tr>
+<tr class="even">
+<td>显示时间</td>
+<td>time</td>
+<td>date</td>
+</tr>
+<tr class="odd">
+<td>显示已被使用的内存</td>
+<td>mem</td>
+<td>free</td>
+</tr>
+<tr class="even">
+<td>在屏幕打印文件内容</td>
+<td>type</td>
+<td>cat</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/21/%E7%90%86%E8%A7%A3BIO-NIO-AIO-IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/21/%E7%90%86%E8%A7%A3BIO-NIO-AIO-IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" class="post-title-link" itemprop="url">理解BIO,NIO,AIO,IO多路复用</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-21 18:56:41" itemprop="dateCreated datePublished" datetime="2021-03-21T18:56:41+08:00">2021-03-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:04:09" itemprop="dateModified" datetime="2022-07-18T01:04:09+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>预备知识:</strong></p>
+<p>操作系统分内核态与用户态,真正的I/O操作都不是应用程序在做,为了保证安全,操作系统提供了系统调用,比如read&amp;write.</p>
+<p>通常一个应用程序的执行代表一个进程,当应用程序需要I/O时就会执行系统调用.</p>
+<p>比如一次read指令的执行,应用调用read指令,内核从外部设备获取数据放入内核缓冲区,然后又把内核缓存区的内容复制到进程缓冲区.</p>
+<p><strong>四种IO模型:</strong></p>
+<p>１.　BＩＯ，同步阻塞IO</p>
+<p>２.　ＮＩＯ，同步非阻塞IO</p>
+<p>３.　IO多路复用,同步非阻塞IO升级版</p>
+<p>４.　AIO，异步非阻塞IO</p>
+<p>怎么理解用一个例子来执行一下就好啦</p>
+<p><strong>BIO</strong></p>
+<p><img src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321191140634.png" alt="image-20210321191140634" style="zoom:67%;" /></p>
+<p>首先我们得知道,内核态的内存缓冲区也不是一开始就有数据的,所以这就分了两个阶段,</p>
+<p>第一个是等待内核态内存缓存区充满的过程,</p>
+<p>第二个是从内核态内存缓存区复制到进程缓冲区的过程</p>
+<p>所以同步阻塞IO就比较惨,在这两个阶段都得等着</p>
+<p>第一个阶段是阻塞,用户态发起IO执行read调用指令,如果内核态没数据就被ＯＳ挂起</p>
+<p>第二个阶段内核态复制数据到进程缓冲区,它也不能干其他的.</p>
+<p><strong>NIO</strong></p>
+<p><img src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321191002045.png" alt="image-20210321191002045" style="zoom:70%;" /></p>
+<p>同步非阻塞也没好到哪里去</p>
+<p>第一个阶段,虽然没有被阻塞,但是也得不停的轮询,不断发起IO系统调用</p>
+<p>第二个阶段，等待复制完成</p>
+<p><strong>IO多路复用</strong></p>
+<p><img src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321195033926.png" alt="image-20210321195033926" style="zoom:67%;" /></p>
+<p>IO多路复用本质上还是同步非阻塞</p>
+<p>在这种模式中，首先不是进行read系统调动，而是进行select/epoll系统调用。当然，这里有一个前提，需要将目标网络连接，提前注册到select/epoll的可查询socket列表中。然后，才可以开启整个的IO多路复用模型的读流程。</p>
+<p>（1）进行select/epoll系统调用，查询可以读的连接。kernel会查询所有select的可查询socket列表，当任何一个socket中的数据准备好了，select就会返回。</p>
+<p>当用户进程调用了select，那么整个线程会被block（阻塞掉）。</p>
+<p>（2）用户线程获得了目标连接后，发起read系统调用，用户线程阻塞。内核开始复制数据。它就会将数据从kernel内核缓冲区，拷贝到用户缓冲区（用户内存），然后kernel返回结果。</p>
+<p>（3）用户线程才解除block的状态，用户线程终于真正读取到数据，继续执行。</p>
+<p>多路复用IO的特点：</p>
+<p>IO多路复用模型，建立在操作系统kernel内核能够提供的多路分离系统调用select/epoll基础之上的。多路复用IO需要用到两个系统调用（system
+call）， 一个select/epoll查询调用，一个是IO的读取调用。</p>
+<p>和NIO模型相似，多路复用IO需要轮询。负责select/epoll查询调用的线程，需要不断的进行select/epoll轮询，查找出可以进行IO操作的连接。</p>
+<p>另外，多路复用IO模型与前面的NIO模型，是有关系的。对于每一个可以查询的socket，一般都设置成为non-blocking模型。只是这一点，对于用户程序是透明的（不感知）。</p>
+<p>多路复用IO的优点：</p>
+<p>用select/epoll的优势在于，它可以同时处理成千上万个连接（connection）。与一条线程维护一个连接相比，I/O多路复用技术的最大优势是：系统不必创建线程，也不必维护这些线程，从而大大减小了系统的开销。</p>
+<p>Java的NIO（new
+IO）技术，使用的就是IO多路复用模型。在linux系统上，使用的是epoll系统调用。</p>
+<p>多路复用IO的缺点：</p>
+<p>本质上，select/epoll系统调用，属于同步IO，也是阻塞IO。都需要在读写事件就绪后，自己负责进行读写，也就是说这个读写过程是阻塞的。</p>
+<p><strong>AIO</strong></p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321195511679.png"
+alt="image-20210321195511679" />
+<figcaption aria-hidden="true">image-20210321195511679</figcaption>
+</figure>
+<p>如果大家学过终端的话就容易理解AIO</p>
+<p>第一个阶段,用户态程序执行read调用,如果内核态没数据,那就做其他事情</p>
+<p>第二个阶段,内核态把数据复制到了用户态的进程缓冲区后通知用户应用程序</p>
+<p>异步IO模型的特点：</p>
+<p>在内核kernel的等待数据和复制数据的两个阶段，用户线程都不是block(阻塞)的。用户线程需要接受kernel的IO操作完成的事件，或者说注册IO操作完成的回调函数，到操作系统的内核。所以说，异步IO有的时候，也叫做信号驱动
+IO 。</p>
+<p>异步IO模型缺点：</p>
+<p>需要完成事件的注册与传递，这里边需要底层操作系统提供大量的支持，去做大量的工作。</p>
+<p>目前来说， Windows 系统下通过 IOCP 实现了真正的异步
+I/O。但是，就目前的业界形式来说，Windows
+系统，很少作为百万级以上或者说高并发应用的服务器操作系统来使用。</p>
+<p>而在 Linux
+系统下，异步IO模型在2.6版本才引入，目前并不完善。所以，这也是在 Linux
+下，实现高并发网络编程时都是以 IO 复用模型模式为主。</p>
+<p><strong>总结</strong></p>
+<p>只有AIO不会阻塞,其他的都会在第二个阶段阻塞.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/21/Switch%20jdk8%20jdk17/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/21/Switch%20jdk8%20jdk17/" class="post-title-link" itemprop="url">Switch jdk8 jdk17</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-21 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-21T13:42:25+08:00">2021-03-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:23:24" itemprop="dateModified" datetime="2022-07-18T01:23:24+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>For the system Java wrappers to find this JDK, symlink it with</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -sfn /opt/homebrew/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk</span><br></pre></td></tr></table></figure>
+<p>openjdk is keg-only, which means it was not symlinked into
+/opt/homebrew, because macOS provides similar software and installing
+this software in parallel can cause all kinds of trouble.</p>
+<p>If you need to have openjdk first in your PATH, run:
+<code>echo 'export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"' &gt;&gt; ~/.zshrc</code></p>
+<p>For compilers to find openjdk you may need to set:
+<code>export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"</code></p>
+<p>.zshrc
+文件修改以下配置，只要输入jdk8就切换jdk8的环境,输入jdk17就切换17 jdk</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_8_HOME=&quot;/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/&quot;</span><br><span class="line">export JAVA_17_HOME=&quot;/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home&quot;</span><br><span class="line">alias jdk8=&quot;export JAVA_HOME=$JAVA_8_HOME&quot;</span><br><span class="line">alias jdk17=&quot;export JAVA_HOME=$JAVA_17_HOME&quot;</span><br><span class="line">export JAVA_HOME=$JAVA_8_HOME</span><br><span class="line">export PATH=$PATH:$JAVA_HOME</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1030,926 +1897,6 @@ Patterns)一书中，将其作为他的一条设计原则而强调出来。</p>
 <p>[15].
 当SOA这个词在本世纪初刚刚出现时，有人曾说：“我们很多年以来一直是这样做的。”有一派观点说，SOA这种风格，将企业级计算早期COBOL程序通过数据文件来进行通信的方式，视作自己的“根”。在另一个方向上，有人说“Erlang编程模型”与微服务是同一回事，只不过它被应用到一个企业应用的上下文中去了。</p>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/02/Morris%20%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/02/Morris%20%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/" class="post-title-link" itemprop="url">Morris 中序遍历</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-02 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-02T13:42:25+08:00">2021-03-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:32:58" itemprop="dateModified" datetime="2022-07-18T01:32:58+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>二叉树的中序遍历，空间复杂度O(1)的算法</p>
-<p><strong>思路</strong></p>
-<p>关键：用一个节点记住根节点的前驱节点</p>
-<p>如何找到这个根节点的前驱节点呢？</p>
-<ol type="1">
-<li>如果根节点有左子树，那么前驱节点就是左子树的最右的叶子节点</li>
-<li>如果根节点没有左子树，那么就不用管，直接把root.val加入返回数组，然后继续判断右子树</li>
-</ol>
-<p>前驱节点有什么用？</p>
-<p>前驱节点可以用于连接当左子树遍历之后需要继续遍历右子树的情况</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;Integer&gt; <span class="title function_">inorderTraversal</span><span class="params">(TreeNode root)</span> &#123;</span><br><span class="line">        List&lt;Integer&gt; res = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">        <span class="type">TreeNode</span> <span class="variable">predecessor</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(root != <span class="literal">null</span>)&#123; <span class="comment">// root 的值就是需要加入返回数组的值，当root不等于null就说明还需要再遍历</span></span><br><span class="line">            <span class="keyword">if</span>(root.left != <span class="literal">null</span> &amp;&amp; root.left != predecessor)&#123; <span class="comment">// 如果有左子树并且左子树没有被遍历过</span></span><br><span class="line">                predecessor = root.left;</span><br><span class="line">                <span class="keyword">while</span>(predecessor.right != <span class="literal">null</span>)&#123;</span><br><span class="line">                    predecessor = predecessor.right; <span class="comment">// 找到前驱节点</span></span><br><span class="line">                &#125;</span><br><span class="line">                predecessor.right = root; <span class="comment">// 创建连接</span></span><br><span class="line">                root = root.left; <span class="comment">// 因为这里所以要创建连接</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// 如果没有左子树</span></span><br><span class="line">                res.add(root.val); </span><br><span class="line">                root = root.right; <span class="comment">// 遍历右子树</span></span><br><span class="line">                <span class="keyword">if</span>(predecessor != <span class="literal">null</span>) <span class="comment">// 对遍历结束的子树断开连接，保证结构不改变</span></span><br><span class="line">                    predecessor.right = <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>给定一个二叉树的根节点 root ，返回它的 中序遍历。</p>
-<p>示例 1：</p>
-<p>输入：root = [1,null,2,3]</p>
-<p>输出：[1,3,2]</p>
-<figure>
-<img src="https://assets.leetcode.com/uploads/2020/09/15/inorder_1.jpg"
-alt="图一" />
-<figcaption aria-hidden="true">图一</figcaption>
-</figure>
-<p>示例 2：</p>
-<p>输入：root = []</p>
-<p>输出：[]</p>
-<p>示例 3：</p>
-<p>输入：root = [1]</p>
-<p>输出：[1]</p>
-<p>示例 4：</p>
-<figure>
-<img src="https://assets.leetcode.com/uploads/2020/09/15/inorder_5.jpg"
-alt="图二" />
-<figcaption aria-hidden="true">图二</figcaption>
-</figure>
-<p>输入：root = [1,2]</p>
-<p>输出：[2,1]</p>
-<p>示例 5：</p>
-<p>输入：root = [1,null,2]</p>
-<p>输出：[1,2]</p>
-<p>提示：</p>
-<p>树中节点数目在范围 [0, 100] 内 -100 &lt;= Node.val &lt;= 100</p>
-<p>https://leetcode-cn.com/problems/binary-tree-inorder-traversal/</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/02/26/Typora-PicGo-Gitee-%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%BF%AB%E9%80%9F%E4%B8%8A%E4%BC%A0-%E5%9B%BE%E5%BA%8A/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/02/26/Typora-PicGo-Gitee-%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%BF%AB%E9%80%9F%E4%B8%8A%E4%BC%A0-%E5%9B%BE%E5%BA%8A/" class="post-title-link" itemprop="url">Typora+PicGo+Gitee 实现图片快速上传 图床</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-02-26 16:19:51" itemprop="dateCreated datePublished" datetime="2021-02-26T16:19:51+08:00">2021-02-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 00:54:22" itemprop="dateModified" datetime="2022-07-18T00:54:22+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <ol type="1">
-<li><p>下载 <a target="_blank" rel="noopener" href="https://typora.io/#windows">Typora</a></p></li>
-<li><p>下载 <a target="_blank" rel="noopener" href="https://molunerfinn.com/PicGo/">PicGo</a></p></li>
-<li><p>注册 <a target="_blank" rel="noopener" href="https://gitee.com/">Gitee</a></p></li>
-<li><p>创建仓库</p>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210226163520859.png"
-alt="image-20210226163520859" />
-<figcaption aria-hidden="true">image-20210226163520859</figcaption>
-</figure></li>
-<li><p>创建文件夹image</p></li>
-<li><p>创建私人令牌（设置-&gt;私人令牌-&gt;新建私人令牌）</p>
-<figure>
-<img src="/Users/yus/workspace/i/iEssay/image-20210226163730024.png"
-alt="image-20210226163730024" />
-<figcaption aria-hidden="true">image-20210226163730024</figcaption>
-</figure></li>
-<li><p>打开PicGo，插件设置，搜索<code>Gitee</code></p>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210226163822038.png"
-alt="image-20210226163822038" />
-<figcaption aria-hidden="true">image-20210226163822038</figcaption>
-</figure></li>
-<li><p>安装后点击，左边gitee</p>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210226164148955.png"
-alt="image-20210226164148955" />
-<figcaption aria-hidden="true">image-20210226164148955</figcaption>
-</figure></li>
-<li><p>打开Typora图像设置</p>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210226164541246.png"
-alt="image-20210226164541246" />
-<figcaption aria-hidden="true">image-20210226164541246</figcaption>
-</figure></li>
-<li><p>点击验证图片上传选项，验证</p></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/02/10/Spring%20Note/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/02/10/Spring%20Note/" class="post-title-link" itemprop="url">Spring Note</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-02-10 19:47:00" itemprop="dateCreated datePublished" datetime="2021-02-10T19:47:00+08:00">2021-02-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-03 16:28:05" itemprop="dateModified" datetime="2022-08-03T16:28:05+08:00">2022-08-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>最基础的架构</p>
-<p>BeanFactory
-里面是一个map，k对应bean的名字，v对应bean的定义，bean从beanDefinition中获取。</p>
-<h2 id="设计和实现资源加载器从spring.xml解析和注册bean对象">6
-设计和实现资源加载器，从Spring.xml解析和注册Bean对象</h2>
-<blockquote>
-<p>承接需求并能把它做好，这来自于对需求的理解，产品场景开发的经验以及对代码实践落地的把控能力等综合多方面因素的结果。就像你现在做的开发中，你的代码有哪些是经常变化的，有哪些是固定通用的，有哪些是负责逻辑拼装的、有哪些是来做核心实现的。那么现在如果你的核心共用层做了频繁变化的业务层包装，那么肯定的说，你的代码即将越来越乱，甚至可能埋下事故的风险！</p>
-</blockquote>
-<h3 id="设计">6.1 设计</h3>
-<p>为了更好的解耦也方便用户操作，需要添加一个资源解析器，也就是能够读取classpath、本地文件、云文件的配置内容。内容会包括Bean对象的描述和属性信息。</p>
-<p>读取之后，需要对配置文件里的Bean描述信息进行解析后注册到容器里。</p>
-<ul>
-<li>资源加载器属于相对独立的部分，位于Spring框架核心包下的IO实现内容，主要用于处理Class、本地和云环境中的文件信息。</li>
-<li>当资源可以加载后，接下来就是解析和注册Bean到Spring中的操作，这部分的实现需要和<code>DefaultLIstableBeanFactory</code>核心类结合起来，因为所有解析后的注册动作，都会把Bean定义信息放到这个类中。</li>
-<li>所以我们需要定义出Bean定义的读取接口：<code>BeanDefinitionReader</code>以及做好对应的实现类，在实现类中完成对Bean对象的解析和注册。</li>
-</ul>
-<p><img
-src="https://bugstack.cn/assets/images/spring/spring-6-02.png" /></p>
-<blockquote>
-<p>接口管定义，抽象类处理非接口功能外的注册Bean组件填充，最终实现类即可只关心具体的业务实现</p>
-<ul>
-<li>这里需要注意
-getRegistry()、getResourceLoader()，都是用于提供给后面三个方法的工具，加载和注册，这两个方法的实现会包装到抽象类中，以免污染具体的接口实现方法。</li>
-</ul>
-</blockquote>
-<hr />
-<p>2021-02-10 19:47:00</p>
-<h1 id="spring-overview">Spring Overview</h1>
-<h2 id="简介">简介</h2>
-<p>Spring : 春天 ---&gt;给软件行业带来了春天</p>
-<p>2002年，Rod Jahnson首次推出了Spring框架雏形interface21框架。</p>
-<p>2004年3月24日，Spring框架以interface21框架为基础，经过重新设计，发布了1.0正式版。</p>
-<p>很难想象Rod Johnson的学历 ,
-他是悉尼大学的博士，然而他的专业不是计算机，而是音乐学。</p>
-<p>Spring理念 : 使现有技术更加实用 . 本身就是一个大杂烩 ,
-整合现有的框架技术。</p>
-<ul>
-<li>SSH：Struct2+Spring+Hibernate</li>
-<li>SSM：SpringMVC+Spring+Mybatis</li>
-</ul>
-<h2 id="优点">优点</h2>
-<ol type="1">
-<li><p>Spring是一个开源免费的框架 , 容器 .</p></li>
-<li><p>Spring是一个轻量级的框架 , 非侵入式的</p></li>
-<li><p><strong>控制反转 IoC , 面向切面 Aop</strong></p></li>
-<li><p>对事物的支持 , 对框架的支持</p></li>
-</ol>
-<h2 id="组成">组成</h2>
-<figure>
-<img
-src="https://upload-images.jianshu.io/upload_images/788498-358a3764fcbca0e4.png?imageMogr2/auto-orient/strip"
-alt="Spring概述" />
-<figcaption aria-hidden="true">Spring概述</figcaption>
-</figure>
-<p>Spring 框架是一个分层架构，由 7 个定义良好的模块组成。Spring
-模块构建在核心容器之上，核心容器定义了创建、配置和管理 bean 的方式</p>
-<p>组成 Spring
-框架的每个模块（或组件）都可以单独存在，或者与其他一个或多个模块联合实现。每个模块的功能如下：</p>
-<ul>
-<li><strong>核心容器</strong>：核心容器提供 Spring
-框架的基本功能。核心容器的主要组件是
-BeanFactory，它是工厂模式的实现。BeanFactory
-使用<em>控制反转</em>（IOC）
-模式将应用程序的配置和依赖性规范与实际的应用程序代码分开。</li>
-<li><strong>Spring 上下文</strong>：Spring 上下文是一个配置文件，向
-Spring 框架提供上下文信息。Spring 上下文包括企业服务，例如
-JNDI、EJB、电子邮件、国际化、校验和调度功能。</li>
-<li><strong>Spring AOP</strong>：通过配置管理特性，Spring AOP
-模块直接将面向切面的编程功能 , 集成到了 Spring
-框架中。所以，可以很容易地使 Spring 框架管理任何支持 AOP的对象。Spring
-AOP 模块为基于 Spring 的应用程序中的对象提供了事务管理服务。通过使用
-Spring AOP，不用依赖组件，就可以将声明性事务管理集成到应用程序中。</li>
-<li><strong>Spring DAO</strong>：JDBC DAO
-抽象层提供了有意义的异常层次结构，可用该结构来管理异常处理和不同数据库供应商抛出的错误消息。异常层次结构简化了错误处理，并且极大地降低了需要编写的异常代码数量（例如打开和关闭连接）。Spring
-DAO 的面向 JDBC 的异常遵从通用的 DAO 异常层次结构。</li>
-<li><strong>Spring ORM</strong>：Spring 框架插入了若干个 ORM
-框架，从而提供了 ORM 的对象关系工具，其中包括 JDO、Hibernate 和 iBatis
-SQL Map。所有这些都遵从 Spring 的通用事务和 DAO 异常层次结构。</li>
-<li><strong>Spring Web 模块</strong>：Web
-上下文模块建立在应用程序上下文模块之上，为基于 Web
-的应用程序提供了上下文。所以，Spring 框架支持与 Jakarta Struts
-的集成。Web
-模块还简化了处理多部分请求以及将请求参数绑定到域对象的工作。</li>
-<li><strong>Spring MVC 框架</strong>：MVC 框架是一个全功能的构建 Web
-应用程序的 MVC 实现。通过策略接口，MVC 框架变成为高度可配置的，MVC
-容纳了大量视图技术，其中包括 JSP、Velocity、Tiles、iText 和 POI。</li>
-</ul>
-<h2 id="拓展">拓展</h2>
-<p><strong>Spring Boot与Spring Cloud</strong></p>
-<ul>
-<li>Spring Boot 是 Spring 的一套快速配置脚手架，可以基于Spring Boot
-快速开发单个微服务;</li>
-<li>Spring Cloud是基于Spring Boot实现的；</li>
-<li>Spring Boot专注于快速、方便集成的单个微服务个体，Spring
-Cloud关注全局的服务治理框架；</li>
-<li>Spring
-Boot使用了约束优于配置的理念，很多集成方案已经帮你选择好了，能不配置就不配置
-, Spring Cloud很大的一部分是基于Spring Boot来实现，Spring
-Boot可以离开Spring Cloud独立使用开发项目，但是Spring Cloud离不开Spring
-Boot，属于依赖的关系。</li>
-<li>SpringBoot在SpringClound中起到了承上启下的作用，如果你要学习SpringCloud必须要学习SpringBoot。</li>
-</ul>
-<h1 id="ioc理论推导">IOC理论推导</h1>
-<h2 id="环境配置">环境配置</h2>
-<ol type="1">
-<li><p>创建Maven项目，删除src文件夹</p></li>
-<li><p>在父pom.xml下添加依赖</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-webmvc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.3.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li><p>新建一个空白maven子模块myspring-01</p></li>
-</ol>
-<h2 id="ioc本质">IoC本质</h2>
-<p><strong>控制反转IoC（Inversion of
-Control），是一种设计思想，DI（依赖注入）是实现IoC的一种方法。</strong></p>
-<p>也有人说DI只是IoC的另一种说法。没有IoC的程序中，我们使用面向对象编程，对象的创建与对象间的依赖关系完全硬编码在程序中，对象的创建由程序自己控制，控制反转后讲对象的创建转移给第三方，个人认为所谓控制反转就是：获得依赖对象的方式反转了。</p>
-<figure>
-<img
-src="https://mmbiz.qpic.cn/mmbiz_png/uJDAUKrGC7KtDiaOqFy5ourlJ8FTVV2FFuYibmavlBHq9e4cDqiclpYSG8VT4EicVsnqKp65yJKQeNibsVdTiahQibJSg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1"
-alt="IOC" />
-<figcaption aria-hidden="true">IOC</figcaption>
-</figure>
-<p>IoC是Spring框架的核心内容，使用多种方式完美的实现了IoC，可以使用XML配置、也可以使用注解、新版本的Spring也可以零配置实现IoC。</p>
-<p>Spring容器在初始化时先读取配置文件，根据配置文件或元数据创建</p>
-<h1 id="代理模式">代理模式</h1>
-<p>AOP的底层机制就是动态代理</p>
-<p>代理模式：</p>
-<pre><code>1. 静态代理
-2. 动态代理</code></pre>
-<figure>
-<img
-src="https://mmbiz.qpic.cn/mmbiz_png/uJDAUKrGC7LoeicP1O2nfyA6H0XPa9jMLRnfS7LpO0Iic7fEEPFCgRs0ggNXCwf6IKo1tibjPmNSTEYeII5ro7YLQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1"
-alt="proxy" />
-<figcaption aria-hidden="true">proxy</figcaption>
-</figure>
-<h2 id="静态代理">静态代理</h2>
-<p>静态代理角色分析：</p>
-<ul>
-<li>抽象角色：一般使用接口或者抽象类来实现</li>
-<li>真实角色：被代理的角色</li>
-<li>代理角色：代理真实角色；代理真实角色后，一般会左一些附属的操作</li>
-<li>客户：使用代理角色来进行一些操作</li>
-</ul>
-<p><strong>代码实现</strong> E:\20200128-proxy</p>
-<p>Rent . java 即抽象角色</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//抽象角色：租房</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Rent</span> &#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rent</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Host . java 即真实角色</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//真实角色: 房东，房东要出租房子</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Host</span> <span class="keyword">implements</span> <span class="title class_">Rent</span>&#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rent</span><span class="params">()</span> &#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;房屋出租&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Proxy . java 即代理角色</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//代理角色：中介</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Proxy</span> <span class="keyword">implements</span> <span class="title class_">Rent</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> Host host;</span><br><span class="line">   <span class="keyword">public</span> <span class="title function_">Proxy</span><span class="params">()</span> &#123; &#125;</span><br><span class="line">   <span class="keyword">public</span> <span class="title function_">Proxy</span><span class="params">(Host host)</span> &#123;</span><br><span class="line">       <span class="built_in">this</span>.host = host;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">//租房</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rent</span><span class="params">()</span>&#123;</span><br><span class="line">       seeHouse();</span><br><span class="line">       host.rent();</span><br><span class="line">       fare();</span><br><span class="line">  &#125;</span><br><span class="line">   <span class="comment">//看房</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">seeHouse</span><span class="params">()</span>&#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;带房客看房&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">   <span class="comment">//收中介费</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">fare</span><span class="params">()</span>&#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;收中介费&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Client . java 即客户</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//客户类，一般客户都会去找代理！</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">       <span class="comment">//房东要租房</span></span><br><span class="line">       <span class="type">Host</span> <span class="variable">host</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Host</span>();</span><br><span class="line">       <span class="comment">//中介帮助房东</span></span><br><span class="line">       <span class="type">Proxy</span> <span class="variable">proxy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(host);</span><br><span class="line"></span><br><span class="line">       <span class="comment">//你去找中介！</span></span><br><span class="line">       proxy.rent();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>分析：在这个过程中，你直接接触的就是中介，就如同现实生活中的样子，你看不到房东，但是你依旧租到了房东的房子通过代理，这就是所谓的代理模式，程序源自于生活，所以学编程的人，一般能够更加抽象的看待生活中发生的事情。</p>
-<h3 id="优点-1">优点</h3>
-<ul>
-<li>可以使真实角色更加纯粹，不再去关注一些公共的事情</li>
-<li>公共的业务由代理来完成，实现了业务的分工</li>
-<li>公共业务发生扩展时变得更加集中和方便</li>
-</ul>
-<h3 id="缺点">缺点</h3>
-<ul>
-<li>类多了，代理类也会变多，工作量变大，效率变低</li>
-</ul>
-<p>如果要克服静态代理的缺点，诞生了动态代理</p>
-<h3 id="深入理解">深入理解</h3>
-<p>E:\20200128-proxy</p>
-<p>练习步骤：</p>
-<p>1、创建一个抽象角色，比如咋们平时做的用户业务，抽象起来就是增删改查！</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//抽象角色：增删改查业务</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">   <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span>;</span><br><span class="line">   <span class="keyword">void</span> <span class="title function_">delete</span><span class="params">()</span>;</span><br><span class="line">   <span class="keyword">void</span> <span class="title function_">update</span><span class="params">()</span>;</span><br><span class="line">   <span class="keyword">void</span> <span class="title function_">query</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>2、我们需要一个真实对象来完成这些增删改查操作</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//真实对象，完成增删改查操作的人</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span> &#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;增加了一个用户&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">delete</span><span class="params">()</span> &#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;删除了一个用户&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">update</span><span class="params">()</span> &#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;更新了一个用户&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">query</span><span class="params">()</span> &#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;查询了一个用户&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>3、需求来了，现在我们需要增加一个日志功能，怎么实现！</p>
-<ul>
-<li>思路1 ：在实现类上增加代码 【麻烦！】</li>
-<li>思路2：使用代理来做，能够不改变原来的业务情况下，实现此功能就是最好的了！</li>
-</ul>
-<p>4、设置一个代理类来处理日志！代理角色</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//代理角色，在这里面增加日志的实现</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceProxy</span> <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">   <span class="keyword">private</span> UserServiceImpl userService;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUserService</span><span class="params">(UserServiceImpl userService)</span> &#123;</span><br><span class="line">       <span class="built_in">this</span>.userService = userService;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span> &#123;</span><br><span class="line">       log(<span class="string">&quot;add&quot;</span>);</span><br><span class="line">       userService.add();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">delete</span><span class="params">()</span> &#123;</span><br><span class="line">       log(<span class="string">&quot;delete&quot;</span>);</span><br><span class="line">       userService.delete();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">update</span><span class="params">()</span> &#123;</span><br><span class="line">       log(<span class="string">&quot;update&quot;</span>);</span><br><span class="line">       userService.update();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">query</span><span class="params">()</span> &#123;</span><br><span class="line">       log(<span class="string">&quot;query&quot;</span>);</span><br><span class="line">       userService.query();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">log</span><span class="params">(String msg)</span>&#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;执行了&quot;</span>+msg+<span class="string">&quot;方法&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>5、测试访问类：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">       <span class="comment">//真实业务</span></span><br><span class="line">       <span class="type">UserServiceImpl</span> <span class="variable">userService</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UserServiceImpl</span>();</span><br><span class="line">       <span class="comment">//代理类</span></span><br><span class="line">       <span class="type">UserServiceProxy</span> <span class="variable">proxy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UserServiceProxy</span>();</span><br><span class="line">       <span class="comment">//使用代理类实现日志功能！</span></span><br><span class="line">       proxy.setUserService(userService);</span><br><span class="line"></span><br><span class="line">       proxy.add();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>OK，到了现在代理模式大家应该都没有什么问题了，重点大家需要理解其中的思想；</p>
-<p>我们在不改变原来的代码的情况下，实现了对原有功能的增强，这是AOP中最核心的思想</p>
-<p>聊聊AOP：纵向开发，横向开发</p>
-<figure>
-<img
-src="https://mmbiz.qpic.cn/mmbiz_png/uJDAUKrGC7LoeicP1O2nfyA6H0XPa9jMLJqcgicA5aEKtxYibgLPicNfDwicKIn9NlFl86rriaVRicKnEXlPNiacbHiaLibw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1"
-alt="AOP" />
-<figcaption aria-hidden="true">AOP</figcaption>
-</figure>
-<h2 id="动态代理">动态代理</h2>
-<ul>
-<li>动态代理的角色与静态代理一致</li>
-<li>动态代理的代理类是动态生成的，静态代理的类是我们提前写好的</li>
-<li>动态代理分为两类：
-<ul>
-<li>基于接口的动态代理
-<ul>
-<li>JDK动态代理</li>
-</ul></li>
-<li>基于类的动态代理
-<ul>
-<li>cglib</li>
-</ul></li>
-<li>基于字节码的动态代理
-<ul>
-<li>javasist</li>
-</ul></li>
-</ul></li>
-</ul>
-<p>动态代理需要了解两个类</p>
-<ul>
-<li>InvocationHandler</li>
-<li>Proxy</li>
-</ul>
-<h3 id="invocationhandler">InvocationHandler</h3>
-<p>Module java.base 软件包 java.lang.reflect</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Interface  InvocationHandler</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">InvocationHandler</span></span><br></pre></td></tr></table></figure>
-<p><code>InvocationHandler</code>是由代理实例的<em>调用处理程序</em>实现的接口。每个代理实例都有一个关联的调用处理程序。
-当在代理实例上调用方法时，方法调用将被编码并分派到其调用处理程序的<code>invoke</code>方法。</p>
-<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Object <span class="title function_">invoke</span><span class="params">(Object proxy,</span></span><br><span class="line"><span class="params">			Method method,</span></span><br><span class="line"><span class="params">			Object[] args)</span><span class="keyword">throws</span> Throwable</span><br></pre></td></tr></table></figure> 处理代理实例上的方法调用并返回结果。
-当在与之关联的代理实例上调用方法时，将在调用处理程序中调用此方法。</p>
-<ul>
-<li><code>proxy</code> - 调用该方法的代理实例</li>
-<li><code>method</code> -
-对应于在代理实例上调用的接口方法的<code>方法</code>实例。
-<code>方法</code>对象的声明类将是方法声明的接口，它可以是代理类继承方法的代理接口的超级接口。</li>
-<li><code>args</code> -
-包含代理实例上方法调用中传递的参数值的对象数组，如果接口方法不带参数，
-<code>null</code> 。
-原始类型的参数包含在适当的原始包装器类的实例中，例如<code>java.lang.Integer</code>或<code>java.lang.Boolean</code>
-。</li>
-</ul>
-<h3 id="proxy">Proxy</h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Proxy</span> </span><br><span class="line">    <span class="keyword">extends</span> <span class="title class_">Object</span> </span><br><span class="line">    <span class="keyword">implements</span> <span class="title class_">Serializable</span></span><br></pre></td></tr></table></figure>
-<p><code>Proxy</code>
-提供了静态方法来创建类似于接口实列的对象，但允许自定义的方法调用。</p>
-<p>代理类是在允许时创建的实现指定的接口列表的类。</p>
-<p>代理实例是代理类的一个实例。每个代理实例都有一个关联的调用处理程序对象，它实现接口<code>InvocationHandler</code>。</p>
-<p>通过其代理接口之一的代理实例上的方法调用将被分派到实例调用处理程序的<a
-href="../../../java/lang/reflect/InvocationHandler.html#invoke-java.lang.Object-java.lang.reflect.Method-java.lang.Object:A-"><code>invoke</code></a>方法，传递代理实例，标识调用方法的<code>java.lang.reflect.Method</code>对象以及包含参数的类型为<code>Object</code>的数组。
-调用处理程序适当地处理编码方法调用，并且返回的结果将作为方法在代理实例上调用的结果返回。</p>
-<p>在运行期动态创建一个<code>interface</code>实例的方法如下：</p>
-<ol type="1">
-<li><p>定义一个<code>InvocationHandler</code>实例，它负责实现接口的方法调用；</p></li>
-<li><p>通过<code>Proxy.newProxyInstance()</code></p>
-<p>创建<code>interface</code></p>
-<p>实例，它需要3个参数：</p>
-<ol type="1">
-<li>使用的<code>ClassLoader</code>，通常就是接口类的<code>ClassLoader</code>；</li>
-<li>需要实现的接口数组，至少需要传入一个接口进去；</li>
-<li>用来处理接口方法调用的<code>InvocationHandler</code>实例。</li>
-</ol></li>
-<li><p>将返回的<code>Object</code>强制转型为接口。</p></li>
-</ol>
-<p>动态代理实际上是JVM在运行期动态创建class字节码并加载的过程</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//生成代理类</span></span><br><span class="line"><span class="keyword">public</span> Object <span class="title function_">getProxy</span><span class="params">()</span>&#123;</span><br><span class="line">   <span class="keyword">return</span> Proxy.newProxyInstance(<span class="built_in">this</span>.getClass().getClassLoader(),</span><br><span class="line">                                 rent.getClass().getInterfaces(),<span class="built_in">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>代码实现</strong></p>
-<p>抽象角色和真实角色和之前的一样！</p>
-<p>Rent . java 即抽象角色</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//抽象角色：租房</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Rent</span> &#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rent</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Host . java 即真实角色</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//真实角色: 房东，房东要出租房子</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Host</span> <span class="keyword">implements</span> <span class="title class_">Rent</span>&#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rent</span><span class="params">()</span> &#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;房屋出租&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>ProxyInvocationHandler. java 即代理角色</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProxyInvocationHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">   <span class="keyword">private</span> Rent rent;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setRent</span><span class="params">(Rent rent)</span> &#123;</span><br><span class="line">       <span class="built_in">this</span>.rent = rent;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">//生成代理类，重点是第二个参数，获取要代理的抽象角色！之前都是一个角色，现在可以代理一类角色</span></span><br><span class="line">   <span class="keyword">public</span> Object <span class="title function_">getProxy</span><span class="params">()</span>&#123;</span><br><span class="line">       <span class="keyword">return</span> Proxy.newProxyInstance(<span class="built_in">this</span>.getClass().getClassLoader(),</span><br><span class="line">               rent.getClass().getInterfaces(),<span class="built_in">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// proxy : 代理类 method : 代理类的调用处理程序的方法对象.</span></span><br><span class="line">   <span class="comment">// 处理代理实例上的方法调用并返回结果</span></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">       seeHouse();</span><br><span class="line">       <span class="comment">//核心：本质利用反射实现！</span></span><br><span class="line">       <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(rent, args);</span><br><span class="line">       fare();</span><br><span class="line">       <span class="keyword">return</span> result;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">//看房</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">seeHouse</span><span class="params">()</span>&#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;带房客看房&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">   <span class="comment">//收中介费</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">fare</span><span class="params">()</span>&#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;收中介费&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Client . java</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//租客</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">       <span class="comment">//真实角色</span></span><br><span class="line">       <span class="type">Host</span> <span class="variable">host</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Host</span>();</span><br><span class="line">       <span class="comment">//代理实例的调用处理程序</span></span><br><span class="line">       <span class="type">ProxyInvocationHandler</span> <span class="variable">pih</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ProxyInvocationHandler</span>();</span><br><span class="line">       pih.setRent(host); <span class="comment">//将真实角色放置进去！</span></span><br><span class="line">       <span class="type">Rent</span> <span class="variable">proxy</span> <span class="operator">=</span> (Rent)pih.getProxy(); <span class="comment">//动态生成对应的代理类！</span></span><br><span class="line">       proxy.rent();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>核心：<strong>一个动态代理 , 一般代理某一类业务 ,
-一个动态代理可以代理多个类，代理的是接口！、</strong></p>
-<h3 id="优点-2">优点</h3>
-<p>静态代理有的它有，没有的它也有。</p>
-<ul>
-<li>可以使得我们的真实角色更加纯粹 . 不再去关注一些公共的事情 .</li>
-<li>公共的业务由代理来完成 . 实现了业务的分工 ,</li>
-<li>公共业务发生扩展时变得更加集中和方便 .</li>
-<li>一个动态代理 , 一般代理某一类业务</li>
-<li>一个动态代理可以代理多个类，代理的是接口！</li>
-</ul>
-<h1 id="aop">AOP</h1>
-<p>Aspect Oriented
-Programming：面向切面编程，通过预编译方式和云更新期间动态代理实现程序功能的统一维护的一种技术。</p>
-<p>AOP是OOP的延续，是软件开发的一个热点，也是Spring框架的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各个部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。</p>
-<figure>
-<img
-src="https://mmbiz.qpic.cn/mmbiz_png/uJDAUKrGC7JAeTYOaaH6rZ6WmLLgwQLHf5pmH30gj6mZm81PC7iauicFu55sicJtspU7K3vTCVdZCDTSHq7D5XHlw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1"
-alt="AOP" />
-<figcaption aria-hidden="true">AOP</figcaption>
-</figure>
-<h2 id="aop-在声明式事务中的作用">AOP 在声明式事务中的作用</h2>
-<ul>
-<li>横切关注点：跨越应用程序多个模块的方法或功能。即，与我们业务逻辑无关的，但是需要我们关注的部分，如：日志、安全、缓存、事务......</li>
-<li>切面aspect：横切关注点被模块化的特殊对象。即，它是一个类。如：<strong>日志类</strong></li>
-<li>目标target：被通知的对象。<strong>业务逻辑类</strong></li>
-<li>代理proxy：向目标对象应用通知之后创建的对象。<strong>代理类</strong></li>
-<li>连接点joint
-point：与切入点匹配的执行点。<strong>类里面哪些方法可以被增强，这些方法称为连接点</strong></li>
-<li>切入点point
-cut：切面通知执行的地点的定义。<strong>实际被真正增强的方法，成为切入点</strong></li>
-<li>通知advice：切面必须完成的工作，即，它是类中的一个方法。<strong>实际增强的逻辑部分称为通知（增强）</strong></li>
-</ul>
-<p>SpringAOP中，通过advice定义横切逻辑，Spring中支持5种类型的advice：</p>
-<table>
-<colgroup>
-<col style="width: 15%" />
-<col style="width: 25%" />
-<col style="width: 59%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>通知类型</th>
-<th>连接点</th>
-<th>实现接口</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>前置通知</td>
-<td>方法前</td>
-<td>org.springframework.aop.MethodBeforeAdvice</td>
-</tr>
-<tr class="even">
-<td>后置通知</td>
-<td>方法后</td>
-<td>org.springframework.aop.AfterReturningAdvice</td>
-</tr>
-<tr class="odd">
-<td>环绕通知</td>
-<td>方法前后</td>
-<td>org.aopalliance.intercept.MethodInterceptor</td>
-</tr>
-<tr class="even">
-<td>异常抛出通知</td>
-<td>方法抛出异常</td>
-<td>org.springframework.aop.ThrowsAdvice</td>
-</tr>
-<tr class="odd">
-<td>引介通知</td>
-<td>类中增加新的方法属性</td>
-<td>org.springframework.aop.IntroductionInterceptor</td>
-</tr>
-</tbody>
-</table>
-<p>即AOP在不改变原有代码的清空下，去增加新的功能。</p>
-<h2 id="使用spring实现aop">使用Spring实现AOP</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;org.aspectj&lt;/groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;aspectjweaver&lt;/artifactId&gt;</span><br><span class="line">   &lt;version&gt;1.9.4&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/01/23/%E7%90%86%E8%A7%A3%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/01/23/%E7%90%86%E8%A7%A3%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">理解单例模式</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-01-23 16:26:07" itemprop="dateCreated datePublished" datetime="2021-01-23T16:26:07+08:00">2021-01-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2021-03-28 13:48:09" itemprop="dateModified" datetime="2021-03-28T13:48:09+08:00">2021-03-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>Talk is cheap, show me your code.</p>
-<p>---Linus</p>
-</blockquote>
-<h2 id="version-1">Version 1</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Singleton</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Singleton</span> <span class="variable">singleton</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton</span><span class="params">()</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(singleton==<span class="literal">null</span>)&#123;<span class="comment">//第五行</span></span><br><span class="line">            singleton = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol type="1">
-<li>声明一个单例对象指向null</li>
-<li>创建一个私有构造函数,也就是说这个类不能被new了,new操作就是在用构造方法创建对象</li>
-<li>getInstance是获取单例对象的方法</li>
-<li>创建一个类型为Singleton的静态成员,初始值为null</li>
-</ol>
-<p>只能通过getInstance来获取该对象,如果singleton是null,就创建一个对象,如果不为null就返回之前创建的对象.</p>
-<blockquote>
-<p>注:</p>
-<p>初始singleton=null,属于单例模式的懒汉模式,需要该对象的时候,才会被创建</p>
-<p>初始singleton=new Singleton(),属于饿汉模式,一开始就被主动创建</p>
-</blockquote>
-<p>缺点:</p>
-<ul>
-<li>线程不安全</li>
-</ul>
-<p>为什么:</p>
-<p>当有两个线程,A先进入到第五行,然后线程切换,B也进入到第五行,后面随便按什么顺序,第六行都会被执行两次,单例模式也就失效了.</p>
-<h2 id="version-2">Version 2</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Singleton</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Singleton</span> <span class="variable">singleton</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton</span><span class="params">()</span>&#123;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(singleton==<span class="literal">null</span>)&#123;<span class="comment">//第五行</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(singleton==<span class="literal">null</span>)</span><br><span class="line">                    singleton = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>给new操作加上同步锁</p>
-<p>为什么要做两次判空操作:</p>
-<p>A、B都进入到了第五行,A先拿到锁,如果不在临界区再次判空,B拿到锁之后还是会执行new操作.</p>
-<p>缺点:</p>
-<ul>
-<li>线程不安全</li>
-</ul>
-<p>为什么:</p>
-<p>看似已经可以了,但是没有考虑到编译器的指令重排序,这些代码都不是一条指令可以执行完的</p>
-<p>比如一个简单的new操作</p>
-<figure>
-<img
-src="https://gitee.com/yuswork/my-images/raw/master/img/image-20210323165458233.png"
-alt="image-20210323165458233" />
-<figcaption aria-hidden="true">image-20210323165458233</figcaption>
-</figure>
-<p>简单来说:</p>
-<ul>
-<li>类加载检查</li>
-<li>分配内存</li>
-<li>初始化零值</li>
-<li>调用对象init方法</li>
-<li>将引用指向对象</li>
-</ul>
-<p>如果线程A拿到锁,正在进行new操作,恰好指令重排序把将引用指向对象先执行了,而还没有调用对象的init方法.</p>
-<p>说时迟,那时快,突然线程B抢占了CPU,开始执行getInstance()方法,结构发现instance已经不为null了,那就返回呗,但是收到却是一个没有初始化完成的对象.</p>
-<h2 id="version-3">Version 3</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Singleton</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> <span class="type">Singleton</span> <span class="variable">singleton</span> <span class="operator">=</span> <span class="literal">null</span>;<span class="comment">//加上volatile关键字</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton</span><span class="params">()</span>&#123;&#125;</span><br><span class="line">    <span class="keyword">public</span>  <span class="keyword">static</span> Singleton <span class="title function_">getInstance</span><span class="params">()</span>&#123; </span><br><span class="line">        <span class="keyword">if</span>(singleton==<span class="literal">null</span>)&#123;<span class="comment">//第五行</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(singleton==<span class="literal">null</span>)</span><br><span class="line">                    singleton = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>给单例对象singleton加上volatile关键字</p>
-<p>volatile的作用:</p>
-<ul>
-<li>保证变量的内存可见性</li>
-<li>禁止volatile变量与普通变量重排序</li>
-</ul>
-<p>参考资料:</p>
-<ol type="1">
-<li><a
-target="_blank" rel="noopener" href="https://redspider.gitbook.io/concurrent/di-er-pian-yuan-li-pian/8">深入浅出Java多线程-第二篇volatile</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34213112">JVM创建对象源码分析</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33102022">漫画:单例模式</a></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/01/05/workbench%E5%9C%A8win10%E4%B8%8B%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/01/05/workbench%E5%9C%A8win10%E4%B8%8B%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">workbench在win10下无法启动问题</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-01-05 01:32:17" itemprop="dateCreated datePublished" datetime="2021-01-05T01:32:17+08:00">2021-01-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2021-03-28 13:49:50" itemprop="dateModified" datetime="2021-03-28T13:49:50+08:00">2021-03-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>好久没编程果然出现了很多问题，下面是一些记录。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/01/05/workbench%E5%9C%A8win10%E4%B8%8B%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E9%97%AE%E9%A2%98/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 

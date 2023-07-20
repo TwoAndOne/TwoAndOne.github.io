@@ -129,16 +129,16 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -172,6 +172,713 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/06/15/Annotation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/06/15/Annotation/" class="post-title-link" itemprop="url">小🌧️学Annotation</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-06-15 11:46:10" itemprop="dateCreated datePublished" datetime="2022-06-15T11:46:10+08:00">2022-06-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-08-09 17:19:36" itemprop="dateModified" datetime="2022-08-09T17:19:36+08:00">2022-08-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>注解的本质就是一个继承了Annotation接口的接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.SOURCE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Override &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Override</span> <span class="keyword">extends</span> <span class="title class_">Annotation</span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>元注解</p>
+<p>注解注解的注解（中国语言博大精深，充分利用词语的词性）</p>
+<p><span class="citation"
+data-cites="Target">@Target</span>：指明作用目标</p>
+<table>
+<thead>
+<tr class="header">
+<th>ElementType</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ElementType.TYPE：允许被修饰的注解作用在类、接口和枚举上</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>ElementType.FIELD：允许作用在属性字段上</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>ElementType.METHOD：允许作用在方法上</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>ElementType.PARAMETER：允许作用在方法参数上</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>ElementType.CONSTRUCTOR：允许作用在构造器上</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>ElementType.LOCAL_VARIABLE：允许作用在本地局部变量上</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>ElementType.ANNOTATION_TYPE：允许作用在注解上</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>ElementType.PACKAGE：允许作用在包上</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><span class="citation"
+data-cites="Retention">@Retention</span>：指明当前注解的生命周期</p>
+<ul>
+<li>RetentionPolicy.SOURCE：当前注解编译期可见，不会写入 class 文件</li>
+<li>RetentionPolicy.CLASS：类加载阶段丢弃，会写入 class 文件</li>
+<li>RetentionPolicy.RUNTIME：永久保存，可以反射获取</li>
+</ul>
+<p><span class="citation" data-cites="Documented">@Documented</span>
+注解修饰的注解，当我们执行 JavaDoc 文档打包时会被保存进 doc
+文档，反之将在打包时丢弃。</p>
+<p><span class="citation" data-cites="Inherited">@Inherited</span>
+注解修饰的注解是具有可继承性的，也就说我们的注解修饰了一个类，而该类的子类将自动继承父类的该注解。</p>
+<p>2022年7月12日 10:31:48</p>
+<p>最近做一个需求用到了@Component注解，具体的情况如下所示：</p>
+<p>我需要继承一个已经注解了@Componet的类。</p>
+<p>这时候就产生了一个疑问，我这个new Class会继承Component注解吗？</p>
+<p>唉，这就是基础不扎实导致呀，本来学了元注解，但是一点印象都没有。</p>
+<p><span class="citation"
+data-cites="Inherited注解修饰的注解是具有可继承性的">@Inherited注解修饰的注解是具有可继承性的</span>，可惜Component没有被Inherited修饰。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/03/28/maven/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/28/maven/" class="post-title-link" itemprop="url">小🌧️学maven</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-28 11:46:10" itemprop="dateCreated datePublished" datetime="2022-03-28T11:46:10+08:00">2022-03-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-08-09 17:13:49" itemprop="dateModified" datetime="2022-08-09T17:13:49+08:00">2022-08-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="conception">Conception</h2>
+<h3 id="仓库">1.1 仓库</h3>
+<p>存储资源，各种jar包</p>
+<ul>
+<li>本地仓库：/Users/yus/.m2/repository</li>
+<li>远程仓库:
+<ul>
+<li>中央仓库，maven团队维护</li>
+<li>私服：公司存储的，具有版权</li>
+</ul></li>
+</ul>
+<h3 id="坐标">1.2 坐标</h3>
+<p>描述仓库中资源的位置</p>
+<p>https://repo1.maven.org/maven2</p>
+<ul>
+<li>groupId: maven项目隶属组织名称（org.mybatis)</li>
+<li>artifactId: maven项目的名称</li>
+<li>version： 版本号</li>
+<li>packaging： 打包方式</li>
+</ul>
+<p>这个地址指定了中央仓库的地址</p>
+<p>/usr/local/apache-maven-3.8.4/lib/maven-model-builder-3.8.4/org/apache/maven/model/pom-4.0.0.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">id</span>&gt;</span>central<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>Central Repository<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://repo.maven.apache.org/maven2<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">layout</span>&gt;</span>default<span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>false<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>因为这个地址的国外的地址，所以我们可以在用户设置里更改central的访问路径，通过镜像来实现</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 此镜像的唯一标识符，用来区分不同的mirror元素 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span></span><br><span class="line">      nexus-aliyun</span><br><span class="line">    <span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 镜像的对象 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">      central</span><br><span class="line">    <span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Nexus aliyun<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="section"></h2>
+<h2 id="command">Command</h2>
+<p><code>mvn compile</code> 生成targe文件夹，class文件</p>
+<p><code>mvn clean</code> 删除target文件夹</p>
+<p><code>mvn package</code> 打包 ：compile ⇨ testCompile test ⇨
+package</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/03/10/%E4%B8%80%E9%94%AE%E7%99%BB%E5%BD%95%E8%B7%B3%E6%9D%BF%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/10/%E4%B8%80%E9%94%AE%E7%99%BB%E5%BD%95%E8%B7%B3%E6%9D%BF%E6%9C%BA/" class="post-title-link" itemprop="url">登录跳板机脚本</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-10 13:42:25" itemprop="dateCreated datePublished" datetime="2022-03-10T13:42:25+08:00">2022-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-08-26 22:28:47" itemprop="dateModified" datetime="2022-08-26T22:28:47+08:00">2022-08-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="第一步">第一步</h1>
+<p>在某个目录（我是在～/exp）下创建一个文件：login-it_zhenaioa_com.exp
+vim login-it_zhenaioa_com.exp 文件内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/usr/bin/expect</span></span><br><span class="line">set ip it.zhenaioa.com</span><br><span class="line">set user user-name</span><br><span class="line">set password your-password</span><br><span class="line">set port 22</span><br><span class="line"></span><br><span class="line">spawn ssh  $user@$ip -p$port</span><br><span class="line"></span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*assword:*&quot; &#123; send &quot;$password\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><code>[#!/usr/bin/expect］</code>
+这一行告诉操作系统脚本里的代码使用那一个shell来执行。这里的expect其实和linux下的bash、windows下的cmd是一类东西。
+注意：这一行需要在脚本的第一行。</li>
+<li><code>［set timeout 30］</code>
+基本上认识英文的都知道这是设置超时时间的，现在你只要记住他的计时单位是：秒</li>
+<li><code>［spawn ssh -l username 192.168.1.1］</code>
+spawn是进入expect环境后才可以执行的expect内部命令，如果没有装expect或者直接在默认的SHELL下执行是找不到spawn命令的。所以不要用
+“which
+spawn“之类的命令去找spawn命令。好比windows里的dir就是一个内部命令，这个命令由shell自带，你无法找到一个dir.com
+或 dir.exe 的可执行文件。
+它主要的功能是给ssh运行进程加个壳，用来传递交互指令。</li>
+<li><code>［expect "password:"］</code>
+这里的expect也是expect的一个内部命令，有点晕吧，expect的shell命令和内部命令是一样的，但不是一个功能，习惯就好了。这个命令的意思是判断上次输出结果里是否包含“password:”的字符串，如果有则立即返回，否则就等待一段时间后返回，这里等待时长就是前面设置的30秒</li>
+<li><code>［send "ispass\r"］</code>
+这里就是执行交互动作，与手工输入密码的动作等效。 温馨提示：
+命令字符串结尾别忘记加上 “，如果出现异常等待的状态可以核查一下。</li>
+<li><code>［interact］</code>
+执行完成后保持交互状态，把控制权交给控制台，这个时候就可以手工操作了。如果没有这一句登录完成后会退出，而不是留在远程终端上。如果你只是登录过去执行一段命令就退出，可改为［expect
+eof］</li>
+</ol>
+<h1 id="第二步">第二步</h1>
+<p>进入～/.zshrc文件，添加快捷alias</p>
+<p>vim .zshrc别名为zago</p>
+<p>expect后面的是刚才所创建文件的地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias zago=&quot;expect exp/login-it_zhenaioa_com.exp&quot;</span><br></pre></td></tr></table></figure>
+<p>修改了.zshrc文件后，执行 source .zshrc 命令刷新一下</p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/uPic/8XNGrB.png"
+alt="8XNGrB" />
+<figcaption aria-hidden="true">8XNGrB</figcaption>
+</figure>
+<h1 id="第三步">第三步</h1>
+<p>执行你所命名的别名 go，然后就可以一键登录啦！</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/02/24/Muti%20Thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/02/24/Muti%20Thread/" class="post-title-link" itemprop="url">Muti Thread</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-02-24 13:42:25" itemprop="dateCreated datePublished" datetime="2022-02-24T13:42:25+08:00">2022-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 01:08:31" itemprop="dateModified" datetime="2022-07-18T01:08:31+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <figure>
+<img
+src="https://static001.geekbang.org/resource/image/11/65/11e0c64618c04edba52619f41aaa3565.png"
+alt="全景图" />
+<figcaption aria-hidden="true">全景图</figcaption>
+</figure>
+<h2 id="开篇陈词">1 开篇陈词</h2>
+<p>一切为了提高性能！</p>
+<p>为了不浪费等待IO的CPU资源，所以我们把任务拆分交替执行<strong>分时操作系统</strong>，这就是并发。</p>
+<p>随着技术的发展，出现了多核CPU，我们就可以实现并行计算。</p>
+<p>为了充分利用多核CPU，进一步提升效率，我们需要对任务进行组织编排，进行分工。对线程进行分工了之后，这就导致一个问题，有一些任务是有依赖关系的，要想实现这些依赖关系，就得让线程之间进行通信，也就是<strong>同步</strong>。</p>
+<p>当然为了并发和通信，也引入了新的问题，那就是多线程并发操作临界资源的问题。</p>
+<p>对于临界资源，我们的解决方案是锁、信号量等，这就是<strong>互斥</strong>。</p>
+<p>一切为了提高性能！</p>
+<p>那么问题有哪些呢？</p>
+<ul>
+<li>缓存——可见性问题</li>
+<li>线程切换——原子性问题</li>
+<li>编译优化——有序性问题</li>
+</ul>
+<p>那么Java是如何解决这些问题的呢？</p>
+<p>如果说缓存和编译优化会带来可见性和有序性的问题，是不是直接禁用缓存和编译优化就行了。但是如果直接禁用，程序的性能就堪忧了，所以我们需要按需禁用。</p>
+<p>Java内存模型规范了JVM如何提供按需禁用缓存和编译优化的方法：</p>
+<ul>
+<li>volatile</li>
+<li>synchronize</li>
+<li>final</li>
+<li>六个Happens-Before规则</li>
+</ul>
+<h2 id="死锁">2 死锁</h2>
+<p><span class="citation"
+data-cites="test.MutiThread0">@test.MutiThread0</span></p>
+<blockquote>
+<p>加锁本质就是在锁对象的对象头中写入当前线程id</p>
+<p>解决原子性问题，是要保证中间状态对外不见</p>
+<p>用细粒度锁来锁定多个资源时，要注意死锁的问题</p>
+</blockquote>
+<p>死锁的四个条件</p>
+<ul>
+<li><p>互斥</p></li>
+<li><p>占有且等待</p></li>
+<li><p>不可抢占</p></li>
+<li><p>循环等待</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Account</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="type">int</span> id;</span><br><span class="line">  <span class="keyword">private</span> <span class="type">int</span> balance;</span><br><span class="line">  <span class="comment">// 转账</span></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">transfer</span><span class="params">(Account target, <span class="type">int</span> amt)</span>&#123;</span><br><span class="line">    <span class="type">Account</span> <span class="variable">left</span> <span class="operator">=</span> <span class="built_in">this</span>        ①</span><br><span class="line">    <span class="type">Account</span> <span class="variable">right</span> <span class="operator">=</span> target;    ②</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.id &gt; target.id) &#123; ③</span><br><span class="line">      left = target;           ④</span><br><span class="line">      right = <span class="built_in">this</span>;            ⑤</span><br><span class="line">    &#125;                          ⑥</span><br><span class="line">    <span class="comment">// 锁定序号小的账户</span></span><br><span class="line">    <span class="keyword">synchronized</span>(left)&#123;</span><br><span class="line">      <span class="comment">// 锁定序号大的账户</span></span><br><span class="line">      <span class="keyword">synchronized</span>(right)&#123; </span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.balance &gt; amt)&#123;</span><br><span class="line">          <span class="built_in">this</span>.balance -= amt;</span><br><span class="line">          target.balance += amt;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>wait与sleep区别在于：</p>
+<ol type="1">
+<li>wait会释放所有锁而sleep不会释放锁资源.</li>
+<li>wait只能在同步方法和同步块中使用，而sleep任何地方都可以.</li>
+<li>wait无需捕捉异常，而sleep需要.</li>
+</ol>
+<p>两者相同点：都会让渡CPU执行时间，等待再次调度！</p>
+</blockquote>
+<h2 id="开篇小结">3开篇小结</h2>
+<p>安全问题</p>
+<p>数据竞争： 多个线程同时访问一个数据，并且至少有一个线程会写这个数据。
+竞态条件： 程序的执行结果依赖程序执行的顺序。
+也可以按照以下的方式理解竞态条件：
+程序的执行依赖于某个状态变量，在判断满足条件的时候执行，但是在执行时其他变量同时修改了状态变量。
+if (状态变量 满足 执行条件) { 执行操作 }</p>
+<p>活跃问题</p>
+<ul>
+<li>死锁：破坏死锁产生的条件</li>
+<li>活锁:等待一个随机时间</li>
+<li>饥饿：公平锁</li>
+</ul>
+<p>性能问题</p>
+<ul>
+<li>使用无锁的算法和数据结构
+<ul>
+<li>线程本地存储、写入时复制、乐观锁、Java并发包原子类、Disruptor</li>
+</ul></li>
+<li>减少锁持有的时间
+<ul>
+<li>细粒度的锁：concurrentHashMap</li>
+<li>读写锁</li>
+</ul></li>
+</ul>
+<h2 id="管程">4 管程</h2>
+<p>管程和信号量等价，指管理共享变量以及对共享变量的操作过程，让他们支持并发。</p>
+<p>MESA模型 <span class="citation"
+data-cites="BlockedQueue.java">@BlockedQueue.java</span></p>
+<figure>
+<img
+src="https://static001.geekbang.org/resource/image/57/fa/57e4d94e90226b70be3d57024f5333fa.png"
+alt="MESA" />
+<figcaption aria-hidden="true">MESA</figcaption>
+</figure>
+<h2 id="生命周期">5 生命周期</h2>
+<p>使用jstack获取JVM线程栈信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">top # 获取程序pid</span><br><span class="line">jstack pid</span><br></pre></td></tr></table></figure>
+<h2 id="使用方式">6 使用方式</h2>
+<p>衡量性能的指标：</p>
+<ul>
+<li>延迟</li>
+<li>吞吐量</li>
+</ul>
+<p>我们要减低延迟、提高吞吐量</p>
+<p>CPU密集：CPU核数+1</p>
+<p>IO密集：CPU核数*[1+(I/O耗时 / CPU耗时)]</p>
+<h2 id="juc">7 JUC</h2>
+<p>java
+并发包通过Lock和Condition两个接口来实现管程，其中Lock解决互斥问题，Condition解决同步问题。</p>
+<p>已经有了synchronized，为什么还要设计一个Lock接口?
+因为synchronized会让线程直接进入blocked状态，如果陷入死锁，那么就无法解除了。</p>
+<p>锁的最佳实践</p>
+<blockquote>
+<ul>
+<li>永远只在更新对象的成员变量时加锁</li>
+<li>永远只在访问可变的成员变量时加锁</li>
+<li>永不在调用其他对象的方法时加锁</li>
+<li>———-《Java并发编程：设计原则与模式》Doug Lea 减少锁的持有时间
+减小锁的粒度</li>
+</ul>
+</blockquote>
+<h2 id="concurrent包">7 Concurrent包</h2>
+<h3 id="completionservice">CompletionService</h3>
+<p><strong>作用</strong></p>
+<p>与CompletableFuture的区别在于这里可以批量执行异步任务。执行之后还可以拿到先完成的任务结果，这里是用一个阻塞队列实现的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ExecutorCompletionService(Executor executor);</span><br><span class="line">ExecutorCompletionService(Executor executor, BlockingQueue&lt;Future&lt;V&gt;&gt; completionQueue);</span><br><span class="line"><span class="comment">// 不指定队列默认用无界的LinkedBlockedQueue</span></span><br></pre></td></tr></table></figure>
+<p><strong>使用</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CompletionServiceTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException, ExecutionException &#123;</span><br><span class="line">    <span class="type">ExecutorService</span> <span class="variable">executor</span> <span class="operator">=</span> Executors.newFixedThreadPool(<span class="number">3</span>);</span><br><span class="line">    ExecutorCompletionService&lt;Integer&gt; cs = <span class="keyword">new</span> <span class="title class_">ExecutorCompletionService</span>&lt;&gt;(executor);</span><br><span class="line">    cs.submit(()-&gt;sleep(<span class="string">&quot;2s&quot;</span>,<span class="number">2</span>));</span><br><span class="line">    cs.submit(()-&gt;sleep(<span class="string">&quot;3s&quot;</span>,<span class="number">3</span>));</span><br><span class="line">    cs.submit(()-&gt;sleep(<span class="string">&quot;1s&quot;</span>,<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">      <span class="type">Integer</span> <span class="variable">r</span> <span class="operator">=</span> cs.take().get();</span><br><span class="line">      executor.execute(()-&gt; &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          sleep(<span class="string">&quot;搞完了&quot;</span>,<span class="number">2</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">          e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">sleep</span><span class="params">(String name,Integer sec)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    TimeUnit.SECONDS.sleep(sec);</span><br><span class="line">    System.out.println(<span class="string">&quot;Name:&quot;</span>+Thread.currentThread().getName() +<span class="string">&quot;  &quot;</span>+name+<span class="string">&quot;: sleep:&quot;</span>+sec);</span><br><span class="line">    <span class="keyword">return</span> sec;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/uPic/jbsY9d.png"
+alt="jbsY9d" />
+<figcaption aria-hidden="true">jbsY9d</figcaption>
+</figure>
+<p><strong>什么时候使用</strong></p>
+<p>当需要批量提交异步任务的时候。CompletionService将线程池Executor和阻塞队列BlockQueue的功能融合在了一起，能够让批量异步任务的管理更简单。
+而且能够让异步任务的执行结果有序化，先执行的先进入阻塞队列，利用这个特性可以避免无谓的等待。</p>
+<blockquote>
+<p>对于简单的并行任务，可以通过“线程池+Future”的方案解决；如果任务之间有聚合关系，可以通过CompletableFuture解决；而批量的并行任务，则可以通过CompletionService解决。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/12/15/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/12/15/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-12-15 23:11:49 / Modified: 23:12:30" itemprop="dateCreated datePublished" datetime="2021-12-15T23:11:49+08:00">2021-12-15</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="工作总结">工作总结</h2>
+<p>上半年主要做的是协助用户引流组做相关各种钩子和靠近的需求，下半年主要做主站各模块的优化、审核、打折的需求。
+业务需求完成度100%，除产品变更需求外，没有发生延期，需求上线bug为0，无线上重大事故。下半年粗略估计排查了15个线上问题（只看了写了排期的，有些忘记写了），粗略估计处理了18次客诉，重构了引流钩子的代码和打折push与短信发送的代码（因为这两种需求做的最多）。能够从需求中洞悉产品的核心诉求，找到方便自己也方便产品的解决方案。</p>
+<h2 id="个人成长">个人成长</h2>
+<ol type="1">
+<li>完善了自己的git提交规范 每次在排查问题时，找到当时的git
+commit很多都是无意义的fix，至少把当时需求的id留下也好呀。
+目前使用的格式是： 增加：tapdId#feat:增加了xx功能
+修复bug：tapdId#fix：修复了某个bug
+文案或格式：tapdId#style：xx文案改动</li>
+<li>优化打折短信发送逻辑
+之前每次测试打折短信时，测试反馈收到短信的概率并不是百分百。这里取短信配置进行发送难点在于，目前不知道短信配置是否已经在队列中，其中等待的时间是一个比较难估计的时长。太长也许影响线上发送短信的时间，太短就会造成测试人员测试的时候拿不到配置就结束流程了。
+可以把拿不到数据的情况想象成出现冲突，那么这种情况可以套用计算机网络中常用的算法“二进制指数退避算法”，按照这种思想改造优化后，测试再也没反馈过短信收不到了。
+3、对MongoDB、ELK、Canal等技术可以知其然，看了fastjson的源码</li>
+</ol>
+<h2 id="现有问题">现有问题</h2>
+<ol type="1">
+<li><p>不够自信</p>
+<p>之前写了一个记录操作记录的切面，已经测试通过，但是自我感觉不太实用且无可用之地就一直没有同步到master。</p></li>
+<li><p>不懂拒绝
+产品需要帮忙排查逻辑的时候，总是满口答应，然后会耽误自己完成需求的时间。</p></li>
+<li><p>思维假性近视
+在学习的时候，倾向于快速得出结论“这个我早知道了”，重新想起一星半点的关键词就停止思考，将真正的知识拒之门外，甚至觉得自己已经融会贯通。</p></li>
+</ol>
+<h2 id="未来展望">未来展望</h2>
+<p>其实学会写代码并不难，但学会写好代码却很难。
+从易阅读上来说代码要有准确的命名和清晰的注释、从易使用上来说代码要具备设计模式的包装让对外的服务调用更简单、从易扩展上来说代码要做好业务和功能的实现分层。
+在易阅读、易使用、易扩展以及更多编码规范的约束下，还需要在开发完成上线后的交付结果上满足:高可用、高性能、高并发，与此同时还会接到现有项目中层出不穷来自产品新增的需求。
+下一年我会保持对自己的约束，不仅写代码，还写好代码。并且针对自己现有问题一一治疗。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -813,873 +1520,6 @@ server</li>
 <li>查看日志</li>
 </ol>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Mac</span></span><br><span class="line"><span class="built_in">tail</span> -200f ~/logs/rocketmqlogs/broker.log</span><br><span class="line"><span class="comment"># Windows</span></span><br><span class="line">C:\Users\asus\logs\rocketmqlogs\broker.log</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/" class="post-title-link" itemprop="url">JVM GC参数(Xmn,Xms,Xmx,Xss)助记</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-23 12:18:20" itemprop="dateCreated datePublished" datetime="2021-03-23T12:18:20+08:00">2021-03-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2021-03-28 13:52:45" itemprop="dateModified" datetime="2021-03-28T13:52:45+08:00">2021-03-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="overview">Overview</h2>
-<p><strong>太长不看总结:</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th>Option</th>
-<th>意义</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>-</td>
-<td>标准VM 选项</td>
-</tr>
-<tr class="even">
-<td>-X</td>
-<td>非标准VM选项</td>
-</tr>
-<tr class="odd">
-<td>-Xms</td>
-<td>maximum size 设置堆的最大初始初始值</td>
-</tr>
-<tr class="even">
-<td>-Xmn</td>
-<td>maximum nursery 设置堆中新生代的最大初始值</td>
-</tr>
-<tr class="odd">
-<td>-Xmx</td>
-<td>memory maximum 设置堆的最大值</td>
-</tr>
-<tr class="even">
-<td>-Xss</td>
-<td>stack size 设置线程中栈的内容大小</td>
-</tr>
-</tbody>
-</table>
-<p>-Xms, -Xms, -Xmn, -Xss</p>
-<p>在看技术博客时,看到到这些参数是不是很无语,完全不知道说的是啥,根本无法理解!</p>
-<p>但是仔细想想写JDK的那群神仙会像我们这种菜鸟随便命名吗?</p>
-<p>所以我放下书本去翻了一下文档</p>
-<p>https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html</p>
-<blockquote>
-<p>OptionsThe <code>java</code> command supports a wide range of options
-that can be divided into the following categories:</p>
-<ul>
-<li><a
-target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDJJFI">Standard
-Options</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI">Non-Standard
-Options</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABCBGHF">Advanced
-Runtime Options</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDDFII">Advanced
-JIT Compiler Options</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABFJDIC">Advanced
-Serviceability Options</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABFAFAE">Advanced
-Garbage Collection Options</a></li>
-</ul>
-<p>Standard options are guaranteed to be supported by all
-implementations of the Java Virtual Machine (JVM). They are used for
-common actions, such as checking the version of the JRE, setting the
-class path, enabling verbose output, and so on.</p>
-<p>Non-standard options are general purpose options that are specific to
-the Java HotSpot Virtual Machine, so they are not guaranteed to be
-supported by all JVM implementations, and are subject to change. These
-options start with <code>-X</code>.</p>
-<p>Advanced options are not recommended for casual use. These are
-developer options used for tuning specific areas of the Java HotSpot
-Virtual Machine operation that often have specific system requirements
-and may require privileged access to system configuration parameters.
-They are also not guaranteed to be supported by all JVM implementations,
-and are subject to change. Advanced options start with
-<code>-XX</code>.</p>
-</blockquote>
-<p>翻译一下,大概就是java提供了很多命令,有标准的,有非标准的,非标准的就得用<code>-X</code>开头,进阶一点不建议平时使用的用<code>-XX</code>开头</p>
-<p>好的,我们已经明白这几个命令的开头是什么意思了</p>
-<ul>
-<li>- : 标准VM选项，VM规范的选项</li>
-<li>-X: 非标准VM选项，不保证所有VM支持</li>
-<li>-XX: 高级选项，高级特性，但属于不稳定的选项</li>
-</ul>
-<h2 id="xmn">-Xmn</h2>
-<blockquote>
-<p>Sets the initial and maximum size (in bytes) of the heap for the
-young generation (nursery).</p>
-</blockquote>
-<p>为新生代设置在堆上的初始最大值</p>
-<blockquote>
-<p>Append the letter <code>k</code> or <code>K</code> to indicate
-kilobytes, <code>m</code> or <code>M</code> to indicate megabytes,
-<code>g</code> or <code>G</code> to indicate gigabytes.</p>
-</blockquote>
-<p>参数后可以指定单位,比如用k、m、g</p>
-<blockquote>
-<p>The young generation region of the heap is used for new objects. GC
-is performed in this region more often than in other regions. If the
-size for the young generation is too small, then a lot of minor garbage
-collections will be performed. If the size is too large, then only full
-garbage collections will be performed, which can take a long time to
-complete.</p>
-</blockquote>
-<p>堆的新生代区域用于新对象。GC在这个区域执行的频率高于其他区域。如果年轻代size太小，那么将执行大量次要的垃圾收集。如果size太大，则只有完整的垃圾收集才会被执行，这可能需要很长时间才能完成。</p>
-<blockquote>
-<p>Oracle recommends that you keep the size for the young generation
-between a half and a quarter of the overall heap size.</p>
-</blockquote>
-<p>Oracle建议将新生代的堆的size保持在总体堆size的二分之一到四分之一之间。</p>
-<blockquote>
-<p>The following examples show how to set the initial and maximum size
-of young generation to 256 MB using various units:</p>
-<p>-Xmn256m</p>
-<p>-Xmn262144k</p>
-<p>-Xmn268435456</p>
-<p>Instead of the <code>-Xmn</code> option to set both the initial and
-maximum size of the heap for the young generation, you can use
-<code>-XX:NewSize</code> to set the initial size and
-<code>-XX:MaxNewSize</code> to set the maximum size.</p>
-</blockquote>
-<p>下面是使用不同的单位设置新生代的例子,不翻译了,都能看懂.</p>
-<p><strong>总结</strong></p>
-<p>-Xmn 指的是,</p>
-<ul>
-<li><p>-X:非标准VM选项</p></li>
-<li><p>m:maximum 最大</p></li>
-<li><p>n: nursery :托儿所</p></li>
-</ul>
-<p>最大的托儿所,就是新生代最大size</p>
-<h2 id="xms">-Xms</h2>
-<blockquote>
-<p>Sets the initial size (in bytes) of the heap. This value must be a
-multiple of 1024 and greater than 1 MB. Append the letter <code>k</code>
-or <code>K</code> to indicate kilobytes, <code>m</code> or
-<code>M</code> to indicate megabytes, <code>g</code> or <code>G</code>
-to indicate gigabytes.</p>
-</blockquote>
-<p>设置堆的初始最大size,这个值必须是1024的倍数,必须大于1MB,可以用k、m、g做参数后面的单位</p>
-<blockquote>
-<p>The following examples show how to set the size of allocated memory
-to 6 MB using various units:</p>
-<p><code>-Xms6291456 -Xms6144k -Xms6m</code></p>
-</blockquote>
-<p>下面是一些例子,用不同单位设置6MB的最大内存</p>
-<p><strong>总结</strong></p>
-<ul>
-<li><p>-X:非标准VM选项</p></li>
-<li><p>m:最大 maximum</p></li>
-<li><p>s:大小 size</p></li>
-</ul>
-<p>在堆上初始最大的容量</p>
-<h2 id="xmx">-Xmx</h2>
-<blockquote>
-<p>Specifies the maximum size (in bytes) of the memory allocation pool
-in bytes. This value must be a multiple of 1024 and greater than 2 MB.
-Append the letter <code>k</code> or <code>K</code> to indicate
-kilobytes, <code>m</code> or <code>M</code> to indicate megabytes,
-<code>g</code> or <code>G</code> to indicate gigabytes.</p>
-</blockquote>
-<p>指定堆的最大值,跟-Xms的区别是,ms是初始值,这个是可容纳的最大值</p>
-<blockquote>
-<p>The default value is chosen at runtime based on system configuration.
-For server deployments, <code>-Xms</code> and <code>-Xmx</code> are
-often set to the same value. See the section "Ergonomics" in <em>Java SE
-HotSpot Virtual Machine Garbage Collection Tuning Guide</em> at
-`<code>http://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/index.html</code>.</p>
-</blockquote>
-<p>默认值是基于系统配置在运行时选择的,在服务部署时,-Xms与-Xmx一般被设置为同样的大小</p>
-<blockquote>
-<p>The following examples show how to set the maximum allowed size of
-allocated memory to 80 MB using various units:</p>
-</blockquote>
-<p>80MB的例子</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Xmx83886080</span><br><span class="line">-Xmx81920k</span><br><span class="line">-Xmx80m</span><br></pre></td></tr></table></figure>
-<p>The <code>-Xmx</code> option is equivalent to
-<code>-XX:MaxHeapSize</code>.</p>
-<p><strong>总结</strong></p>
-<ul>
-<li><p>-X:非标准VM选项</p></li>
-<li><p>m:最大 memory</p></li>
-<li><p>x:大小 maximum</p></li>
-</ul>
-<p>最大的容量</p>
-<h2 id="xss">-Xss</h2>
-<blockquote>
-<p>Sets the thread stack size (in bytes). Append the letter
-<code>k</code> or <code>K</code> to indicate KB, <code>m</code> or
-<code>M</code> to indicate MB, <code>g</code> or <code>G</code> to
-indicate GB. The default value depends on virtual memory.</p>
-</blockquote>
-<p>设置线程栈的大小,可以用不同的单位来设置,默认值取决于虚拟机.</p>
-<p>The following examples set the thread stack size to 1024 KB in
-different units:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Xss1m</span><br><span class="line">-Xss1024k</span><br><span class="line">-Xss1048576</span><br></pre></td></tr></table></figure>
-<p>This option is equivalent to <code>-XX:ThreadStackSize</code>.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/23/%E7%90%86%E8%A7%A3%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/23/%E7%90%86%E8%A7%A3%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/" class="post-title-link" itemprop="url">理解强引用、软引用、弱引用、虚引用</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-23 12:03:09" itemprop="dateCreated datePublished" datetime="2021-03-23T12:03:09+08:00">2021-03-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:03:09" itemprop="dateModified" datetime="2022-07-18T01:03:09+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="强引用">强引用</h1>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">reference</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span>  <span class="keyword">void</span> <span class="title function_">testReference</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">ListNode</span> <span class="variable">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ListNode</span>(<span class="number">3</span>);</span><br><span class="line">        test = <span class="literal">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ListNode</span> &#123;</span><br><span class="line">	<span class="comment">//......</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;test被回收了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>强引用是最普遍的引用,在代码中随处可见,只要某个对象与强引用关联,这个对象就不会被回收,JVM宁愿抛出OOM也不会回收.</p>
-<p>那么什么时候才能被回收呢?</p>
-<p>手动把引用指向null,比如上述代码中</p>
-<p><code>test = null</code></p>
-<h1 id="软引用">软引用</h1>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323132537741.png"
-alt="image-20210323132537741" />
-<figcaption aria-hidden="true">image-20210323132537741</figcaption>
-</figure>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323132606414.png"
-alt="image-20210323132606414" />
-<figcaption aria-hidden="true">image-20210323132606414</figcaption>
-</figure>
-<p>软引用需要用SoftReference对象包装一下</p>
-<p>它的特点是,当内存不足时,就会触发JVM的GC,如果GC后内存还是不足,就会把软引用包裹的对象回收.也就是说只有当内存不足时,JVM才会回收软引用</p>
-<p>解释一下图片的例子:</p>
-<p>创建一个软引用对象,里面包裹byte[],byte[]占用10M,设置JVM运行参数,-Xmx,表示堆内存最大容量</p>
-<p>这个参数不懂的可以参考笔者另一篇文章</p>
-<p>第一次用softReference.get()方法获取该引用的地址</p>
-<p>手动打开GC</p>
-<p>GC后,测试发现该引用还是存在,这是因为内存还比较充足</p>
-<p>接着再创建一个10M的byte[]对象</p>
-<p>再次用softReference.get()方法获取软引用的地址,发现已经为null了</p>
-<p><strong>软引用的作用</strong></p>
-<p>做缓存吧,内存够就正常拿缓存,内存不够就干掉它,不至于马上抛出OOM</p>
-<h2 id="弱引用">弱引用</h2>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323133735452.png"
-alt="image-20210323133735452" />
-<figcaption aria-hidden="true">image-20210323133735452</figcaption>
-</figure>
-<p>弱引用是用WeakReference来包裹对象</p>
-<p>无论有没有内存,gc遇到它就回收</p>
-<p><strong>什么时候用呢</strong></p>
-<p>ThreadLocal,WeakHashMap</p>
-<p>ThreadLocal是一个本地线程副本变量工具类。内部是一个<strong>弱引用</strong>的Map来维护。</p>
-<p>WeakHashMap其实和HashMap大多数行为是一样的，只是WeakHashMap不会阻止GC回收key对象（不是value）</p>
-<h2 id="虚引用">虚引用</h2>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323134603056.png"
-alt="image-20210323134603056" />
-<figcaption aria-hidden="true">image-20210323134603056</figcaption>
-</figure>
-<p>运行完直接返回null,说明根本拿不到虚引用指向的对象</p>
-<p>看图中,创建虚引用不仅需要传入被包裹对象,还得传入一个ReferenceQueue ,
-当GC准备回收一个对象时,如果发现它还有虚引用,就会在回收之前,把这个虚引用加入到与之关联的ReferenceQueue中.</p>
-<p>平时没用到虚引用,所以我也不是很懂,待续.......</p>
-<p>NIO中好像使用了虚引用管理堆外内存.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/22/cmd%E5%91%BD%E4%BB%A4%E4%B8%8ELinux%E5%91%BD%E4%BB%A4%E7%9A%84%E5%8C%BA%E5%88%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/22/cmd%E5%91%BD%E4%BB%A4%E4%B8%8ELinux%E5%91%BD%E4%BB%A4%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">cmd命令与Linux命令的区别</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-22 21:03:16" itemprop="dateCreated datePublished" datetime="2021-03-22T21:03:16+08:00">2021-03-22</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2021-03-28 13:52:56" itemprop="dateModified" datetime="2021-03-28T13:52:56+08:00">2021-03-28</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>太长不看总结</strong></p>
-<p>cmd是.exe程序,windows系统拿来模拟Dos系统的</p>
-<p>Linux命令也就是shell,是用户态于内核态的交互层,功能更强大.</p>
-<table>
-<thead>
-<tr class="header">
-<th><strong>功能</strong></th>
-<th><strong>cmd</strong></th>
-<th><strong>linux</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>复制文件</td>
-<td>copy</td>
-<td>cp</td>
-</tr>
-<tr class="even">
-<td>移动文件</td>
-<td>move</td>
-<td>mv</td>
-</tr>
-<tr class="odd">
-<td>列举文件</td>
-<td>dir</td>
-<td>ls</td>
-</tr>
-<tr class="even">
-<td>清除屏幕</td>
-<td>cls</td>
-<td>clear</td>
-</tr>
-<tr class="odd">
-<td>退出</td>
-<td>exit</td>
-<td>exit</td>
-</tr>
-<tr class="even">
-<td>显示修改日期</td>
-<td>date</td>
-<td>date</td>
-</tr>
-<tr class="odd">
-<td>删除文件</td>
-<td>del</td>
-<td>rm</td>
-</tr>
-<tr class="even">
-<td>回响信息到屏幕</td>
-<td>echo</td>
-<td>echo</td>
-</tr>
-<tr class="odd">
-<td>用编辑器编辑文件</td>
-<td>edit</td>
-<td>vi</td>
-</tr>
-<tr class="even">
-<td>比较文件内容</td>
-<td>fc</td>
-<td>diff</td>
-</tr>
-<tr class="odd">
-<td>在文件中查找字符串</td>
-<td>find</td>
-<td>grep</td>
-</tr>
-<tr class="even">
-<td>显示命令帮助</td>
-<td>命令/?</td>
-<td>man 命令</td>
-</tr>
-<tr class="odd">
-<td>创建目录</td>
-<td>mkdir</td>
-<td>mkdir</td>
-</tr>
-<tr class="even">
-<td>删除目录</td>
-<td>rd</td>
-<td>rmdir</td>
-</tr>
-<tr class="odd">
-<td>目录更名</td>
-<td>move</td>
-<td>mv</td>
-</tr>
-<tr class="even">
-<td>拷贝目录</td>
-<td>xcopy</td>
-<td>copy</td>
-</tr>
-<tr class="odd">
-<td>查看文件</td>
-<td>more</td>
-<td>less</td>
-</tr>
-<tr class="even">
-<td>重命名文件</td>
-<td>ren</td>
-<td>mv</td>
-</tr>
-<tr class="odd">
-<td>切换目录</td>
-<td>cd</td>
-<td>cd</td>
-</tr>
-<tr class="even">
-<td>显示时间</td>
-<td>time</td>
-<td>date</td>
-</tr>
-<tr class="odd">
-<td>显示已被使用的内存</td>
-<td>mem</td>
-<td>free</td>
-</tr>
-<tr class="even">
-<td>在屏幕打印文件内容</td>
-<td>type</td>
-<td>cat</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/21/%E7%90%86%E8%A7%A3BIO-NIO-AIO-IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/21/%E7%90%86%E8%A7%A3BIO-NIO-AIO-IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" class="post-title-link" itemprop="url">理解BIO,NIO,AIO,IO多路复用</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-21 18:56:41" itemprop="dateCreated datePublished" datetime="2021-03-21T18:56:41+08:00">2021-03-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:04:09" itemprop="dateModified" datetime="2022-07-18T01:04:09+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>预备知识:</strong></p>
-<p>操作系统分内核态与用户态,真正的I/O操作都不是应用程序在做,为了保证安全,操作系统提供了系统调用,比如read&amp;write.</p>
-<p>通常一个应用程序的执行代表一个进程,当应用程序需要I/O时就会执行系统调用.</p>
-<p>比如一次read指令的执行,应用调用read指令,内核从外部设备获取数据放入内核缓冲区,然后又把内核缓存区的内容复制到进程缓冲区.</p>
-<p><strong>四种IO模型:</strong></p>
-<p>１.　BＩＯ，同步阻塞IO</p>
-<p>２.　ＮＩＯ，同步非阻塞IO</p>
-<p>３.　IO多路复用,同步非阻塞IO升级版</p>
-<p>４.　AIO，异步非阻塞IO</p>
-<p>怎么理解用一个例子来执行一下就好啦</p>
-<p><strong>BIO</strong></p>
-<p><img src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321191140634.png" alt="image-20210321191140634" style="zoom:67%;" /></p>
-<p>首先我们得知道,内核态的内存缓冲区也不是一开始就有数据的,所以这就分了两个阶段,</p>
-<p>第一个是等待内核态内存缓存区充满的过程,</p>
-<p>第二个是从内核态内存缓存区复制到进程缓冲区的过程</p>
-<p>所以同步阻塞IO就比较惨,在这两个阶段都得等着</p>
-<p>第一个阶段是阻塞,用户态发起IO执行read调用指令,如果内核态没数据就被ＯＳ挂起</p>
-<p>第二个阶段内核态复制数据到进程缓冲区,它也不能干其他的.</p>
-<p><strong>NIO</strong></p>
-<p><img src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321191002045.png" alt="image-20210321191002045" style="zoom:70%;" /></p>
-<p>同步非阻塞也没好到哪里去</p>
-<p>第一个阶段,虽然没有被阻塞,但是也得不停的轮询,不断发起IO系统调用</p>
-<p>第二个阶段，等待复制完成</p>
-<p><strong>IO多路复用</strong></p>
-<p><img src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321195033926.png" alt="image-20210321195033926" style="zoom:67%;" /></p>
-<p>IO多路复用本质上还是同步非阻塞</p>
-<p>在这种模式中，首先不是进行read系统调动，而是进行select/epoll系统调用。当然，这里有一个前提，需要将目标网络连接，提前注册到select/epoll的可查询socket列表中。然后，才可以开启整个的IO多路复用模型的读流程。</p>
-<p>（1）进行select/epoll系统调用，查询可以读的连接。kernel会查询所有select的可查询socket列表，当任何一个socket中的数据准备好了，select就会返回。</p>
-<p>当用户进程调用了select，那么整个线程会被block（阻塞掉）。</p>
-<p>（2）用户线程获得了目标连接后，发起read系统调用，用户线程阻塞。内核开始复制数据。它就会将数据从kernel内核缓冲区，拷贝到用户缓冲区（用户内存），然后kernel返回结果。</p>
-<p>（3）用户线程才解除block的状态，用户线程终于真正读取到数据，继续执行。</p>
-<p>多路复用IO的特点：</p>
-<p>IO多路复用模型，建立在操作系统kernel内核能够提供的多路分离系统调用select/epoll基础之上的。多路复用IO需要用到两个系统调用（system
-call）， 一个select/epoll查询调用，一个是IO的读取调用。</p>
-<p>和NIO模型相似，多路复用IO需要轮询。负责select/epoll查询调用的线程，需要不断的进行select/epoll轮询，查找出可以进行IO操作的连接。</p>
-<p>另外，多路复用IO模型与前面的NIO模型，是有关系的。对于每一个可以查询的socket，一般都设置成为non-blocking模型。只是这一点，对于用户程序是透明的（不感知）。</p>
-<p>多路复用IO的优点：</p>
-<p>用select/epoll的优势在于，它可以同时处理成千上万个连接（connection）。与一条线程维护一个连接相比，I/O多路复用技术的最大优势是：系统不必创建线程，也不必维护这些线程，从而大大减小了系统的开销。</p>
-<p>Java的NIO（new
-IO）技术，使用的就是IO多路复用模型。在linux系统上，使用的是epoll系统调用。</p>
-<p>多路复用IO的缺点：</p>
-<p>本质上，select/epoll系统调用，属于同步IO，也是阻塞IO。都需要在读写事件就绪后，自己负责进行读写，也就是说这个读写过程是阻塞的。</p>
-<p><strong>AIO</strong></p>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210321195511679.png"
-alt="image-20210321195511679" />
-<figcaption aria-hidden="true">image-20210321195511679</figcaption>
-</figure>
-<p>如果大家学过终端的话就容易理解AIO</p>
-<p>第一个阶段,用户态程序执行read调用,如果内核态没数据,那就做其他事情</p>
-<p>第二个阶段,内核态把数据复制到了用户态的进程缓冲区后通知用户应用程序</p>
-<p>异步IO模型的特点：</p>
-<p>在内核kernel的等待数据和复制数据的两个阶段，用户线程都不是block(阻塞)的。用户线程需要接受kernel的IO操作完成的事件，或者说注册IO操作完成的回调函数，到操作系统的内核。所以说，异步IO有的时候，也叫做信号驱动
-IO 。</p>
-<p>异步IO模型缺点：</p>
-<p>需要完成事件的注册与传递，这里边需要底层操作系统提供大量的支持，去做大量的工作。</p>
-<p>目前来说， Windows 系统下通过 IOCP 实现了真正的异步
-I/O。但是，就目前的业界形式来说，Windows
-系统，很少作为百万级以上或者说高并发应用的服务器操作系统来使用。</p>
-<p>而在 Linux
-系统下，异步IO模型在2.6版本才引入，目前并不完善。所以，这也是在 Linux
-下，实现高并发网络编程时都是以 IO 复用模型模式为主。</p>
-<p><strong>总结</strong></p>
-<p>只有AIO不会阻塞,其他的都会在第二个阶段阻塞.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/21/Switch%20jdk8%20jdk17/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/21/Switch%20jdk8%20jdk17/" class="post-title-link" itemprop="url">Switch jdk8 jdk17</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-21 13:42:25" itemprop="dateCreated datePublished" datetime="2021-03-21T13:42:25+08:00">2021-03-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:23:24" itemprop="dateModified" datetime="2022-07-18T01:23:24+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>For the system Java wrappers to find this JDK, symlink it with</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -sfn /opt/homebrew/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk</span><br></pre></td></tr></table></figure>
-<p>openjdk is keg-only, which means it was not symlinked into
-/opt/homebrew, because macOS provides similar software and installing
-this software in parallel can cause all kinds of trouble.</p>
-<p>If you need to have openjdk first in your PATH, run:
-<code>echo 'export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"' &gt;&gt; ~/.zshrc</code></p>
-<p>For compilers to find openjdk you may need to set:
-<code>export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"</code></p>
-<p>.zshrc
-文件修改以下配置，只要输入jdk8就切换jdk8的环境,输入jdk17就切换17 jdk</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_8_HOME=&quot;/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/&quot;</span><br><span class="line">export JAVA_17_HOME=&quot;/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home&quot;</span><br><span class="line">alias jdk8=&quot;export JAVA_HOME=$JAVA_8_HOME&quot;</span><br><span class="line">alias jdk17=&quot;export JAVA_HOME=$JAVA_17_HOME&quot;</span><br><span class="line">export JAVA_HOME=$JAVA_8_HOME</span><br><span class="line">export PATH=$PATH:$JAVA_HOME</span><br></pre></td></tr></table></figure>
 
       
     </div>
