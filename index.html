@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -781,88 +781,6 @@ Locking）是Java中锁优化的一种技术，旨在减少无竞争情况下的
 <li><p>《流浪者之歌》</p></li>
 <li><p>《》</p></li>
 </ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2023/07/05/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/07/05/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">排序算法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2023-07-05 15:32:35 / Modified: 16:12:59" itemprop="dateCreated datePublished" datetime="2023-07-05T15:32:35+08:00">2023-07-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="快速排序">快速排序</h1>
-<p>快速排序最重要的就是，找到一个基准，然后把数列分成两部分，一部分比基准小，另一部分比基准大，然后递归。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickSort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] arr = &#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">78</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">87</span>&#125;;</span><br><span class="line">        sort(arr,<span class="number">0</span>,arr.length-<span class="number">1</span>);</span><br><span class="line">        Arrays.stream(arr).forEach(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> i ,<span class="type">int</span> j)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(i&lt;j)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">p</span> <span class="operator">=</span> quickSort(arr,i,j);</span><br><span class="line">            sort(arr,i,p-<span class="number">1</span>);</span><br><span class="line">            sort(arr,p+<span class="number">1</span>,j);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">quickSort</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> i, <span class="type">int</span> j)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">p</span> <span class="operator">=</span> arr[i]; <span class="comment">// 找到基准</span></span><br><span class="line">        <span class="keyword">while</span>(i &lt; j)&#123;</span><br><span class="line">            <span class="keyword">while</span>(j &gt;i &amp;&amp; arr[j]&gt;= p) j--; <span class="comment">// 从右边开始，大于等于基准的元素都不用移动，继续往左边找</span></span><br><span class="line">            arr[i] = arr[j]; <span class="comment">// 找到了第一个比基准小的，那么把这个元素移动过去</span></span><br><span class="line">            <span class="keyword">while</span>(i &lt; j &amp;&amp; arr[i]&lt;=p) i++; <span class="comment">// 从左边开始，小于等于基准的元素都不用移动，继续往右边找</span></span><br><span class="line">            arr[j] = arr[i];</span><br><span class="line">        &#125;</span><br><span class="line">        arr[i] = p; <span class="comment">// 终止循环条件是i==j，这时候就找到基准所在的位置了</span></span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1 id="堆排序">堆排序</h1>
 
       
     </div>
@@ -2815,6 +2733,112 @@ style="text-align: left;">在<strong>函数结束之后</strong>(正常返回和
 <p>第三行的configs引用拿到了入参configs被过滤的结果（这个时候只剩3条），然后，Arthas默认情况下<code>-f</code>打开，也就是在<strong>函数结束之后</strong>(正常返回和异常返回)观察，我们观察的入参configs对象也就成了被过滤之后的对象了。</p>
 <p>参考文献：</p>
 <p>[1] https://arthas.aliyun.com/doc/</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/09/04/%E5%89%8D%E9%9D%A2%E7%9A%84%E8%B7%AF%E4%BB%A5%E5%90%8E%E5%86%8D%E6%9D%A5%E6%8E%A2%E7%B4%A2%E5%90%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/04/%E5%89%8D%E9%9D%A2%E7%9A%84%E8%B7%AF%E4%BB%A5%E5%90%8E%E5%86%8D%E6%9D%A5%E6%8E%A2%E7%B4%A2%E5%90%A7/" class="post-title-link" itemprop="url">前面的路以后再来探索吧</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-09-04 16:00:14" itemprop="dateCreated datePublished" datetime="2022-09-04T16:00:14+08:00">2022-09-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-09-05 20:13:21" itemprop="dateModified" datetime="2022-09-05T20:13:21+08:00">2022-09-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">life</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>本文谨以记录本人地球探索进度:earth_asia:</p>
+<h1 id="获得菜谱2">获得菜谱2</h1>
+<h2 id="青椒肉丝">1、🫑青椒肉丝</h2>
+<ol type="1">
+<li>半肥瘦的二刀肉，前臀肉，切丝</li>
+<li>搅拌盐、老抽、食用油，腌制5min</li>
+<li>青椒切丝，姜4片</li>
+<li>锅烧热冒烟，少许底油，五成热</li>
+<li>放肉，直至炒香</li>
+<li>青椒和姜下锅，大火，炒至青椒断生，有香味</li>
+<li>离火，放盐、味精、白糖、醋、酱油</li>
+<li>炒熟</li>
+</ol>
+<p>https://www.bilibili.com/video/BV1aW411F7pR</p>
+<p>老师：王刚</p>
+<h2 id="清炒丝瓜">2、🥒清炒丝瓜</h2>
+<ol type="1">
+<li>丝瓜切小片，切勿沾水</li>
+<li>猪油下锅，油热</li>
+<li>放丝瓜，小火</li>
+<li>变色、放盐</li>
+</ol>
 
       
     </div>

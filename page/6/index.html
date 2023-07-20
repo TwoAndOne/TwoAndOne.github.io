@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -172,109 +172,6 @@
 
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2020/08/19/%E6%90%ADHexo-Github%E5%8D%9A%E5%AE%A2%E4%B9%8B%E7%A7%8D%E7%A7%8D%E7%A3%A8%E9%9A%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/08/19/%E6%90%ADHexo-Github%E5%8D%9A%E5%AE%A2%E4%B9%8B%E7%A7%8D%E7%A7%8D%E7%A3%A8%E9%9A%BE/" class="post-title-link" itemprop="url">搭Hexo+Github博客之种种磨难</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-08-19 16:41:12" itemprop="dateCreated datePublished" datetime="2020-08-19T16:41:12+08:00">2020-08-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-09-02 23:56:35" itemprop="dateModified" datetime="2022-09-02T23:56:35+08:00">2022-09-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>Command</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">需要进入项目</span><br><span class="line">npx hexo clean <span class="comment"># 清除所有发布文件</span></span><br><span class="line">npx hexo s <span class="comment"># 预览</span></span><br><span class="line">npx hexo g <span class="comment"># 生成发布文件</span></span><br><span class="line">npx hexo d <span class="comment"># 远程部署</span></span><br></pre></td></tr></table></figure>
-<p>这次做了备份😠丢了好几次，终于有了教训</p>
-<p><strong>2022-08-10 10:25:44</strong></p>
-<p>数学公式的添加：</p>
-<p>在next主题下的配置有如下：</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Math Formulas Render Support</span></span><br><span class="line"><span class="comment"># Warning: Please install / uninstall the relevant renderer according to the documentation.</span></span><br><span class="line"><span class="comment"># See: https://theme-next.js.org/docs/third-party-services/math-equations</span></span><br><span class="line"><span class="comment"># Server-side plugin: https://github.com/next-theme/hexo-filter-mathjax</span></span><br><span class="line"><span class="attr">math:</span></span><br><span class="line">  <span class="comment"># Default (false) will load mathjax / katex script on demand.</span></span><br><span class="line">  <span class="comment"># That is it only render those page which has `mathjax: true` in front-matter.</span></span><br><span class="line">  <span class="comment"># If you set it to true, it will load mathjax / katex script EVERY PAGE.</span></span><br><span class="line">  <span class="attr">every_page:</span> <span class="literal">false</span> <span class="comment"># 是否每篇文章都渲染，如果为否，那么需要在头部添加：mathjax: true</span></span><br><span class="line">  </span><br><span class="line">  <span class="attr">mathjax:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span> <span class="comment"># 设置为true</span></span><br><span class="line">    <span class="comment"># Available values: none | ams | all</span></span><br><span class="line">    <span class="attr">tags:</span> <span class="string">none</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">katex:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">false</span></span><br><span class="line">    <span class="comment"># See: https://github.com/KaTeX/KaTeX/tree/master/contrib/copy-tex</span></span><br><span class="line">    <span class="attr">copy_tex:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-<hr />
-<p><strong>2020-08-19 10:23:13</strong></p>
-<p>搭一个hexo+GitHub的博客，外加换主题，花了一天时间。
-唉，本来预想是两小时搞完，但总是不尽人意。
-众所周知，学习任何计算机知识，第一步是一道坎——环境配置。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/08/19/%E6%90%ADHexo-Github%E5%8D%9A%E5%AE%A2%E4%B9%8B%E7%A7%8D%E7%A7%8D%E7%A3%A8%E9%9A%BE/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -4785,6 +4682,287 @@ alt="image-20210226165052149" />
 <li>修改了xml文件，记得重启容器</li>
 <li>增加了依赖，记得去项目结构Artifacts中lib添加</li>
 </ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2020/03/25/%E7%90%86%E8%A7%A3HTTP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/03/25/%E7%90%86%E8%A7%A3HTTP/" class="post-title-link" itemprop="url">理解HTTP</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-03-25 20:50:22" itemprop="dateCreated datePublished" datetime="2020-03-25T20:50:22+08:00">2020-03-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 00:59:19" itemprop="dateModified" datetime="2022-07-18T00:59:19+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="一http基本概念">一、HTTP基本概念</h1>
+<h3 id="http是什么">HTTP是什么？</h3>
+<p>HTTP 是超文本传输协议，也就是HyperText Transfer Protocol。</p>
+<p>HTTP
+是一个在计算机世界里专门在「两点」之间「传输」文字、图片、音频、视频等「超文本」数据
+的「约定和规范」。</p>
+<h3 id="http常见状态码">HTTP常见状态码？</h3>
+<p><strong>1xx</strong></p>
+<p>1xx
+类状态码属于提示信息，是协议处理中的一种中间状态，实际用到的比较少。</p>
+<p><strong>2xx</strong></p>
+<p>2xx
+类状态码表示服务器成功处理了客户端的请求，也是我们最愿意看到的状态。</p>
+<ul>
+<li><p>「200 OK」是最常见的成功状态码，表示一切正常。如果是非 HEAD
+请求，服务器返回的响应头都 会有 body 数据。</p></li>
+<li><p>「204 No Content」也是常见的成功状态码，与 200 OK
+基本相同，但响应头没有 body 数据。</p></li>
+<li><p>「206 Partial Content」是应用于 HTTP
+分块下载或断点续传，表示响应返回的 body 数据并不是资源
+的全部，而是其中的一部分，也是服务器处理成功的状态。</p></li>
+</ul>
+<p><strong>3xx</strong></p>
+<p>3xx 类状态码表示客户端请求的资源发送了变动，需要客户端用新的 URL
+重新发送请求获取资源， 也就是重定向。</p>
+<ul>
+<li><p>「301 Moved
+Permanently」表示永久重定向，说明请求的资源已经不存在了，需改用新的 URL
+再次 访问。</p></li>
+<li><p>「302
+Found」表示临时重定向，说明请求的资源还在，但暂时需要用另一个 URL
+来访问。 301 和 302 都会在响应头里使用字段 Location ，指明后续要跳转的
+URL，浏览器会自动重定向新的 URL。</p></li>
+<li><p>「304 Not
+Modified」不具有跳转的含义，表示资源未修改，重定向已存在的缓冲文件，也称缓存重定
+向，用于缓存控制。</p></li>
+</ul>
+<p><strong>4xx</strong></p>
+<p>4xx
+类状态码表示客户端发送的报文有误，服务器无法处理，也就是错误码的含义。</p>
+<ul>
+<li>「400 Bad
+Request」表示客户端请求的报文有错误，但只是个笼统的错误。</li>
+<li>「403
+Forbidden」表示服务器禁止访问资源，并不是客户端的请求出错。</li>
+<li>「404 Not
+Found」表示请求的资源在服务器上不存在或未找到，所以无法提供给客户端。</li>
+</ul>
+<p><strong>5xx</strong></p>
+<p>5xx
+类状态码表示客户端请求报文正确，但是服务器处理时内部发生了错误，属于服务器端的错误
+码。</p>
+<ul>
+<li>「500 Internal Server Error」与 400
+类型，是个笼统通用的错误码，服务器发生了什么错误，我们并 不知道。</li>
+<li>「501 Not
+Implemented」表示客户端请求的功能还不支持，类似“即将开业，敬请期待”的意思。</li>
+<li>「502 Bad
+Gateway」通常是服务器作为网关或代理时返回的错误码，表示服务器自身工作正常，访问
+后端服务器发生了错误。</li>
+<li>「503 Service
+Unavailable」表示服务器当前很忙，暂时无法响应服务器，类似“网络服务正忙，请稍
+后重试”的意思。</li>
+</ul>
+<h3 id="http常见的字段">HTTP常见的字段？</h3>
+<p>Host 字段 客户端发送请求时，用来指定服务器的域名。</p>
+<p>Content-Length 字段 服务器在返回数据时，会有 Content-Length
+字段，表明本次回应的数据长度。</p>
+<p>Connection 字段 Connection 字段最常用于客户端要求服务器使用 TCP
+持久连接，以便其他请求复用。</p>
+<p>Content-Type 字段 Content-Type
+字段用于服务器回应时，告诉客户端，本次数据是什么格式。</p>
+<p>Content-Encoding 字段 Content-Encoding
+字段说明数据的压缩方法。表示服务器返回的数据使用了什么压缩格式</p>
+<h1 id="二get与post">二、GET与POST</h1>
+<h3 id="get和post的区别">GET和POST的区别？</h3>
+<p>Get
+方法的含义是请求从服务器获取资源，这个资源可以是静态的文本、页面、图片视频等。</p>
+<p>比如，你打开我的文章，浏览器就会发送 GET
+请求给服务器，服务器就会返回文章的所有文字及资 源。</p>
+<p>而 POST 方法则是相反操作，它向 URI
+指定的资源提交数据，数据就放在报文的 body 里。</p>
+<p>比如，你在我文章底部，敲入了留言后点击「提交」（暗示你们留言），浏览器就会执行一次
+POST 请 求，把你的留言文字放进了报文 body 里，然后拼接好 POST
+请求头，通过 TCP 协议发送给服务器。</p>
+<h3
+id="get和post方法都是安全和等幂的吗">GET和POST方法都是安全和等幂的吗？</h3>
+<p>先说明下安全和幂等的概念：</p>
+<p>在 HTTP
+协议里，所谓的「安全」是指请求方法不会「破坏」服务器上的资源。</p>
+<p>所谓的「幂等」，意思是多次执行相同的操作，结果都是「相同」的。</p>
+<p>那么很明显 GET
+方法就是安全且幂等的，因为它是「只读」操作，无论操作多少次，服务器上的数据
+都是安全的，且每次的结果都是相同的。</p>
+<p>POST
+因为是「新增或提交数据」的操作，会修改服务器上的资源，所以是不安全的，且多次提交数据
+就会创建多个资源，所以不是幂等的。</p>
+<h1 id="三http的特性">三、HTTP的特性</h1>
+<h3 id="优点">优点？</h3>
+<p>HTTP 最凸出的优点是「简单、灵活和易于扩展、应用广泛和跨平台」。</p>
+<ol type="1">
+<li><p>简单</p>
+<p>HTTP 基本的报文格式就是 header + body ，头部信息也是 key-value
+简单文本的形式，易于理解， 降低了学习和使用的门槛。</p></li>
+<li><p>灵活和易于扩展</p>
+<p>HTTP协议里的各类请求方法、URI/URL、状态码、头字段等每个组成要求都没有被固定死，都允许开
+发人员自定义和扩充。 同时 HTTP 由于是工作在应用层（ OSI
+第七层），则它下层可以随意变化。 HTTPS 也就是在 HTTP 与 TCP 层之间增加了
+SSL/TLS 安全传输层，HTTP/3 甚至把 TCP 层换成了基 于 UDP 的
+QUIC。</p></li>
+<li><p>应用广泛和跨平台</p>
+<p>互联网发展至今，HTTP
+的应用范围非常的广泛，从台式机的浏览器到手机上的各种 APP，从看新闻、
+刷贴吧到购物、理财、吃鸡，HTTP
+的应用片地开花，同时天然具有跨平台的优越性。</p></li>
+</ol>
+<h3 id="缺点">缺点？</h3>
+<ol type="1">
+<li><p>无状态</p>
+<p>好处，让服务器减少记录状态信息减少负担</p>
+<p>坏处，因为没有记忆功能，在完成有关联的任务就非常麻烦，例如登录、下单、结算、支付</p>
+<p>解决方案是在客户端写一个Cookie</p></li>
+<li><p>明文传输</p>
+<p>明文意味着在传输过程中的信息，是可方便阅读的，通过浏览器的 F12
+控制台或 Wireshark 抓包都可
+以直接肉眼查看，为我们调试工作带了极大的便利性。</p>
+<p>但是这正是这样，HTTP
+的所有信息都暴露在了光天化日下，相当于信息裸奔。在传输的漫长的过程
+中，信息的内容都毫无隐私可言，很容易就能被窃取，如果里面有你的账号密码信息，那你号没了。</p></li>
+<li><p>不安全</p>
+<p>HTTP 比较严重的缺点就是不安全：</p>
+<ul>
+<li>通信使用明文（不加密），内容可能会被窃听。比如，账号信息容易泄漏，那你号没了。</li>
+<li>不验证通信方的身份，因此有可能遭遇伪装。比如，访问假的淘宝、拼多多，那你钱没了。</li>
+<li>无法证明报文的完整性，所以有可能已遭篡改。比如，网页上植入垃圾广告，视觉污染，眼没
+了。</li>
+</ul>
+<p>HTTP 的安全问题，可以用 HTTPS 的方式解决，也就是通过引入 SSL/TLS
+层，使得在安全上达到了极致。</p></li>
+</ol>
+<h3 id="性能">性能？</h3>
+<p>HTTP 协议是基于 TCP/IP，并且使用了「请求 -
+应答」的通信模式，所以性能的关键就在这两点里。</p>
+<ol type="1">
+<li><p>长连接</p>
+<p>早期 HTTP/1.0
+性能上的一个很大的问题，那就是每发起一个请求，都要新建一次 TCP
+连接（三次握 手），而且是串行请求，做了无谓的 TCP
+连接建立和断开，增加了通信开销。</p>
+<p>为了解决上述 TCP 连接问题，HTTP/1.1
+提出了长连接的通信方式，也叫持久连接。这种方式的好处在 于减少了 TCP
+连接的重复建立和断开所造成的额外开销，减轻了服务器端的负载。持久连接的特点是，只要任意一端没有明确提出断开连接，则保持
+TCP 连接状态。</p></li>
+<li><p>管道网络传输</p>
+<p>HTTP/1.1
+采用了长连接的方式，这使得管道（pipeline）网络传输成为了可能。</p>
+<p>即可在同一个 TCP
+连接里面，客户端可以发起多个请求，只要第一个请求发出去了，不必等其回来，
+就可以发第二个请求出去，可以减少整体的响应时间。</p>
+<p>举例来说，客户端需要请求两个资源。以前的做法是，在同一个TCP连接里面，先发送
+A 请求，然后等 待服务器做出回应，收到后再发出 B 请求。</p>
+<p>管道机制则是允许浏览器同时发出 A 请求和 B 请求。</p>
+<p>但是服务器还是按照顺序，先回应 A 请求，完成后再回应 B
+请求。要是前面的回应特别慢，后面就会
+有许多请求排队等着。这称为「<strong>队头堵塞</strong>」。</p></li>
+<li><p>队头阻塞</p>
+<p>「请求 - 应答」的模式加剧了 HTTP 的性能问题。
+因为当顺序发送的请求序列中的一个请求因为某种原因被阻塞时，在后面排队的所有请求也一同被阻塞
+了，会招致客户端一直请求不到数据，这也就是「队头阻塞」。好比上班的路上塞车。</p></li>
+</ol>
+<p>总之 HTTP/1.1 的性能一般般，后续的 HTTP/2 和 HTTP/3 就是在优化 HTTP
+的性能。</p>
+<h1 id="四http与https">四、HTTP与HTTPS</h1>
+<h3 id="区别">区别？</h3>
+<ol type="1">
+<li>HTTP 是超文本传输协议，信息是明文传输，存在安全风险的问题。HTTPS
+则解决 HTTP 不安全 的缺陷，在 TCP 和 HTTP 网络层之间加入了 SSL/TLS
+安全协议，使得报文能够加密传输。</li>
+<li>HTTP 连接建立相对简单， TCP 三次握手之后便可进行 HTTP 的报文传输。而
+HTTPS 在 TCP 三次握手之后，还需进行 SSL/TLS
+的握手过程，才可进入加密报文传输。</li>
+<li>HTTP 的端口号是 80，HTTPS 的端口号是 443。</li>
+<li>HTTPS 协议需要向
+CA（证书权威机构）申请数字证书，来保证服务器的身份是可信的。</li>
+</ol>
+<h3 id="https解决了哪些问题">HTTPS解决了哪些问题？</h3>
+<p>HTTP 由于是明文传输，所以安全上存在以下三个风险：</p>
+<p>窃听风险，比如通信链路上可以获取通信内容，用户号容易没。</p>
+<p>篡改风险，比如强制植入垃圾广告，视觉污染，用户眼容易瞎。</p>
+<p>冒充风险，比如冒充淘宝网站，用户钱容易没。</p>
+<h3 id="https是如何解决不安全问题的">HTTPS是如何解决不安全问题的？</h3>
+<h3
+id="https是如何建立连接的其间交互了什么">HTTPS是如何建立连接的？其间交互了什么？</h3>
+<h1 id="五http1.1http2http3">五、HTTP/1.1、HTTP/2、HTTP/3</h1>
+<h3 id="http1.1与http的区别">HTTP/1.1与HTTP的区别</h3>
+<h3 id="http2与http2的区别">HTTP/2与HTTP/2的区别</h3>
+<h3 id="http3与htpp2的区别">HTTP/3与HTPP/2的区别</h3>
 
       
     </div>

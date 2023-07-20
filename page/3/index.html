@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -172,158 +172,6 @@
 
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/06/15/Annotation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/06/15/Annotation/" class="post-title-link" itemprop="url">小🌧️学Annotation</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-06-15 11:46:10" itemprop="dateCreated datePublished" datetime="2022-06-15T11:46:10+08:00">2022-06-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-09 17:19:36" itemprop="dateModified" datetime="2022-08-09T17:19:36+08:00">2022-08-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>注解的本质就是一个继承了Annotation接口的接口</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.SOURCE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Override &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Override</span> <span class="keyword">extends</span> <span class="title class_">Annotation</span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>元注解</p>
-<p>注解注解的注解（中国语言博大精深，充分利用词语的词性）</p>
-<p><span class="citation"
-data-cites="Target">@Target</span>：指明作用目标</p>
-<table>
-<thead>
-<tr class="header">
-<th>ElementType</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>ElementType.TYPE：允许被修饰的注解作用在类、接口和枚举上</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>ElementType.FIELD：允许作用在属性字段上</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>ElementType.METHOD：允许作用在方法上</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>ElementType.PARAMETER：允许作用在方法参数上</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>ElementType.CONSTRUCTOR：允许作用在构造器上</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>ElementType.LOCAL_VARIABLE：允许作用在本地局部变量上</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>ElementType.ANNOTATION_TYPE：允许作用在注解上</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>ElementType.PACKAGE：允许作用在包上</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><span class="citation"
-data-cites="Retention">@Retention</span>：指明当前注解的生命周期</p>
-<ul>
-<li>RetentionPolicy.SOURCE：当前注解编译期可见，不会写入 class 文件</li>
-<li>RetentionPolicy.CLASS：类加载阶段丢弃，会写入 class 文件</li>
-<li>RetentionPolicy.RUNTIME：永久保存，可以反射获取</li>
-</ul>
-<p><span class="citation" data-cites="Documented">@Documented</span>
-注解修饰的注解，当我们执行 JavaDoc 文档打包时会被保存进 doc
-文档，反之将在打包时丢弃。</p>
-<p><span class="citation" data-cites="Inherited">@Inherited</span>
-注解修饰的注解是具有可继承性的，也就说我们的注解修饰了一个类，而该类的子类将自动继承父类的该注解。</p>
-<p>2022年7月12日 10:31:48</p>
-<p>最近做一个需求用到了@Component注解，具体的情况如下所示：</p>
-<p>我需要继承一个已经注解了@Componet的类。</p>
-<p>这时候就产生了一个疑问，我这个new Class会继承Component注解吗？</p>
-<p>唉，这就是基础不扎实导致呀，本来学了元注解，但是一点印象都没有。</p>
-<p><span class="citation"
-data-cites="Inherited注解修饰的注解是具有可继承性的">@Inherited注解修饰的注解是具有可继承性的</span>，可惜Component没有被Inherited修饰。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -1520,6 +1368,289 @@ server</li>
 <li>查看日志</li>
 </ol>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Mac</span></span><br><span class="line"><span class="built_in">tail</span> -200f ~/logs/rocketmqlogs/broker.log</span><br><span class="line"><span class="comment"># Windows</span></span><br><span class="line">C:\Users\asus\logs\rocketmqlogs\broker.log</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/23/JVM-GC%E5%8F%82%E6%95%B0-xms-xss-xmn-xss-%E5%8A%A9%E8%AE%B0/" class="post-title-link" itemprop="url">JVM GC参数(Xmn,Xms,Xmx,Xss)助记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-23 12:18:20" itemprop="dateCreated datePublished" datetime="2021-03-23T12:18:20+08:00">2021-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-03-28 13:52:45" itemprop="dateModified" datetime="2021-03-28T13:52:45+08:00">2021-03-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="overview">Overview</h2>
+<p><strong>太长不看总结:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-</td>
+<td>标准VM 选项</td>
+</tr>
+<tr class="even">
+<td>-X</td>
+<td>非标准VM选项</td>
+</tr>
+<tr class="odd">
+<td>-Xms</td>
+<td>maximum size 设置堆的最大初始初始值</td>
+</tr>
+<tr class="even">
+<td>-Xmn</td>
+<td>maximum nursery 设置堆中新生代的最大初始值</td>
+</tr>
+<tr class="odd">
+<td>-Xmx</td>
+<td>memory maximum 设置堆的最大值</td>
+</tr>
+<tr class="even">
+<td>-Xss</td>
+<td>stack size 设置线程中栈的内容大小</td>
+</tr>
+</tbody>
+</table>
+<p>-Xms, -Xms, -Xmn, -Xss</p>
+<p>在看技术博客时,看到到这些参数是不是很无语,完全不知道说的是啥,根本无法理解!</p>
+<p>但是仔细想想写JDK的那群神仙会像我们这种菜鸟随便命名吗?</p>
+<p>所以我放下书本去翻了一下文档</p>
+<p>https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html</p>
+<blockquote>
+<p>OptionsThe <code>java</code> command supports a wide range of options
+that can be divided into the following categories:</p>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDJJFI">Standard
+Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI">Non-Standard
+Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABCBGHF">Advanced
+Runtime Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDDFII">Advanced
+JIT Compiler Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABFJDIC">Advanced
+Serviceability Options</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABFAFAE">Advanced
+Garbage Collection Options</a></li>
+</ul>
+<p>Standard options are guaranteed to be supported by all
+implementations of the Java Virtual Machine (JVM). They are used for
+common actions, such as checking the version of the JRE, setting the
+class path, enabling verbose output, and so on.</p>
+<p>Non-standard options are general purpose options that are specific to
+the Java HotSpot Virtual Machine, so they are not guaranteed to be
+supported by all JVM implementations, and are subject to change. These
+options start with <code>-X</code>.</p>
+<p>Advanced options are not recommended for casual use. These are
+developer options used for tuning specific areas of the Java HotSpot
+Virtual Machine operation that often have specific system requirements
+and may require privileged access to system configuration parameters.
+They are also not guaranteed to be supported by all JVM implementations,
+and are subject to change. Advanced options start with
+<code>-XX</code>.</p>
+</blockquote>
+<p>翻译一下,大概就是java提供了很多命令,有标准的,有非标准的,非标准的就得用<code>-X</code>开头,进阶一点不建议平时使用的用<code>-XX</code>开头</p>
+<p>好的,我们已经明白这几个命令的开头是什么意思了</p>
+<ul>
+<li>- : 标准VM选项，VM规范的选项</li>
+<li>-X: 非标准VM选项，不保证所有VM支持</li>
+<li>-XX: 高级选项，高级特性，但属于不稳定的选项</li>
+</ul>
+<h2 id="xmn">-Xmn</h2>
+<blockquote>
+<p>Sets the initial and maximum size (in bytes) of the heap for the
+young generation (nursery).</p>
+</blockquote>
+<p>为新生代设置在堆上的初始最大值</p>
+<blockquote>
+<p>Append the letter <code>k</code> or <code>K</code> to indicate
+kilobytes, <code>m</code> or <code>M</code> to indicate megabytes,
+<code>g</code> or <code>G</code> to indicate gigabytes.</p>
+</blockquote>
+<p>参数后可以指定单位,比如用k、m、g</p>
+<blockquote>
+<p>The young generation region of the heap is used for new objects. GC
+is performed in this region more often than in other regions. If the
+size for the young generation is too small, then a lot of minor garbage
+collections will be performed. If the size is too large, then only full
+garbage collections will be performed, which can take a long time to
+complete.</p>
+</blockquote>
+<p>堆的新生代区域用于新对象。GC在这个区域执行的频率高于其他区域。如果年轻代size太小，那么将执行大量次要的垃圾收集。如果size太大，则只有完整的垃圾收集才会被执行，这可能需要很长时间才能完成。</p>
+<blockquote>
+<p>Oracle recommends that you keep the size for the young generation
+between a half and a quarter of the overall heap size.</p>
+</blockquote>
+<p>Oracle建议将新生代的堆的size保持在总体堆size的二分之一到四分之一之间。</p>
+<blockquote>
+<p>The following examples show how to set the initial and maximum size
+of young generation to 256 MB using various units:</p>
+<p>-Xmn256m</p>
+<p>-Xmn262144k</p>
+<p>-Xmn268435456</p>
+<p>Instead of the <code>-Xmn</code> option to set both the initial and
+maximum size of the heap for the young generation, you can use
+<code>-XX:NewSize</code> to set the initial size and
+<code>-XX:MaxNewSize</code> to set the maximum size.</p>
+</blockquote>
+<p>下面是使用不同的单位设置新生代的例子,不翻译了,都能看懂.</p>
+<p><strong>总结</strong></p>
+<p>-Xmn 指的是,</p>
+<ul>
+<li><p>-X:非标准VM选项</p></li>
+<li><p>m:maximum 最大</p></li>
+<li><p>n: nursery :托儿所</p></li>
+</ul>
+<p>最大的托儿所,就是新生代最大size</p>
+<h2 id="xms">-Xms</h2>
+<blockquote>
+<p>Sets the initial size (in bytes) of the heap. This value must be a
+multiple of 1024 and greater than 1 MB. Append the letter <code>k</code>
+or <code>K</code> to indicate kilobytes, <code>m</code> or
+<code>M</code> to indicate megabytes, <code>g</code> or <code>G</code>
+to indicate gigabytes.</p>
+</blockquote>
+<p>设置堆的初始最大size,这个值必须是1024的倍数,必须大于1MB,可以用k、m、g做参数后面的单位</p>
+<blockquote>
+<p>The following examples show how to set the size of allocated memory
+to 6 MB using various units:</p>
+<p><code>-Xms6291456 -Xms6144k -Xms6m</code></p>
+</blockquote>
+<p>下面是一些例子,用不同单位设置6MB的最大内存</p>
+<p><strong>总结</strong></p>
+<ul>
+<li><p>-X:非标准VM选项</p></li>
+<li><p>m:最大 maximum</p></li>
+<li><p>s:大小 size</p></li>
+</ul>
+<p>在堆上初始最大的容量</p>
+<h2 id="xmx">-Xmx</h2>
+<blockquote>
+<p>Specifies the maximum size (in bytes) of the memory allocation pool
+in bytes. This value must be a multiple of 1024 and greater than 2 MB.
+Append the letter <code>k</code> or <code>K</code> to indicate
+kilobytes, <code>m</code> or <code>M</code> to indicate megabytes,
+<code>g</code> or <code>G</code> to indicate gigabytes.</p>
+</blockquote>
+<p>指定堆的最大值,跟-Xms的区别是,ms是初始值,这个是可容纳的最大值</p>
+<blockquote>
+<p>The default value is chosen at runtime based on system configuration.
+For server deployments, <code>-Xms</code> and <code>-Xmx</code> are
+often set to the same value. See the section "Ergonomics" in <em>Java SE
+HotSpot Virtual Machine Garbage Collection Tuning Guide</em> at
+`<code>http://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/index.html</code>.</p>
+</blockquote>
+<p>默认值是基于系统配置在运行时选择的,在服务部署时,-Xms与-Xmx一般被设置为同样的大小</p>
+<blockquote>
+<p>The following examples show how to set the maximum allowed size of
+allocated memory to 80 MB using various units:</p>
+</blockquote>
+<p>80MB的例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Xmx83886080</span><br><span class="line">-Xmx81920k</span><br><span class="line">-Xmx80m</span><br></pre></td></tr></table></figure>
+<p>The <code>-Xmx</code> option is equivalent to
+<code>-XX:MaxHeapSize</code>.</p>
+<p><strong>总结</strong></p>
+<ul>
+<li><p>-X:非标准VM选项</p></li>
+<li><p>m:最大 memory</p></li>
+<li><p>x:大小 maximum</p></li>
+</ul>
+<p>最大的容量</p>
+<h2 id="xss">-Xss</h2>
+<blockquote>
+<p>Sets the thread stack size (in bytes). Append the letter
+<code>k</code> or <code>K</code> to indicate KB, <code>m</code> or
+<code>M</code> to indicate MB, <code>g</code> or <code>G</code> to
+indicate GB. The default value depends on virtual memory.</p>
+</blockquote>
+<p>设置线程栈的大小,可以用不同的单位来设置,默认值取决于虚拟机.</p>
+<p>The following examples set the thread stack size to 1024 KB in
+different units:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Xss1m</span><br><span class="line">-Xss1024k</span><br><span class="line">-Xss1048576</span><br></pre></td></tr></table></figure>
+<p>This option is equivalent to <code>-XX:ThreadStackSize</code>.</p>
 
       
     </div>
