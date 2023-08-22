@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-count">65</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -172,146 +172,6 @@
 
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/03/23/%E7%90%86%E8%A7%A3%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="Yus">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yussss">
-      <meta itemprop="description" content="后端废物">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Yussss">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/23/%E7%90%86%E8%A7%A3%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/" class="post-title-link" itemprop="url">理解强引用、软引用、弱引用、虚引用</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-23 12:03:09" itemprop="dateCreated datePublished" datetime="2021-03-23T12:03:09+08:00">2021-03-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:03:09" itemprop="dateModified" datetime="2022-07-18T01:03:09+08:00">2022-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="强引用">强引用</h1>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">reference</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span>  <span class="keyword">void</span> <span class="title function_">testReference</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">ListNode</span> <span class="variable">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ListNode</span>(<span class="number">3</span>);</span><br><span class="line">        test = <span class="literal">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ListNode</span> &#123;</span><br><span class="line">	<span class="comment">//......</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;test被回收了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>强引用是最普遍的引用,在代码中随处可见,只要某个对象与强引用关联,这个对象就不会被回收,JVM宁愿抛出OOM也不会回收.</p>
-<p>那么什么时候才能被回收呢?</p>
-<p>手动把引用指向null,比如上述代码中</p>
-<p><code>test = null</code></p>
-<h1 id="软引用">软引用</h1>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323132537741.png"
-alt="image-20210323132537741" />
-<figcaption aria-hidden="true">image-20210323132537741</figcaption>
-</figure>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323132606414.png"
-alt="image-20210323132606414" />
-<figcaption aria-hidden="true">image-20210323132606414</figcaption>
-</figure>
-<p>软引用需要用SoftReference对象包装一下</p>
-<p>它的特点是,当内存不足时,就会触发JVM的GC,如果GC后内存还是不足,就会把软引用包裹的对象回收.也就是说只有当内存不足时,JVM才会回收软引用</p>
-<p>解释一下图片的例子:</p>
-<p>创建一个软引用对象,里面包裹byte[],byte[]占用10M,设置JVM运行参数,-Xmx,表示堆内存最大容量</p>
-<p>这个参数不懂的可以参考笔者另一篇文章</p>
-<p>第一次用softReference.get()方法获取该引用的地址</p>
-<p>手动打开GC</p>
-<p>GC后,测试发现该引用还是存在,这是因为内存还比较充足</p>
-<p>接着再创建一个10M的byte[]对象</p>
-<p>再次用softReference.get()方法获取软引用的地址,发现已经为null了</p>
-<p><strong>软引用的作用</strong></p>
-<p>做缓存吧,内存够就正常拿缓存,内存不够就干掉它,不至于马上抛出OOM</p>
-<h2 id="弱引用">弱引用</h2>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323133735452.png"
-alt="image-20210323133735452" />
-<figcaption aria-hidden="true">image-20210323133735452</figcaption>
-</figure>
-<p>弱引用是用WeakReference来包裹对象</p>
-<p>无论有没有内存,gc遇到它就回收</p>
-<p><strong>什么时候用呢</strong></p>
-<p>ThreadLocal,WeakHashMap</p>
-<p>ThreadLocal是一个本地线程副本变量工具类。内部是一个<strong>弱引用</strong>的Map来维护。</p>
-<p>WeakHashMap其实和HashMap大多数行为是一样的，只是WeakHashMap不会阻止GC回收key对象（不是value）</p>
-<h2 id="虚引用">虚引用</h2>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210323134603056.png"
-alt="image-20210323134603056" />
-<figcaption aria-hidden="true">image-20210323134603056</figcaption>
-</figure>
-<p>运行完直接返回null,说明根本拿不到虚引用指向的对象</p>
-<p>看图中,创建虚引用不仅需要传入被包裹对象,还得传入一个ReferenceQueue ,
-当GC准备回收一个对象时,如果发现它还有虚引用,就会在回收之前,把这个虚引用加入到与之关联的ReferenceQueue中.</p>
-<p>平时没用到虚引用,所以我也不是很懂,待续.......</p>
-<p>NIO中好像使用了虚引用管理堆外内存.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -1737,6 +1597,131 @@ alt="图二" />
 <p>提示：</p>
 <p>树中节点数目在范围 [0, 100] 内 -100 &lt;= Node.val &lt;= 100</p>
 <p>https://leetcode-cn.com/problems/binary-tree-inorder-traversal/</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/02/26/Typora-PicGo-Gitee-%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%BF%AB%E9%80%9F%E4%B8%8A%E4%BC%A0-%E5%9B%BE%E5%BA%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="Yus">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yussss">
+      <meta itemprop="description" content="后端废物">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Yussss">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/02/26/Typora-PicGo-Gitee-%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%BF%AB%E9%80%9F%E4%B8%8A%E4%BC%A0-%E5%9B%BE%E5%BA%8A/" class="post-title-link" itemprop="url">Typora+PicGo+Gitee 实现图片快速上传 图床</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-02-26 16:19:51" itemprop="dateCreated datePublished" datetime="2021-02-26T16:19:51+08:00">2021-02-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-18 00:54:22" itemprop="dateModified" datetime="2022-07-18T00:54:22+08:00">2022-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ol type="1">
+<li><p>下载 <a target="_blank" rel="noopener" href="https://typora.io/#windows">Typora</a></p></li>
+<li><p>下载 <a target="_blank" rel="noopener" href="https://molunerfinn.com/PicGo/">PicGo</a></p></li>
+<li><p>注册 <a target="_blank" rel="noopener" href="https://gitee.com/">Gitee</a></p></li>
+<li><p>创建仓库</p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210226163520859.png"
+alt="image-20210226163520859" />
+<figcaption aria-hidden="true">image-20210226163520859</figcaption>
+</figure></li>
+<li><p>创建文件夹image</p></li>
+<li><p>创建私人令牌（设置-&gt;私人令牌-&gt;新建私人令牌）</p>
+<figure>
+<img src="/Users/yus/workspace/i/iEssay/image-20210226163730024.png"
+alt="image-20210226163730024" />
+<figcaption aria-hidden="true">image-20210226163730024</figcaption>
+</figure></li>
+<li><p>打开PicGo，插件设置，搜索<code>Gitee</code></p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210226163822038.png"
+alt="image-20210226163822038" />
+<figcaption aria-hidden="true">image-20210226163822038</figcaption>
+</figure></li>
+<li><p>安装后点击，左边gitee</p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210226164148955.png"
+alt="image-20210226164148955" />
+<figcaption aria-hidden="true">image-20210226164148955</figcaption>
+</figure></li>
+<li><p>打开Typora图像设置</p>
+<figure>
+<img
+src="https://github.com/TwoAndOne/my-images/raw/master/img/image-20210226164541246.png"
+alt="image-20210226164541246" />
+<figcaption aria-hidden="true">image-20210226164541246</figcaption>
+</figure></li>
+<li><p>点击验证图片上传选项，验证</p></li>
+</ol>
 
       
     </div>
