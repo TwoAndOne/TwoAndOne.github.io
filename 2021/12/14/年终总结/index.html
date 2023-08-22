@@ -20,28 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"twoandone.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="工作总结 上半年主要做的是协助用户引流组做相关各种钩子和靠近的需求，下半年主要做主站各模块的优化、审核、打折的需求。 业务需求完成度100%，除产品变更需求外，没有发生延期，需求上线bug为0，无线上重大事故。下半年粗略估计排查了15个线上问题（只看了写了排期的，有些忘记写了），粗略估计处理了18次客诉，重构了引流钩子的代码和打折push与短信发送的代码（因为这两种需求做的最多）。能够从需求中洞悉">
+    <meta name="description" content="工作总结 上季度主要做的是协助用户引流组做相关各种钩子和靠近的需求，下季度主要做主站各模块的优化、审核、打折的需求。 业务需求完成度100%，除产品变更需求外，没有发生延期，需求上线bug为0，无线上重大事故。下半年粗略估计排查了15个线上问题（只看了写了排期的，有些忘记写了），粗略估计处理了18次客诉，重构了引流钩子的代码和打折push与短信发送的代码（因为这两种需求做的最多）。能够从需求中洞悉">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Yussss">
-<meta property="og:url" content="https://twoandone.github.io/2021/12/15/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">
+<meta property="og:title" content="Prim算法——最小生成树">
+<meta property="og:url" content="https://twoandone.github.io/2021/12/14/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">
 <meta property="og:site_name" content="Yussss">
-<meta property="og:description" content="工作总结 上半年主要做的是协助用户引流组做相关各种钩子和靠近的需求，下半年主要做主站各模块的优化、审核、打折的需求。 业务需求完成度100%，除产品变更需求外，没有发生延期，需求上线bug为0，无线上重大事故。下半年粗略估计排查了15个线上问题（只看了写了排期的，有些忘记写了），粗略估计处理了18次客诉，重构了引流钩子的代码和打折push与短信发送的代码（因为这两种需求做的最多）。能够从需求中洞悉">
+<meta property="og:description" content="工作总结 上季度主要做的是协助用户引流组做相关各种钩子和靠近的需求，下季度主要做主站各模块的优化、审核、打折的需求。 业务需求完成度100%，除产品变更需求外，没有发生延期，需求上线bug为0，无线上重大事故。下半年粗略估计排查了15个线上问题（只看了写了排期的，有些忘记写了），粗略估计处理了18次客诉，重构了引流钩子的代码和打折push与短信发送的代码（因为这两种需求做的最多）。能够从需求中洞悉">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-12-15T15:11:49.212Z">
-<meta property="article:modified_time" content="2021-12-15T15:12:30.557Z">
+<meta property="article:published_time" content="2021-12-14T09:29:52.000Z">
+<meta property="article:modified_time" content="2023-08-22T10:23:17.591Z">
 <meta property="article:author" content="Yus">
-<meta property="article:tag" content="java">
+<meta property="article:tag" content="arithmetic">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://twoandone.github.io/2021/12/15/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">
+<link rel="canonical" href="https://twoandone.github.io/2021/12/14/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://twoandone.github.io/2021/12/15/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/","path":"2021/12/15/年终总结/","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://twoandone.github.io/2021/12/14/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/","path":"2021/12/14/年终总结/","title":"Prim算法——最小生成树"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title> | Yussss</title>
+<title>Prim算法——最小生成树 | Yussss</title>
   
 
 
@@ -185,7 +185,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/12/15/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/12/14/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -198,12 +198,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Yussss">
+      <meta itemprop="name" content="Prim算法——最小生成树 | Yussss">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          Prim算法——最小生成树
         </h1>
 
         <div class="post-meta-container">
@@ -213,9 +213,24 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2021-12-15 23:11:49 / Modified: 23:12:30" itemprop="dateCreated datePublished" datetime="2021-12-15T23:11:49+08:00">2021-12-15</time>
+      <time title="Created: 2021-12-14 17:29:52" itemprop="dateCreated datePublished" datetime="2021-12-14T17:29:52+08:00">2021-12-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-08-22 18:23:17" itemprop="dateModified" datetime="2023-08-22T18:23:17+08:00">2023-08-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
     </span>
 
   
@@ -229,7 +244,7 @@
     
     <div class="post-body" itemprop="articleBody">
         <h2 id="工作总结">工作总结</h2>
-<p>上半年主要做的是协助用户引流组做相关各种钩子和靠近的需求，下半年主要做主站各模块的优化、审核、打折的需求。
+<p>上季度主要做的是协助用户引流组做相关各种钩子和靠近的需求，下季度主要做主站各模块的优化、审核、打折的需求。
 业务需求完成度100%，除产品变更需求外，没有发生延期，需求上线bug为0，无线上重大事故。下半年粗略估计排查了15个线上问题（只看了写了排期的，有些忘记写了），粗略估计处理了18次客诉，重构了引流钩子的代码和打折push与短信发送的代码（因为这两种需求做的最多）。能够从需求中洞悉产品的核心诉求，找到方便自己也方便产品的解决方案。</p>
 <h2 id="个人成长">个人成长</h2>
 <ol type="1">
@@ -265,6 +280,9 @@ commit很多都是无意义的fix，至少把当时需求的id留下也好呀。
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/arithmetic/" rel="tag"># arithmetic</a>
+          </div>
 
         
 
