@@ -181,7 +181,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/03/28/maven/">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/07/08/Multi-Threading/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -199,7 +199,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/28/maven/" class="post-title-link" itemprop="url">小🌧️学maven</a>
+          <a href="/2021/07/08/Multi-Threading/" class="post-title-link" itemprop="url">Multi Threading</a>
         </h2>
 
         <div class="post-meta-container">
@@ -210,14 +210,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2022-03-28 11:46:10" itemprop="dateCreated datePublished" datetime="2022-03-28T11:46:10+08:00">2022-03-28</time>
+      <time title="Created: 2021-07-08 15:03:55" itemprop="dateCreated datePublished" datetime="2021-07-08T15:03:55+08:00">2021-07-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-09 17:13:49" itemprop="dateModified" datetime="2022-08-09T17:13:49+08:00">2022-08-09</time>
+      <time title="Modified: 2023-08-22 17:22:32" itemprop="dateModified" datetime="2023-08-22T17:22:32+08:00">2023-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -239,37 +239,350 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="conception">Conception</h2>
-<h3 id="仓库">1.1 仓库</h3>
-<p>存储资源，各种jar包</p>
+          <h1 id="java-多线程">Java 多线程</h1>
+<h2 id="进程与线程的基本概念">1 进程与线程的基本概念</h2>
+<h3 id="进程产生的背景">1.1 进程产生的背景</h3>
+<p>最开始计算机是处理完一个任务，再处理下一个任务，有些时候一些任务io时间很长，傻乎乎的等会很浪费CPU资源。</p>
+<p>有没有一种方式可以让一个任务在等待IO时，把CPU让给另一个任务呢？</p>
+<p>所以进程出现了。给每个进程分配一块内存，分配一个时间段，如果进程在时间片结束前阻塞或结束，则CPU立即切换，不用等待时间片用完。进程暂停时，会保存当前进程高状态（进程标识、进程使用的资源）</p>
+<p>由于计算机不停发展，用户对同时使用多个任务的需要增加，比如一个浏览器进程，要开多个任务一个听音乐，一个看小说。然后还出现了多核处理器，可以真正的实现并行操作。</p>
+<p>线程允许将任务分解为多个可并发执行的子任务，并利用多核处理器等硬件资源，实现更高效的并发性和性能。</p>
+<p>因为线程更轻量级，而且能够共享进程的资源，适合在需要高并发和快速响应的情况下使用。</p>
+<p><strong>进程时操作系统资源分配的基本单位，线程时操作系统进行调度的基本单位</strong></p>
+<h3 id="上下文切换">1.2 上下文切换</h3>
+<p>上下文是指某一时间点CPU寄存器和PC的内容</p>
+<p>一个进程切换到另一个进程</p>
+<p>上下文切换是计算密集型，所以线程不是越多越好。</p>
+<h3 id="什么是线程安全">1.3 什么是线程安全</h3>
+<p>当多个线程同时访问一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要进行额外的同步，或者在调用方进行任何其他的协调操作，调用这个对象的行为都可以获得正确的结果，那就称这个对象是线程安全的。</p>
+<p>如果根本不存在多线程，又或者一段代码根本不会与其他线程共享数据，那么从线程安全的角度看，程序是串行的还是多线程执行的毫无区别。</p>
+<p>按照“安全程度”来区分共享数据有五类：</p>
 <ul>
-<li>本地仓库：/Users/yus/.m2/repository</li>
-<li>远程仓库:
-<ul>
-<li>中央仓库，maven团队维护</li>
-<li>私服：公司存储的，具有版权</li>
-</ul></li>
+<li>不可变：不可变对象一定是线程安全的，比如被<code>final</code>修饰的变量</li>
+<li>绝对线程安全</li>
+<li>相对线程安全</li>
+<li>线程兼容</li>
+<li>线程对立</li>
 </ul>
-<h3 id="坐标">1.2 坐标</h3>
-<p>描述仓库中资源的位置</p>
-<p>https://repo1.maven.org/maven2</p>
+<h3 id="线程安全的实现方式">1.4 线程安全的实现方式</h3>
+<h4 id="互斥同步">互斥同步</h4>
+<p>同步是指在多个线程并发访问共享数据时，保证共享数据在同一个时刻只被一条线程使用</p>
+<p>互斥是实现同步的一种手段，临界区（Critical
+Section）、互斥量（Mutex）、信号量（Semaphore）都是常见的互斥实现方式。</p>
+<p><code>synchronized</code>关键字，是一种块结构的同步语法。经过编译之后，会在同步块的前后分别形成<code>monitorenter</code>
+和<code>monitorexit</code>这两个字节码命令。</p>
+<p>这两个字节码指令都需要一个reference类型的参数来指明要锁定和解锁的对象。</p>
 <ul>
-<li>groupId: maven项目隶属组织名称（org.mybatis)</li>
-<li>artifactId: maven项目的名称</li>
-<li>version： 版本号</li>
-<li>packaging： 打包方式</li>
+<li>可重入</li>
+<li>重量级需要内核切换</li>
+<li>无法抢占也无法超时退出</li>
 </ul>
-<p>这个地址指定了中央仓库的地址</p>
-<p>/usr/local/apache-maven-3.8.4/lib/maven-model-builder-3.8.4/org/apache/maven/model/pom-4.0.0.xml</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">id</span>&gt;</span>central<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>Central Repository<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://repo.maven.apache.org/maven2<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">layout</span>&gt;</span>default<span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>false<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>因为这个地址的国外的地址，所以我们可以在用户设置里更改central的访问路径，通过镜像来实现</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 此镜像的唯一标识符，用来区分不同的mirror元素 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span></span><br><span class="line">      nexus-aliyun</span><br><span class="line">    <span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 镜像的对象 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">      central</span><br><span class="line">    <span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Nexus aliyun<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="section"></h2>
-<h2 id="command">Command</h2>
-<p><code>mvn compile</code> 生成targe文件夹，class文件</p>
-<p><code>mvn clean</code> 删除target文件夹</p>
-<p><code>mvn package</code> 打包 ：compile ⇨ testCompile test ⇨
-package</p>
+<p>重入锁是Lock接口最常见的一种实现</p>
+<ul>
+<li>等待可中断</li>
+<li>公平锁</li>
+<li>锁绑定多个条件</li>
+</ul>
+<p>目前两者之间没什么性能上的差异，但Lock需要自己释放而synchronized可以让虚拟机帮忙，所以建议使用synchronized关键字</p>
+<h4 id="非阻塞同步">非阻塞同步</h4>
+<h2 id="java多线程入门类和接口">2 Java多线程入门类和接口</h2>
+<h3 id="thread类和runnable接口">2.1 Thread类和Runnable接口</h3>
+<ol type="1">
+<li>继承Thread类，并重写run方法</li>
+<li>实现Runnable接口的run方法</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Thread2</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">MyThread</span> <span class="variable">myThread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyThread</span>();</span><br><span class="line">        myThread.start();</span><br><span class="line">        System.out.println(<span class="string">&quot;main&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">MyThread</span> <span class="keyword">extends</span> <span class="title class_">Thread</span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;MyThread&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用start()方法，该线程才算启动。不可多次调用。</p>
+<p>“main”和“MyThread”的输出顺序不确定</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Thread2</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">MyThread2</span>()).start();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span>  <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">MyThread2</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span>  <span class="title function_">run</span><span class="params">()</span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;MyThread2&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="callable接口和futurefuturetask">2.2
+Callable接口和Future、FutureTask</h3>
+<h4 id="callable和future">2.2.1 Callable和Future</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Task2</span> <span class="keyword">implements</span> <span class="title class_">Callable</span>&lt;Integer&gt; &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException &#123;</span><br><span class="line">        <span class="type">ExecutorService</span> <span class="variable">executor</span> <span class="operator">=</span> Executors.newCachedThreadPool();</span><br><span class="line">        <span class="type">Task2</span> <span class="variable">task2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Task2</span>();</span><br><span class="line">        Future&lt;Integer&gt; submit = executor.submit(task2);</span><br><span class="line"><span class="comment">// 注意调用get方法会阻塞当前线程，直到得到结果。</span></span><br><span class="line">        <span class="comment">// 所以实际编码中建议使用可以设置超时时间的重载get方法。</span></span><br><span class="line">        System.out.println(submit.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们使用<code>Runnable</code>和<code>Thread</code>来创建一个新的线程。但是它们有一个弊端，就是<code>run</code>方法是没有返回值的。而有时候我们希望开启一个线程去执行一个任务，并且这个任务执行完成后有一个返回值。</p>
+<p>JDK提供了<code>Callable</code>接口与<code>Future</code>接口为我们解决这个问题，这也是所谓的“异步”模型。</p>
+<p><code>ExecutorService</code>可以使用<code>submit</code>方法来让一个<code>Callable</code>接口执行。它会返回一个<code>Future</code>，我们后续的程序可以通过这个<code>Future</code>的<code>get</code>方法得到结果。</p>
+<h4 id="future接口的方法">2.2.2 Future接口的方法</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">interface</span> <span class="title class_">Future</span>&lt;V&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="type">boolean</span> <span class="title function_">cancel</span><span class="params">(<span class="type">boolean</span> paramBoolean)</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="type">boolean</span> <span class="title function_">isCancelled</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="type">boolean</span> <span class="title function_">isDone</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> V <span class="title function_">get</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> V <span class="title function_">get</span><span class="params">(<span class="type">long</span> paramLong, TimeUnit paramTimeUnit)</span></span><br><span class="line">            <span class="keyword">throws</span> InterruptedException, ExecutionException, TimeoutException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>cancel</code>方法是试图取消一个线程的执行。</p>
+<p>注意是<strong>试图</strong>取消，<strong>并不一定能取消成功</strong>。因为任务可能已完成、已取消、或者一些其它因素不能取消，存在取消失败的可能。<code>boolean</code>类型的返回值是“是否取消成功”的意思。参数<code>paramBoolean</code>表示是否采用中断的方式取消线程执行。</p>
+<p>所以有时候，为了让任务有能够取消的功能，就使用<code>Callable</code>来代替<code>Runnable</code>。如果为了可取消性而使用
+<code>Future</code>但又不提供可用的结果，则可以声明
+<code>Future&lt;?&gt;</code>形式类型、并返回
+<code>null</code>作为底层任务的结果。</p>
+<h4 id="futuretask">2.2.3 FutureTask</h4>
+<p>FutureTask类实现了Future接口，也就实现那些方法。</p>
+<p><img src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230708170346083.png" alt="image-20230708170346083" style="zoom:50%;" /></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Task2</span> <span class="keyword">implements</span> <span class="title class_">Callable</span>&lt;Integer&gt; &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException &#123;</span><br><span class="line">        <span class="type">ExecutorService</span> <span class="variable">executorService</span> <span class="operator">=</span> Executors.newCachedThreadPool();</span><br><span class="line">        FutureTask&lt;Integer&gt; futureTask = <span class="keyword">new</span> <span class="title class_">FutureTask</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">Task2</span>());</span><br><span class="line">        executorService.submit(futureTask);</span><br><span class="line">        System.out.println(futureTask.get());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>使用上与第一个Demo有一点小的区别。首先，调用<code>submit</code>方法是没有返回值的。这里实际上是调用的<code>submit(Runnable task)</code>方法，而上面的Demo，调用的是<code>submit(Callable&lt;T&gt; task)</code>方法。</p>
+<p>然后，这里是使用<code>FutureTask</code>直接取<code>get</code>取值，而上面的Demo是通过<code>submit</code>方法返回的<code>Future</code>去取值。</p>
+<p>在很多高并发的环境下，有可能Callable和FutureTask会创建多次。FutureTask能够在高并发环境下<strong>确保任务只执行一次</strong>。这块有兴趣的同学可以参看FutureTask源码。</p>
+<h2 id="java线程的状态及转化方法">4 Java线程的状态及转化方法</h2>
+<p><img src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230708172034675.png" alt="image-20230708172034675" style="zoom: 50%;" /></p>
+<h3 id="new">new</h3>
+<p>Thread实例的start方法尚未调用</p>
+<ol type="1">
+<li>反复调用同一个线程的start方法是否可行？</li>
+<li>假如一个线程执行完毕，能否再次调用start方法？</li>
+</ol>
+<p>两个问题的答案都是false，看源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">start</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalThreadStateException</span>();</span><br><span class="line">  ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里有一个threadStatus的变量。如果它不等于0，调用start()是会直接抛出异常的。</p>
+<h3 id="runnable">runnable</h3>
+<p>Java线程的runnable状态包括传统操作系统线程的ready和running两个状态</p>
+<h3 id="blocked">blocked</h3>
+<p>阻塞状态，正在等待锁的释放以进入同步区</p>
+<h3 id="waiting">waiting</h3>
+<p>等待状态，需要其他线程唤醒才能进入running状态</p>
+<p>调用如下3个方法会使线程进入等待状态：</p>
+<ul>
+<li>Object.wait()：使当前线程处于等待状态直到另一个线程唤醒它；</li>
+<li>Thread.join()：等待线程执行完毕，底层调用的是Object实例的wait方法；</li>
+<li>LockSupport.park()：除非获得调用许可，否则禁用当前线程进行线程调度。</li>
+</ul>
+<h3 id="timed_waiting">timed_waiting</h3>
+<p>超时等待状态，线程等待一个具体时间，时间到后会被自动唤醒</p>
+<p>调用如下方法会使线程进入超时等待状态：</p>
+<ul>
+<li>Thread.sleep(long millis)：使当前线程睡眠指定时间；</li>
+<li>Object.wait(long
+timeout)：线程休眠指定时间，等待期间可以通过notify()/notifyAll()唤醒；</li>
+<li>Thread.join(long
+millis)：等待当前线程最多执行millis毫秒，如果millis为0，则会一直执行；</li>
+<li>LockSupport.parkNanos(long nanos)：
+除非获得调用许可，否则禁用当前线程进行线程调度指定时间；</li>
+<li>LockSupport.parkUntil(long
+deadline)：同上，也是禁止线程进行调度指定时间；</li>
+</ul>
+<h3 id="terminated">terminated</h3>
+<p>终止状态。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230708173041277.png"
+alt="image-20230708173041277" />
+<figcaption aria-hidden="true">image-20230708173041277</figcaption>
+</figure>
+<h2 id="线程间的通信">5 线程间的通信</h2>
+<h3 id="锁与同步">5.1 锁与同步</h3>
+<p>在Java中锁是基于对象的，我们称它为对象锁。一个锁同一时间只能被一个线程持有。</p>
+<p>同步是为了让线程之间按照一定的顺序执行</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ObjectLock</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>(); <span class="comment">// 声明了一个lock的对象锁</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ThreadA</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123; <span class="comment">// 同步块</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;Thread A &quot;</span> + i);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ThreadB</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123; <span class="comment">// 同步块</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;Thread B &quot;</span> + i);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">ThreadA</span>()).start();</span><br><span class="line">        Thread.sleep(<span class="number">10</span>); <span class="comment">// 为了防止B先获得锁</span></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">ThreadB</span>()).start(); <span class="comment">// 线程B会等待A执行完了再执行</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="等待通知机制">5.2 等待/通知机制</h3>
+<p>基于锁的方式，线程需要不断去尝试获得锁，如果失败了，再继续尝试，可能会耗费CPU资源。</p>
+<p>等待/通知机制是另一种方式</p>
+<p><code>Object</code>类的<code>wait()</code>方法和<code>notify()</code>,
+<code>notifyAll()</code>方法来实现的。</p>
+<p>notify()方法会随机叫醒一个正在等待的线程，而notifyAll()会叫醒所有正在等待的线程。</p>
+<p>notify只是叫别人不要等了，但并没有释放锁，也就是让某个线程从waiting队列中唤醒，然后进入runnable队列，由于它想获得锁，所以又进入blocked队列。如果这时候持有锁的线程调用wait方法，它进入waiting队列，blocked队列的线程就可以获得锁进入runnable队列了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WaitAndNotify</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ThreadA</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        System.out.println(<span class="string">&quot;ThreadA: &quot;</span> + i);</span><br><span class="line">                        lock.notify();</span><br><span class="line">                        lock.wait();</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                lock.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ThreadB</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        System.out.println(<span class="string">&quot;ThreadB: &quot;</span> + i);</span><br><span class="line">                        lock.notify();</span><br><span class="line">                        lock.wait();</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                lock.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">ThreadA</span>()).start();</span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">ThreadB</span>()).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出：</span></span><br><span class="line">ThreadA: <span class="number">0</span></span><br><span class="line">ThreadB: <span class="number">0</span></span><br><span class="line">ThreadA: <span class="number">1</span></span><br><span class="line">ThreadB: <span class="number">1</span></span><br><span class="line">ThreadA: <span class="number">2</span></span><br><span class="line">ThreadB: <span class="number">2</span></span><br><span class="line">ThreadA: <span class="number">3</span></span><br><span class="line">ThreadB: <span class="number">3</span></span><br><span class="line">ThreadA: <span class="number">4</span></span><br><span class="line">ThreadB: <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要注意的是等待/通知机制使用的是使用同一个对象锁，如果你两个线程使用的是不同的对象锁，那它们之间是不能用等待/通知机制通信的。</p>
+</blockquote>
+<h3 id="信号量">5.3 信号量</h3>
+<blockquote>
+<p>volatile关键字能够保证内存的可见性，如果用volatile关键字声明了一个变量，在一个线程里面改变了这个变量的值，那其它线程是立马可见更改后的值的。</p>
+</blockquote>
+<p>使用volatile关键词实现信号量通信</p>
+<p>等待/通知机制适合两个线程之间的合作，信号量机制适合多个线程之间的合作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Signal</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">signal</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ThreadA</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">while</span> (signal &lt; <span class="number">5</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (signal % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;threadA: &quot;</span> + signal);</span><br><span class="line">                    signal++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ThreadB</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">while</span> (signal &lt; <span class="number">5</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (signal % <span class="number">2</span> == <span class="number">1</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;threadB: &quot;</span> + signal);</span><br><span class="line">                    signal = signal + <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">ThreadA</span>()).start();</span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">ThreadB</span>()).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出：</span></span><br><span class="line">threadA: <span class="number">0</span></span><br><span class="line">threadB: <span class="number">1</span></span><br><span class="line">threadA: <span class="number">2</span></span><br><span class="line">threadB: <span class="number">3</span></span><br><span class="line">threadA: <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h3 id="管道通信">5.4 管道通信</h3>
+<p>与IO流有关，当一个线程需要另一个线程发送信息或文件时</p>
+<h3 id="其他通信相关">5.5 其他通信相关</h3>
+<h4 id="join方法">5.5.1 join方法</h4>
+<p>join方法是Thread类的实例方法，它的作用是等join的这个线程执行完成之后，再继续执行当前线程。</p>
+<p>执行join方法，当前线程进入waiting队列</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Join</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ThreadA</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;我是子线程，我先睡一秒&quot;</span>);</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                System.out.println(<span class="string">&quot;我是子线程，我睡完了一秒&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">ThreadA</span>());</span><br><span class="line">        thread.start();</span><br><span class="line">        thread.join();</span><br><span class="line">        System.out.println(<span class="string">&quot;如果不加join方法，我会先被打出来，加了就不一样了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">join</span><span class="params">(<span class="keyword">final</span> <span class="type">long</span> millis)</span></span><br><span class="line">   <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">       <span class="keyword">if</span> (millis &gt; <span class="number">0</span>) &#123;</span><br><span class="line">           <span class="keyword">if</span> (isAlive()) &#123;</span><br><span class="line">               <span class="keyword">final</span> <span class="type">long</span> <span class="variable">startTime</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">               <span class="type">long</span> <span class="variable">delay</span> <span class="operator">=</span> millis;</span><br><span class="line">               <span class="keyword">do</span> &#123;</span><br><span class="line">                   wait(delay);</span><br><span class="line">               &#125; <span class="keyword">while</span> (isAlive() &amp;&amp; (delay = millis -</span><br><span class="line">                       TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime)) &gt; <span class="number">0</span>);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">else</span> <span class="keyword">if</span> (millis == <span class="number">0</span>) &#123; <span class="comment">// 这里</span></span><br><span class="line">           <span class="keyword">while</span> (isAlive()) &#123;</span><br><span class="line">               wait(<span class="number">0</span>);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;timeout value is negative&quot;</span>);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>上面是join的源码</p>
+<p>isAlive()方法是判断当前线程是否在start或runnable状态</p>
+<p>如果是，就调用wait方法，进入被调用线程的等待队列</p>
+<p>调用对象的 <code>wait()</code>
+方法会使当前线程进入对象的等待队列，等待其他线程调用相同对象的
+<code>notify()</code> 或 <code>notifyAll()</code> 方法来唤醒。</p>
+<p>比如上面那个例子，第19行，main线程调用了thread.join</p>
+<p>main线程进入thread线程的等待队列，thread线程run方法结束，会默认调用notifyAll方法，main线程回到runnable状态。</p>
+<h4 id="sleep方法">5.5.2 sleep方法</h4>
+<p>sleep方法是Thread类的静态方法，它的作用是让当前线程睡眠一段时间。</p>
+<p><strong>sleep方法是不会释放当前的锁的，而wait方法会</strong></p>
+<p>join方法也不会释放当前的锁。</p>
+<ul>
+<li>wait可以指定时间，也可以不指定；而sleep必须指定时间。</li>
+<li>wait释放cpu资源，同时释放锁；sleep释放cpu资源，但是不释放锁，所以易死锁。</li>
+<li>wait必须放在同步块或同步方法中，而sleep可以在任意位置。</li>
+</ul>
+<h4 id="threadlocal类">5.5.3 ThreadLocal类</h4>
+<p>ThreadLocal是一个本地线程副本变量工具类，内部是一个弱引用的Map来维护。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocalDemo</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ThreadA</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> ThreadLocal&lt;String&gt; threadLocal;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">ThreadA</span><span class="params">(ThreadLocal&lt;String&gt; threadLocal)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.threadLocal = threadLocal;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            threadLocal.set(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;ThreadA输出：&quot;</span> + threadLocal.get());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">ThreadB</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">            <span class="keyword">private</span> ThreadLocal&lt;String&gt; threadLocal;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">public</span> <span class="title function_">ThreadB</span><span class="params">(ThreadLocal&lt;String&gt; threadLocal)</span> &#123;</span><br><span class="line">                <span class="built_in">this</span>.threadLocal = threadLocal;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">                threadLocal.set(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(<span class="string">&quot;ThreadB输出：&quot;</span> + threadLocal.get());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">            ThreadLocal&lt;String&gt; threadLocal = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">ThreadA</span>(threadLocal)).start();</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">ThreadB</span>(threadLocal)).start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出：</span></span><br><span class="line">ThreadA输出：A</span><br><span class="line">ThreadB输出：B</span><br></pre></td></tr></table></figure>
+<p>虽然两个线程使用的同一个ThreadLocal实例（通过构造方法传入），但是它们各自可以存取自己当前线程的一个值。</p>
+<p><code>ThreadLocal</code> 的常见应用场景：</p>
+<ol type="1">
+<li>线程上下文传递：<code>ThreadLocal</code>
+可以在多个方法或组件之间传递线程相关的上下文信息，而无需显式地传递参数。每个线程都可以在
+<code>ThreadLocal</code>
+中设置和获取自己的上下文信息，从而实现线程级别的数据共享。</li>
+<li>线程安全的对象存储：在需要存储线程安全的对象时，可以将对象存储在
+<code>ThreadLocal</code> 中。由于每个线程都拥有独立的
+<code>ThreadLocal</code>
+实例，因此可以安全地将对象存储在其中，而不必担心线程之间的竞争条件。</li>
+<li>数据库连接管理：在多线程的数据库访问场景中，可以使用
+<code>ThreadLocal</code> 存储数据库连接对象。每个线程都可以从
+<code>ThreadLocal</code>
+中获取自己的连接对象，避免了线程之间的竞争和资源争用。</li>
+<li>用户会话管理：在 Web 应用程序中，可以使用 <code>ThreadLocal</code>
+存储用户会话信息。每个线程都可以通过 <code>ThreadLocal</code>
+获取自己的会话对象，而不必共享会话对象或进行同步操作。</li>
+<li>日志跟踪：<code>ThreadLocal</code>
+可以用于在多线程环境中跟踪日志信息。每个线程可以在
+<code>ThreadLocal</code>
+中记录自己的日志上下文，从而实现线程级别的日志记录和跟踪。</li>
+</ol>
+<p>需要注意的是，使用 <code>ThreadLocal</code>
+需要谨慎考虑内存泄漏和资源释放的问题。由于 <code>ThreadLocal</code>
+的生命周期与线程绑定，如果没有及时清理 <code>ThreadLocal</code>
+中的数据，可能会导致内存泄漏和资源浪费。因此，在使用
+<code>ThreadLocal</code> 时，需要注意及时清理和释放线程局部变量。</p>
+<h4 id="inheritablethreadlocal">5.5.4 InheritableThreadLocal</h4>
+<p>InheritableThreadLocal类与ThreadLocal类稍有不同，Inheritable是继承的意思。它不仅仅是当前线程可以存取副本值，而且它的子线程也可以存取这个副本值。</p>
+<h2 id="java内存模型">6 Java内存模型</h2>
+<h3 id="并发模型的两个关键问题">6.1 并发模型的两个关键问题</h3>
+<ol type="1">
+<li>线程间如何通信？线程之间以何种机制来交换信息</li>
+<li>线程间如何同步？线程以何种机制来控制不同线程间操作发生的相对顺序</li>
+</ol>
+<p>有两种并发模型可以解决这两个问题：</p>
+<ul>
+<li>消息传递并发模型</li>
+<li>共享内存并发模型</li>
+</ul>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230710134803619.png"
+alt="image-20230710134803619" />
+<figcaption aria-hidden="true">image-20230710134803619</figcaption>
+</figure>
+<p>Java中，使用的是共享内存并发模型</p>
+<h3 id="java内存模型的抽象结构">6.2 Java内存模型的抽象结构</h3>
+<h4 id="运行时内存划分">6.2.1 运行时内存划分</h4>
+<p><img src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230710135309396.png" alt="image-20230710135309396" style="zoom:50%;" /></p>
+<p>栈都是线程私有的数据，二堆是线程共享的数据，由此产生内存可见性的问题</p>
+<h4 id="既然堆是共享的为什么堆存在内存不可见问题">6.2.2
+既然堆是共享的，为什么堆存在内存不可见问题？</h4>
+<p>现代计算机为了高效，几乎在每个位置都设置了缓存，比如CPU有多级缓存、应用程序有缓存、数据库有缓存、分布式缓存、CDN缓存。</p>
+<p>JMM、Java内存模型也是一个缓存。线程之间的共享变量存在主内存，每个线程都有私有的本地内存，存储了线程读写共享变量的副本。</p>
+<p><img src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230710141347742.png" alt="image-20230710141347742" style="zoom: 33%;" /></p>
+<p>从图中可以看出：</p>
+<ol type="1">
+<li>所有的共享变量都存在主内存中。</li>
+<li>每个线程都保存了一份该线程使用到的共享变量的副本。</li>
+<li>如果线程A与线程B之间要通信的话，必须经历下面2个步骤：
+<ol type="1">
+<li>线程A将本地内存A中更新过的共享变量刷新到主内存中去。</li>
+<li>线程B到主内存中去读取线程A之前已经更新过的共享变量。</li>
+</ol></li>
+</ol>
+<p>根据JMM的规定，<strong>线程对共享变量的所有操作都必须在自己的本地内存中进行，不能直接从主内存中读取</strong>。</p>
+<p>所以线程B并不是直接去主内存中读取共享变量的值，而是先在本地内存B中找到这个共享变量，发现这个共享变量已经被更新了，然后本地内存B去主内存中读取这个共享变量的新值，并拷贝到本地内存B中，最后线程B再读取本地内存B中的新值。</p>
+<p>那么怎么知道这个共享变量的被其他线程更新了呢？这就是JMM的功劳了，也是JMM存在的必要性之一。<strong>JMM通过控制主内存与每个线程的本地内存之间的交互，来提供内存可见性保证</strong>。</p>
+<h2 id="重排序与happens--before">7 重排序与happens- before</h2>
+<h3 id="什么是重排序">7.1 什么是重排序</h3>
+<p>不同的计算机体系结构具有不同的指令集，比如英特尔的
+x86-64指令集。而一个计算机程序可以被解析成一系列指令。</p>
+<p>计算机组成原理中的流水线是一种高效的指令执行方式，它将指令的执行过程划分为多个独立的阶段，并允许多个指令在不同阶段同时执行。这种并行处理的方式可以提高计算机的指令执行速度和吞吐量。</p>
+<p>但是，流水线技术最害怕<strong>中断</strong>，恢复中断的代价是比较大的，所以我们要想尽办法不让流水线中断。指令重排就是减少中断的一种技术。</p>
+<p>指令重排可以保证串行语义一致，但不保证多线程间的语义也一致，所以在多线程下，指令重排序可能会导致一些问题</p>
+<h3 id="顺序一致性模型与jmm的保证">7.2 顺序一致性模型与JMM的保证</h3>
+<p>顺序一致性模型是一个参考或者说概念，内存模型在设计的时候会参考它。</p>
+<h4 id="顺序一致性模型">7.2.1 顺序一致性模型</h4>
+<p>顺序一致性模型有两大特性：</p>
+<ul>
+<li>一个线程中的所有操作必须按照程序的顺序（即Java代码的顺序）来执行。</li>
+<li>不管程序是否同步，所有线程都只能看到一个单一的操作执行顺序。即在顺序一致性模型中，每个操作必须是<strong>原子性的，且立刻对所有线程可见</strong>。</li>
+</ul>
+<p><strong>但是JMM没有这样的保证。</strong></p>
+<p>比如，在当前线程把写过的数据缓存在本地内存中，在没有刷新到主内存之前，这个写操作仅对当前线程可见；从其他线程的角度来观察，这个写操作根本没有被当前线程所执行。只有当前线程把本地内存中写过的数据刷新到主内存之后，这个写操作才对其他线程可见。在这种情况下，当前线程和其他线程看到的执行顺序是不一样的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VolatileExample</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">volatile</span> <span class="type">boolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writer</span><span class="params">()</span> &#123;</span><br><span class="line">        a = <span class="number">1</span>; <span class="comment">// step 1</span></span><br><span class="line">        flag = <span class="literal">true</span>; <span class="comment">// step 2</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reader</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (flag) &#123; <span class="comment">// step 3</span></span><br><span class="line">            System.out.println(a); <span class="comment">// step 4</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="volatile">8 volatile</h2>
+<p>当一个变量被定义成volatile后，它具备两项特性：</p>
+<ol type="1">
+<li>保证此变量对所有线程的可见性</li>
+<li>禁止指令重排序优化</li>
+</ol>
+<h2 id="synchronized与锁">9 synchronized与锁</h2>
+<h3 id="synchronized关键字">9.1 Synchronized关键字</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(lock) &#123;</span><br><span class="line">  <span class="comment">// 同步代码块</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">method</span><span class="params">()</span>&#123;</span><br><span class="line">  <span class="comment">// 同步方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>保证同一时刻只有一个线程可以进入同步代码块或同步方法，从而保证线程安全</p>
+<p>实现有序性和原子性</p>
+<p>但这个有序性和volatile实现的有序性是相对语义来看的，线程与线程间，每一个synchronized块可以看作是一个原子操作，它保证每个时刻只有一个线程执行同步代码，它可以解决工作内存和主内存同步延迟引发的无序。</p>
+<ul>
+<li>synchronized是因为块与块之间看起来是原子操作，块与块之间有序可见</li>
+<li>volatile是在底层通过内存屏障防止指令重排的，变量前后之间的指令与指令之间有序可见。</li>
+</ul>
+<h3 id="锁">9.2 锁🔒</h3>
+<h4 id="对象头">9.2.1 对象头</h4>
+<h4 id="偏向锁">9.2.2 偏向锁</h4>
+<p>偏向锁（Biased
+Locking）是Java中锁优化的一种技术，旨在减少无竞争情况下的锁操作的开销。它是一种针对单线程对共享资源的独占访问的优化手段。</p>
+<p>只要出现<strong>多个线程访问同一个临界资源，无论是否是同时访问</strong>，就会导致偏向锁的升级。</p>
+<p>简单来说，是因为对象头里存储了锁标志位，101代表偏向锁，如果是偏向锁就去查一下当前对象头里的线程id是不是当前线程，如果是那么就继续运行，如果不是，说明出现了锁竞争要锁升级了。</p>
+<p>上述的过程也是CAS的过程。</p>
+<h4 id="轻量级锁">9.2.3 轻量级锁</h4>
+<p>多个线程在不同时段访问同一临界资源，即不存在锁竞争的情况。使用轻量级锁。</p>
+<h4 id="总结锁的升级流程">9.2.5 总结锁的升级流程</h4>
+<p>每一个线程在准备获取共享资源时：
+第一步，检查MarkWord里面是不是放的自己的ThreadId
+,如果是，表示当前线程是处于 “偏向锁” 。</p>
+<p>第二步，如果MarkWord不是自己的ThreadId，锁升级，这时候，用CAS来执行切换，新的线程根据MarkWord里面现有的ThreadId，通知之前线程暂停，之前线程将Markword的内容置为空。</p>
+<p>第三步，两个线程都把锁对象的HashCode复制到自己新建的用于存储锁的记录空间，接着开始通过CAS操作，
+把锁对象的MarKword的内容修改为自己新建的记录空间的地址的方式竞争MarkWord。</p>
+<p>第四步，第三步中成功执行CAS的获得资源，失败的则进入自旋 。</p>
+<p>第五步，自旋的线程在自旋过程中，成功获得资源(即之前获的资源的线程执行完成并释放了共享资源)，则整个状态依然处于
+轻量级锁的状态，如果自旋失败 。</p>
+<p>第六步，进入重量级锁的状态，这个时候，自旋的线程进行阻塞，等待之前线程执行完成并唤醒自己。</p>
+<h3 id="各种锁的优缺点对比">9.2.6 各种锁的优缺点对比</h3>
+<p>下表来自《Java并发编程的艺术》：</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 39%" />
+<col style="width: 31%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>锁</th>
+<th>优点</th>
+<th>缺点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>偏向锁</td>
+<td>加锁和解锁不需要额外的消耗，和执行非同步方法比仅存在纳秒级的差距。</td>
+<td>如果线程间存在锁竞争，会带来额外的锁撤销的消耗。</td>
+<td>适用于只有一个线程访问同步块场景。</td>
+</tr>
+<tr class="even">
+<td>轻量级锁</td>
+<td>竞争的线程不会阻塞，提高了程序的响应速度。</td>
+<td>如果始终得不到锁竞争的线程使用自旋会消耗CPU。</td>
+<td>追求响应时间。同步块执行速度非常快。</td>
+</tr>
+<tr class="odd">
+<td>重量级锁</td>
+<td>线程竞争不使用自旋，不会消耗CPU。</td>
+<td>线程阻塞，响应时间缓慢。</td>
+<td>追求吞吐量。同步块执行时间较长。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="线程池原理">12 线程池原理</h2>
+<h3 id="为什么要用线程池">12.1 为什么要用线程池</h3>
+<ol type="1">
+<li>复用已创建的线程，因为创建/销毁线程需要消耗系统资源</li>
+<li>控制并发的数量。并发数量多，可能会导致资源消耗过多，从而造成服务器崩溃。</li>
+<li>可以对线程做统一管理。</li>
+</ol>
 
       
     </div>
@@ -296,7 +609,7 @@ package</p>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/03/10/%E4%B8%80%E9%94%AE%E7%99%BB%E5%BD%95%E8%B7%B3%E6%9D%BF%E6%9C%BA/">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/07/06/%E5%8F%A4%E5%85%B8%E9%9F%B3%E4%B9%90%E5%85%A5%E9%97%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -314,7 +627,7 @@ package</p>
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/10/%E4%B8%80%E9%94%AE%E7%99%BB%E5%BD%95%E8%B7%B3%E6%9D%BF%E6%9C%BA/" class="post-title-link" itemprop="url">登录跳板机脚本</a>
+          <a href="/2021/07/06/%E5%8F%A4%E5%85%B8%E9%9F%B3%E4%B9%90%E5%85%A5%E9%97%A8/" class="post-title-link" itemprop="url">古典音乐入门</a>
         </h2>
 
         <div class="post-meta-container">
@@ -325,14 +638,14 @@ package</p>
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2022-03-10 13:42:25" itemprop="dateCreated datePublished" datetime="2022-03-10T13:42:25+08:00">2022-03-10</time>
+      <time title="Created: 2021-07-06 00:25:16" itemprop="dateCreated datePublished" datetime="2021-07-06T00:25:16+08:00">2021-07-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-08-26 22:28:47" itemprop="dateModified" datetime="2022-08-26T22:28:47+08:00">2022-08-26</time>
+      <time title="Modified: 2023-08-22 17:22:45" itemprop="dateModified" datetime="2023-08-22T17:22:45+08:00">2023-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -340,7 +653,7 @@ package</p>
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+          <a href="/categories/music/" itemprop="url" rel="index"><span itemprop="name">music</span></a>
         </span>
     </span>
 
@@ -354,45 +667,120 @@ package</p>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="第一步">第一步</h1>
-<p>在某个目录（我是在～/exp）下创建一个文件：login-it_zhenaioa_com.exp
-vim login-it_zhenaioa_com.exp 文件内容如下：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/usr/bin/expect</span></span><br><span class="line">set ip it.zhenaioa.com</span><br><span class="line">set user user-name</span><br><span class="line">set password your-password</span><br><span class="line">set port 22</span><br><span class="line"></span><br><span class="line">spawn ssh  $user@$ip -p$port</span><br><span class="line"></span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*assword:*&quot; &#123; send &quot;$password\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
+          <h1 id="名词解释">名词解释</h1>
+<table>
+<thead>
+<tr class="header">
+<th>英文</th>
+<th>中文</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>minuet</td>
+<td>小步舞曲</td>
+</tr>
+<tr class="even">
+<td>prelude</td>
+<td>前奏</td>
+</tr>
+<tr class="odd">
+<td>fugue</td>
+<td>赋格</td>
+</tr>
+<tr class="even">
+<td>concerto</td>
+<td>协奏曲</td>
+</tr>
+<tr class="odd">
+<td>suite</td>
+<td>组曲</td>
+</tr>
+<tr class="even">
+<td>sonata</td>
+<td>奏鸣曲</td>
+</tr>
+<tr class="odd">
+<td>waltz</td>
+<td>圆舞曲</td>
+</tr>
+<tr class="even">
+<td>symphony</td>
+<td>交响曲</td>
+</tr>
+<tr class="odd">
+<td>nocturne</td>
+<td>夜曲</td>
+</tr>
+<tr class="even">
+<td>Ballade</td>
+<td>叙事曲</td>
+</tr>
+<tr class="odd">
+<td>Aria</td>
+<td>咏叹调</td>
+</tr>
+<tr class="even">
+<td>Flute</td>
+<td>长笛</td>
+</tr>
+<tr class="odd">
+<td>March</td>
+<td>进行曲</td>
+</tr>
+<tr class="even">
+<td>Etude</td>
+<td>练习曲</td>
+</tr>
+</tbody>
+</table>
+<h1 id="一些理论">一些理论</h1>
+<p>音乐音响的两个基本属性：</p>
+<ul>
+<li>没有视觉性：不能直接传达视觉形象</li>
+<li>没有语义性：不能直接传达思想概念</li>
+</ul>
+<p>《西西里之歌》</p>
+<p>音乐是情绪的艺术</p>
+<p>幸福人生最重要是什么？</p>
+<p>是丰富多彩</p>
+<p>为美而流泪</p>
+<blockquote>
+<p><strong>音乐是人类灵魂的避难所，如果你还想保持心灵的纯净，在那么喧嚣的生活当中，给自己留一点宁静，在那么龌龊的人际关系行为中，给天空留下一片崇高，你应该热爱音乐</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>最伟大的演奏家与一般的演奏家的区别在哪？</strong></p>
+<p>在专注程度</p>
+<p>心理习惯一旦养成，比动作系统还难改变</p>
+<p>用宗教般的笃静感来对待每一个音符</p>
+</blockquote>
+<p>从作品的角度看：音乐能否引起明确的内容理解，取决于持续而稳定的联觉对应关系</p>
+<p>从听众的角度看：敏感的联觉、丰富的联想是理解音乐的前提条件</p>
+<p>音乐心理学研究告诉我们，声音只有五种属性可以引起联觉：</p>
 <ol type="1">
-<li><code>[#!/usr/bin/expect］</code>
-这一行告诉操作系统脚本里的代码使用那一个shell来执行。这里的expect其实和linux下的bash、windows下的cmd是一类东西。
-注意：这一行需要在脚本的第一行。</li>
-<li><code>［set timeout 30］</code>
-基本上认识英文的都知道这是设置超时时间的，现在你只要记住他的计时单位是：秒</li>
-<li><code>［spawn ssh -l username 192.168.1.1］</code>
-spawn是进入expect环境后才可以执行的expect内部命令，如果没有装expect或者直接在默认的SHELL下执行是找不到spawn命令的。所以不要用
-“which
-spawn“之类的命令去找spawn命令。好比windows里的dir就是一个内部命令，这个命令由shell自带，你无法找到一个dir.com
-或 dir.exe 的可执行文件。
-它主要的功能是给ssh运行进程加个壳，用来传递交互指令。</li>
-<li><code>［expect "password:"］</code>
-这里的expect也是expect的一个内部命令，有点晕吧，expect的shell命令和内部命令是一样的，但不是一个功能，习惯就好了。这个命令的意思是判断上次输出结果里是否包含“password:”的字符串，如果有则立即返回，否则就等待一段时间后返回，这里等待时长就是前面设置的30秒</li>
-<li><code>［send "ispass\r"］</code>
-这里就是执行交互动作，与手工输入密码的动作等效。 温馨提示：
-命令字符串结尾别忘记加上 “，如果出现异常等待的状态可以核查一下。</li>
-<li><code>［interact］</code>
-执行完成后保持交互状态，把控制权交给控制台，这个时候就可以手工操作了。如果没有这一句登录完成后会退出，而不是留在远程终端上。如果你只是登录过去执行一段命令就退出，可改为［expect
-eof］</li>
+<li>音高</li>
+<li>音强</li>
+<li>速度和节奏</li>
+<li>发音速度</li>
+<li>紧张度</li>
 </ol>
-<h1 id="第二步">第二步</h1>
-<p>进入～/.zshrc文件，添加快捷alias</p>
-<p>vim .zshrc别名为zago</p>
-<p>expect后面的是刚才所创建文件的地址</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias zago=&quot;expect exp/login-it_zhenaioa_com.exp&quot;</span><br></pre></td></tr></table></figure>
-<p>修改了.zshrc文件后，执行 source .zshrc 命令刷新一下</p>
-<figure>
-<img
-src="https://github.com/TwoAndOne/my-images/raw/master/uPic/8XNGrB.png"
-alt="8XNGrB" />
-<figcaption aria-hidden="true">8XNGrB</figcaption>
-</figure>
-<h1 id="第三步">第三步</h1>
-<p>执行你所命名的别名 go，然后就可以一键登录啦！</p>
+<h1 id="充分触发我联觉印象的音乐们">充分触发我联觉印象的音乐们</h1>
+<ol type="1">
+<li><p>Prelude BWV999 鲁特琴 巴赫</p>
+<iframe src="//player.bilibili.com/player.html?aid=339882748&amp;bvid=BV1dR4y1F7AD&amp;cid=554320944&amp;page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+</iframe></li>
+<li><p>《沉思曲》马友友大提琴</p>
+<iframe src="//player.bilibili.com/player.html?aid=375410114&amp;bvid=BV1Eo4y127CR&amp;cid=334900598&amp;page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+</iframe></li>
+<li><p>《沉思曲》李映衡</p>
+<iframe src="//player.bilibili.com/player.html?aid=673328197&amp;bvid=BV1rU4y1L7N9&amp;cid=343294734&amp;page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+</iframe></li>
+<li><p>《月光》 德彪西</p>
+<iframe src="//player.bilibili.com/player.html?aid=48446974&amp;bvid=BV1Gb41137fJ&amp;cid=84847630&amp;page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+</iframe></li>
+<li><p>《流浪者之歌》</p></li>
+<li><p>《》</p></li>
+</ol>
 
       
     </div>
@@ -419,7 +807,7 @@ alt="8XNGrB" />
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/02/24/Muti%20Thread/">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/07/01/JVM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -437,7 +825,7 @@ alt="8XNGrB" />
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/24/Muti%20Thread/" class="post-title-link" itemprop="url">Muti Thread</a>
+          <a href="/2021/07/01/JVM/" class="post-title-link" itemprop="url">JVM</a>
         </h2>
 
         <div class="post-meta-container">
@@ -448,14 +836,14 @@ alt="8XNGrB" />
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2022-02-24 13:42:25" itemprop="dateCreated datePublished" datetime="2022-02-24T13:42:25+08:00">2022-02-24</time>
+      <time title="Created: 2021-07-01 10:53:21" itemprop="dateCreated datePublished" datetime="2021-07-01T10:53:21+08:00">2021-07-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-07-18 01:08:31" itemprop="dateModified" datetime="2022-07-18T01:08:31+08:00">2022-07-18</time>
+      <time title="Modified: 2023-08-22 17:22:28" itemprop="dateModified" datetime="2023-08-22T17:22:28+08:00">2023-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -477,141 +865,330 @@ alt="8XNGrB" />
     
     
     <div class="post-body" itemprop="articleBody">
-          <figure>
-<img
-src="https://static001.geekbang.org/resource/image/11/65/11e0c64618c04edba52619f41aaa3565.png"
-alt="全景图" />
-<figcaption aria-hidden="true">全景图</figcaption>
-</figure>
-<h2 id="开篇陈词">1 开篇陈词</h2>
-<p>一切为了提高性能！</p>
-<p>为了不浪费等待IO的CPU资源，所以我们把任务拆分交替执行<strong>分时操作系统</strong>，这就是并发。</p>
-<p>随着技术的发展，出现了多核CPU，我们就可以实现并行计算。</p>
-<p>为了充分利用多核CPU，进一步提升效率，我们需要对任务进行组织编排，进行分工。对线程进行分工了之后，这就导致一个问题，有一些任务是有依赖关系的，要想实现这些依赖关系，就得让线程之间进行通信，也就是<strong>同步</strong>。</p>
-<p>当然为了并发和通信，也引入了新的问题，那就是多线程并发操作临界资源的问题。</p>
-<p>对于临界资源，我们的解决方案是锁、信号量等，这就是<strong>互斥</strong>。</p>
-<p>一切为了提高性能！</p>
-<p>那么问题有哪些呢？</p>
-<ul>
-<li>缓存——可见性问题</li>
-<li>线程切换——原子性问题</li>
-<li>编译优化——有序性问题</li>
-</ul>
-<p>那么Java是如何解决这些问题的呢？</p>
-<p>如果说缓存和编译优化会带来可见性和有序性的问题，是不是直接禁用缓存和编译优化就行了。但是如果直接禁用，程序的性能就堪忧了，所以我们需要按需禁用。</p>
-<p>Java内存模型规范了JVM如何提供按需禁用缓存和编译优化的方法：</p>
-<ul>
-<li>volatile</li>
-<li>synchronize</li>
-<li>final</li>
-<li>六个Happens-Before规则</li>
-</ul>
-<h2 id="死锁">2 死锁</h2>
-<p><span class="citation"
-data-cites="test.MutiThread0">@test.MutiThread0</span></p>
-<blockquote>
-<p>加锁本质就是在锁对象的对象头中写入当前线程id</p>
-<p>解决原子性问题，是要保证中间状态对外不见</p>
-<p>用细粒度锁来锁定多个资源时，要注意死锁的问题</p>
-</blockquote>
-<p>死锁的四个条件</p>
-<ul>
-<li><p>互斥</p></li>
-<li><p>占有且等待</p></li>
-<li><p>不可抢占</p></li>
-<li><p>循环等待</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Account</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="type">int</span> id;</span><br><span class="line">  <span class="keyword">private</span> <span class="type">int</span> balance;</span><br><span class="line">  <span class="comment">// 转账</span></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">transfer</span><span class="params">(Account target, <span class="type">int</span> amt)</span>&#123;</span><br><span class="line">    <span class="type">Account</span> <span class="variable">left</span> <span class="operator">=</span> <span class="built_in">this</span>        ①</span><br><span class="line">    <span class="type">Account</span> <span class="variable">right</span> <span class="operator">=</span> target;    ②</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.id &gt; target.id) &#123; ③</span><br><span class="line">      left = target;           ④</span><br><span class="line">      right = <span class="built_in">this</span>;            ⑤</span><br><span class="line">    &#125;                          ⑥</span><br><span class="line">    <span class="comment">// 锁定序号小的账户</span></span><br><span class="line">    <span class="keyword">synchronized</span>(left)&#123;</span><br><span class="line">      <span class="comment">// 锁定序号大的账户</span></span><br><span class="line">      <span class="keyword">synchronized</span>(right)&#123; </span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.balance &gt; amt)&#123;</span><br><span class="line">          <span class="built_in">this</span>.balance -= amt;</span><br><span class="line">          target.balance += amt;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<blockquote>
-<p>wait与sleep区别在于：</p>
+          <h1 id="jvm">JVM</h1>
+<h2 id="question">Question</h2>
 <ol type="1">
-<li>wait会释放所有锁而sleep不会释放锁资源.</li>
-<li>wait只能在同步方法和同步块中使用，而sleep任何地方都可以.</li>
-<li>wait无需捕捉异常，而sleep需要.</li>
+<li>JMM模型？</li>
+<li>Java对象的定位方式？</li>
+<li>说一下堆栈的区别？</li>
+<li>什么情况下会发生栈溢出？</li>
+<li>类文件结构</li>
+<li>什么是类加载？类加载的过程？</li>
+<li>什么是双亲委派模型？</li>
+<li>什么是类加载器、类加载器有哪些？</li>
+<li>类的实例化顺序？</li>
+<li>如何判断一个对象是否存活？</li>
+<li>可作为GC Roots的对象有哪些？</li>
+<li>什么情况下类会被卸载？</li>
+<li>强引用、软引用、弱引用、虚引用？</li>
+<li>Minor GC和Full GC的区别？</li>
+<li>内存的分配策略？</li>
+<li>Full GC的触发条件？</li>
+<li>垃圾回收算法有哪些？</li>
+<li>有哪些垃圾回收器？</li>
+<li>常用的JVM调优的命令有哪些？</li>
+<li>如何排查OOM的问题？</li>
+<li>GC是什么？为什么要GC？</li>
 </ol>
-<p>两者相同点：都会让渡CPU执行时间，等待再次调度！</p>
-</blockquote>
-<h2 id="开篇小结">3开篇小结</h2>
-<p>安全问题</p>
-<p>数据竞争： 多个线程同时访问一个数据，并且至少有一个线程会写这个数据。
-竞态条件： 程序的执行结果依赖程序执行的顺序。
-也可以按照以下的方式理解竞态条件：
-程序的执行依赖于某个状态变量，在判断满足条件的时候执行，但是在执行时其他变量同时修改了状态变量。
-if (状态变量 满足 执行条件) { 执行操作 }</p>
-<p>活跃问题</p>
-<ul>
-<li>死锁：破坏死锁产生的条件</li>
-<li>活锁:等待一个随机时间</li>
-<li>饥饿：公平锁</li>
-</ul>
-<p>性能问题</p>
-<ul>
-<li>使用无锁的算法和数据结构
-<ul>
-<li>线程本地存储、写入时复制、乐观锁、Java并发包原子类、Disruptor</li>
-</ul></li>
-<li>减少锁持有的时间
-<ul>
-<li>细粒度的锁：concurrentHashMap</li>
-<li>读写锁</li>
-</ul></li>
-</ul>
-<h2 id="管程">4 管程</h2>
-<p>管程和信号量等价，指管理共享变量以及对共享变量的操作过程，让他们支持并发。</p>
-<p>MESA模型 <span class="citation"
-data-cites="BlockedQueue.java">@BlockedQueue.java</span></p>
+<h2 id="自动内存管理">自动内存管理</h2>
+<h3 id="内存区域与内存溢出异常">内存区域与内存溢出异常</h3>
+<h4 id="运行时数据区域"><strong>运行时数据区域</strong></h4>
 <figure>
 <img
-src="https://static001.geekbang.org/resource/image/57/fa/57e4d94e90226b70be3d57024f5333fa.png"
-alt="MESA" />
-<figcaption aria-hidden="true">MESA</figcaption>
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230701120937994.png"
+alt="image-20230701120937994" />
+<figcaption aria-hidden="true">image-20230701120937994</figcaption>
 </figure>
-<h2 id="生命周期">5 生命周期</h2>
-<p>使用jstack获取JVM线程栈信息</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">top # 获取程序pid</span><br><span class="line">jstack pid</span><br></pre></td></tr></table></figure>
-<h2 id="使用方式">6 使用方式</h2>
-<p>衡量性能的指标：</p>
+<p><strong>PC</strong></p>
+<p>线程私有，是当前线程所执行的字节码的行号指示器。为什么私有是由于多线程情况下，为了切换线程后能恢复到正确的执行位置。</p>
+<p>不会出现OOM</p>
+<p><strong>Java虚拟机栈</strong></p>
+<p>线程私有，与线程同等生命周期。</p>
+<p>虚拟机栈描述的是Java方法执行的线程内存模型：每个方法被执行的时候，VM会创建一个栈帧用于存储局部变量表，操作数栈，动态连接，方法出口等信息。</p>
+<p>每一个方法被调用直至执行完毕的过程，就是一个栈帧在虚拟机栈中从入栈到出栈道过程。</p>
+<p>请求栈深度大于允许的深度，抛出栈溢出异常</p>
+<p>如果栈容易可动态扩展，那么会出现OOM</p>
+<p><strong>本地方法栈</strong></p>
+<p>与虚拟机栈的区别是本地方法栈为本地方法服务。</p>
+<p>栈深度溢出抛出StackOverflowError</p>
+<p>栈扩展失败抛出OutOfMemoryError</p>
+<p><strong>Java堆</strong></p>
+<p>线程共享，虚拟机启动时创建，存放对象实例</p>
+<p>在Java堆中没有内存完成实例分配，并且堆也无法再扩展时，抛出OutOfMemoryError</p>
+<p><strong>方法区</strong></p>
+<p>线程共享，存储类型信息、常量、静态变量、即时编译器后的代码缓存</p>
+<p>方法区是一个虚拟机规范提出的概念，HotSpot是实现</p>
+<p>在jdk6之前使用永久代来实现</p>
+<p>jdk7至jdk8逐渐移到元空间</p>
+<p>无法满足新的内存分配需求时，抛出OutOfMemoryError</p>
+<p><strong>运行时常量池</strong></p>
+<p>线程共享，属于方法区</p>
+<p>存储常量池表：编译期间生成的各种字面量和符号引用</p>
+<p>抛出OOM</p>
+<p><strong>直接内存</strong></p>
+<p>堆外内存，通过DirectByteBuffer对象作为这块内存的引用进行操作，避免Java堆和Native堆来回复制数据。</p>
+<p>使用了内存映射，让操作系统自</p>
+<p><u>除了PC其它都会抛出OOM，只有栈会抛出栈溢出</u></p>
+<h4 id="hotspot虚拟机对象"><strong>HotSpot虚拟机对象</strong></h4>
+<h5 id="对象的创建"><strong>对象的创建</strong></h5>
+<p>new指令：</p>
+<ol type="1">
+<li>类加载检查：检查这个指令的参数能否在常量池中定位到一个类的符号引用，检查这个符号引用代表的类是否已被加载、解析和初始化过</li>
+<li>分配内存：由Java堆是否规整决定-&gt;垃圾收集器是否带有空间压缩整理能力
 <ul>
-<li>延迟</li>
-<li>吞吐量</li>
-</ul>
-<p>我们要减低延迟、提高吞吐量</p>
-<p>CPU密集：CPU核数+1</p>
-<p>IO密集：CPU核数*[1+(I/O耗时 / CPU耗时)]</p>
-<h2 id="juc">7 JUC</h2>
-<p>java
-并发包通过Lock和Condition两个接口来实现管程，其中Lock解决互斥问题，Condition解决同步问题。</p>
-<p>已经有了synchronized，为什么还要设计一个Lock接口?
-因为synchronized会让线程直接进入blocked状态，如果陷入死锁，那么就无法解除了。</p>
-<p>锁的最佳实践</p>
+<li>指针碰撞:带压缩能力的Serial、ParNew</li>
+<li>空闲列表：基于清除的CMS</li>
+</ul></li>
+<li>并发安全问题：
+<ul>
+<li>对分配空间的动作进行同步处理：CAS➕失败重试</li>
+<li>TLAB：本地线程缓冲</li>
+</ul></li>
+<li>初始化零值</li>
+<li>对象头内容初始化</li>
+<li>执行构造函数</li>
+</ol>
 <blockquote>
-<ul>
-<li>永远只在更新对象的成员变量时加锁</li>
-<li>永远只在访问可变的成员变量时加锁</li>
-<li>永不在调用其他对象的方法时加锁</li>
-<li>———-《Java并发编程：设计原则与模式》Doug Lea 减少锁的持有时间
-减小锁的粒度</li>
-</ul>
+<p>初始化一个对象，那肯定得给它分配内存吧，那就得知道分配多少内存吧，分配多少就得知道Class信息吧，总得找到是哪个Class吧，new关键字背后跟了参数，那就是那个类咯，所以区常量池找到它。</p>
 </blockquote>
-<h2 id="concurrent包">7 Concurrent包</h2>
-<h3 id="completionservice">CompletionService</h3>
-<p><strong>作用</strong></p>
-<p>与CompletableFuture的区别在于这里可以批量执行异步任务。执行之后还可以拿到先完成的任务结果，这里是用一个阻塞队列实现的。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ExecutorCompletionService(Executor executor);</span><br><span class="line">ExecutorCompletionService(Executor executor, BlockingQueue&lt;Future&lt;V&gt;&gt; completionQueue);</span><br><span class="line"><span class="comment">// 不指定队列默认用无界的LinkedBlockedQueue</span></span><br></pre></td></tr></table></figure>
-<p><strong>使用</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CompletionServiceTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException, ExecutionException &#123;</span><br><span class="line">    <span class="type">ExecutorService</span> <span class="variable">executor</span> <span class="operator">=</span> Executors.newFixedThreadPool(<span class="number">3</span>);</span><br><span class="line">    ExecutorCompletionService&lt;Integer&gt; cs = <span class="keyword">new</span> <span class="title class_">ExecutorCompletionService</span>&lt;&gt;(executor);</span><br><span class="line">    cs.submit(()-&gt;sleep(<span class="string">&quot;2s&quot;</span>,<span class="number">2</span>));</span><br><span class="line">    cs.submit(()-&gt;sleep(<span class="string">&quot;3s&quot;</span>,<span class="number">3</span>));</span><br><span class="line">    cs.submit(()-&gt;sleep(<span class="string">&quot;1s&quot;</span>,<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">      <span class="type">Integer</span> <span class="variable">r</span> <span class="operator">=</span> cs.take().get();</span><br><span class="line">      executor.execute(()-&gt; &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          sleep(<span class="string">&quot;搞完了&quot;</span>,<span class="number">2</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">          e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">sleep</span><span class="params">(String name,Integer sec)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    TimeUnit.SECONDS.sleep(sec);</span><br><span class="line">    System.out.println(<span class="string">&quot;Name:&quot;</span>+Thread.currentThread().getName() +<span class="string">&quot;  &quot;</span>+name+<span class="string">&quot;: sleep:&quot;</span>+sec);</span><br><span class="line">    <span class="keyword">return</span> sec;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>对象的内存布局</strong></p>
+<p>对象在堆存储布局可以划分三个部分：对象头、实例数据、对齐填充</p>
+<p>对象头包含两个部分：</p>
+<ol type="1">
+<li><p>存储对象自身的运行时数据：Mark Word</p>
+<p>哈希码、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳</p></li>
+<li><p>类型指针：对象指向它的类型元数据的指针，Java虚拟机根据这个指针来确定该对象是哪个类的实例</p></li>
+</ol>
+<p>实例数据：</p>
+<p>无论是父类还是子类的字段都要记录下来，相同宽度的字段被分配到一起，如shorts和chars</p>
+<p>对齐填充：</p>
+<p>任何对象都必须是8字节的倍数，对象头正好是。</p>
+<p><strong>对象的访问定位</strong></p>
+<ul>
+<li>句柄</li>
+<li>直接指针访问</li>
+</ul>
+<p>Java程序会通过栈上的reference数据来操作堆上的具体对象。</p>
+<p>直接指针访问就是reference存储的就是对象地址，速度更快，HotSpot的方式</p>
+<p>句柄访问就是reference存储的是句柄地址，句柄地址存储的是对象地址，多一层是为了当对象被移动时只会改变句柄中的实例数据指针，而reference本身不需要改变。大概是reference可以有很多，让句柄池做了中介。</p>
+<h4 id="outofmemoryerror异常"><strong>OutOfMemoryError异常</strong></h4>
+<p><strong>堆溢出</strong></p>
+<p><code>-verbose:gc -Xms20M -Xmx20M -Mmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8</code></p>
+<p>限制堆大小为20M，不可扩展（将堆堆最小值-Xms参数与最大值-Xmx参数设置为一样即可避免堆自动扩展）</p>
+<p>通过参数-
+XX:+HeapDumpOnOutOfMemoryError可以让虚拟机内存溢出时候Dump出当前内存堆转储快照</p>
+<p>出现异常时的处理方法：</p>
+<ol type="1">
+<li><p>确认内存中导致OOM的对象是否是必要的，也就是要先分清楚内存泄漏还是内存溢出</p>
+<blockquote>
+<p>如果是必要的，就是内存溢出，非必要的就是内存泄漏</p>
+</blockquote></li>
+<li><p>如果是内存泄漏，可通过工具查看泄漏对象到GC
+Root的引用链，找到泄漏对象是通过怎样的引用路径、与哪些GC
+Root相关联，才导致垃圾收集器无法回收。根据泄漏对象的类型信息以及它到GC
+Root引用链的信息，定位具体的代码位置</p></li>
+<li><p>如果是内存溢出，应当检查堆参数，-Xmx，Xms的设置，与机器的内存对比，看看是否能调整。再检查代码中是否有对象生命周期过长、持有状态时间过长、存储设计不合理的情况。</p></li>
+</ol>
+<p><strong>虚拟机栈和本地方法栈溢出</strong></p>
+<p>-Xss 栈容量</p>
+<p><strong>方法区和运行时常量池</strong></p>
+<p>方法区的主要职责是用于存放类型相关信息：类名、访问修饰符、常量池、字段描述、方法描述</p>
+<p>在运行时动态生成大量动态类的应用场景里，应该关注这些类的回收情况。比如大量使用CGLIb字节码增强和动态语言。</p>
+<p><strong>本机直接内存溢出</strong></p>
+<p>由直接内存导致的内存溢出，明显特征时Dump文件没有什么异常，文件也很小。</p>
+<p>考虑是否哪里用了NIO</p>
+<h3 id="垃圾收集器与内存分配策略">垃圾收集器与内存分配策略</h3>
+<ol type="1">
+<li>哪些内存需要回收？</li>
+<li>什么时候回收？</li>
+<li>如何回收？</li>
+</ol>
+<p>只要在运行期间，我们才能知道程序会创建哪些对象，创建多少个对象，这部分内存的分配和回收时动态的。</p>
+<h4 id="哪些内存需要回收"><strong>哪些内存需要回收？</strong></h4>
+<p>只有死去的内存才需要回收，死去即不可能再被任何途径使用的对象</p>
+<p><strong>如何判断对象死没死？</strong></p>
+<p><strong>引用计数法</strong>：有一个地方引用，计数器就加一，引用失效就减一</p>
+<p>单纯使用引用计数很难解决对象之间相互循环引用的问题</p>
+<blockquote>
+<p>Redis中的RedisObject也有一个计数器refcount，计数器为0则可以被回收</p>
+<p>Redis使用，说明Redis一边不会出现循环引用的问题，如果出现了，也有内存过期和淘汰策略进行兜底。</p>
+</blockquote>
+<p><strong>可达性分析算法</strong>：通过GC
+Roots根对象作为起始节点集，从这些节点开始，根据引用关系向下搜索，搜索过程走过的路径称为“引用链”，如果某个对象到GC
+Roots间没有任何引用链相连，则证明此对象时不可能再被使用的。</p>
+<p><u>可以把所有的对象当作图来看待，如果某个对象成了孤岛，那么就可以回收它了</u></p>
+<p><u>有GC Roots的图时大陆，其它都是岛屿</u></p>
+<p>GC Roots：</p>
+<ol type="1">
+<li>虚拟机栈中引用的对象</li>
+<li>方法区中静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法中JNI引用的对象</li>
+<li>被同步锁持有的对象</li>
+<li>虚拟机内部的引用：Class对象、异常对象、类加载器</li>
+</ol>
+<p><strong>强引用、软引用、弱引用、徐引用</strong></p>
+<p>为了破除一个对象只有“被引用”或“未被引用”两种状态，对于描述一些“食之无味、弃之可惜”的对象时，就无能无力。</p>
+<ol type="1">
+<li>强引用：类似Object obj = new Object（）</li>
+<li>软引用：SoftReference类，快发生异常了就丢掉它，也可以做缓存</li>
+<li>弱引用：WeakReference类，遇到垃圾回收就死掉，可以用来在缓存</li>
+<li>虚引用：PhantomReference类，做垃圾回收的回调</li>
+</ol>
+<p><strong>对象不可达了之后就会被回收吗？</strong></p>
+<p>不会，宣告真正死亡，需要两次标记，一次是不可达，一次是执行finalize（）方法后也没有和大陆建立联系。</p>
+<p>finalize（）方法只会被调用一次。</p>
+<p>这个已经被高版本的jdk11移除</p>
+<p><strong>方法区里的内存需要回收吗？</strong></p>
+<p>性价比非常低的区域</p>
+<p>需要回收废弃的常量和不再使用的类型</p>
+<p>如何判断一个类型属于不再使用的类？</p>
+<ol type="1">
+<li>该类所有实例已经被回收</li>
+<li>加载该类的类加载器被回收，非常难</li>
+<li>该类的Class对象没有在任何地方被引用，反射也找不到</li>
+</ol>
+<p>达到这些也只能被允许被回收。</p>
+<h4
+id="什么时候回收垃圾收集算法"><strong>什么时候回收？垃圾收集算法</strong></h4>
+<p><strong>分代收集理论</strong></p>
+<p>将Java堆划分不同区域，根据年龄划分（熬过垃圾收集过程的次数）</p>
+<p>一部分区域对象朝生夕灭，那么就只记录存活的；高频收集</p>
+<p>一部分区域对象难以消灭，那么就只记录死去的；低频收集</p>
+<p>正是因为分了类，才产生了“Minor GC”、“Major GC”、“Full
+GC”等回收类型。</p>
+<p>正是因为分了类，才能针对不同区域安排与里面存储对象存亡特征相匹配的垃圾回收算法。</p>
+<p>但是两个区域之前也是会存在相互引用的关系，所以搞了一个数据结构存储这部分对象：记忆集</p>
+<p><strong>标记清除算法</strong></p>
 <figure>
 <img
-src="https://github.com/TwoAndOne/my-images/raw/master/uPic/jbsY9d.png"
-alt="jbsY9d" />
-<figcaption aria-hidden="true">jbsY9d</figcaption>
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230703164406419.png"
+alt="image-20230703164406419" />
+<figcaption aria-hidden="true">image-20230703164406419</figcaption>
 </figure>
-<p><strong>什么时候使用</strong></p>
-<p>当需要批量提交异步任务的时候。CompletionService将线程池Executor和阻塞队列BlockQueue的功能融合在了一起，能够让批量异步任务的管理更简单。
-而且能够让异步任务的执行结果有序化，先执行的先进入阻塞队列，利用这个特性可以避免无谓的等待。</p>
+<p>三色标记法，标记出可回收的对象，然后回收。</p>
+<p>缺点：</p>
+<ol type="1">
+<li>执行效率不稳定，随着对象数量增长而增长</li>
+<li>内存空间碎片化</li>
+</ol>
+<p><strong>标记复制算法</strong></p>
+<p><img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230703164659791.png" /></p>
+<p>将内存分为两个部分，每次只使用其中一个。回收时把存活对象复制到另一部分，清理掉原来那一部分。</p>
+<p>解决了标记清除算法执行效率不稳定的问题</p>
+<p>缺点：</p>
+<ol type="1">
+<li>空间浪费了一半</li>
+<li>存活对象过多时，内存复制开销大</li>
+</ol>
+<p><strong>标记整理算法</strong></p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230703175719627.png"
+alt="image-20230703175719627" />
+<figcaption aria-hidden="true">image-20230703175719627</figcaption>
+</figure>
+<p>与标记清除一样，选出可以回收的对象进行回收，但是回收之后会对存活的对象进行整理。</p>
+<p>解决了内存碎片问题，吞吐量大</p>
+<p>缺点：</p>
+<ol type="1">
+<li>存活对象过多时，移动对象开销大</li>
+</ol>
+<h4 id="可达性分析的问题"><strong>可达性分析的问题</strong></h4>
+<p>HotSpot算法细节</p>
+<p><strong>根节点枚举</strong></p>
+<p>可回收对象的判断有两种方式一种是引用计数，一种是可达性分析；可达性分析需要从GC
+Roots中开始找引用链，GC Roots集合的寻找就叫做根节点枚举</p>
+<p>为了避免从方法区一个不漏的寻找，使用了OopMap数据结构来快速准确地完成GC
+Roots枚举。</p>
+<p><strong>安全点</strong></p>
+<p>决定用户程序执行时并非在代码指令流的任意位置都能够停顿下来开始垃圾收集，而是强制要求必须执行到安全点后才能够暂停。</p>
+<p>安全点的设定是为了让OopMap不要太多，节约内存。</p>
+<p>一般会在方法调用、循环跳转、异常跳转等程序会长时间执行的地方选取安全点。</p>
+<p><strong>记忆集和卡表</strong></p>
+<p>记忆集是为了解决对象跨代引用所带来的问题，避免把整个老年代加进GC
+Roots扫描范围。</p>
+<p>卡表是记忆集的实现，它包含很多512字节大小的卡页，如果某个卡页中出现跨代引用，那么就标记这个卡页。</p>
+<p>缩减GC Roots扫描范围</p>
+<p><strong>写屏障</strong></p>
+<p>为了解决卡表如何维护，它们何时变脏？谁来把它们变脏？</p>
+<p>何时变脏？</p>
+<p>有其他分代区域中对象引用了本区域对象时，变脏的时间点原则上发生在引用类型字段赋值的那一刻。</p>
+<p>如何变脏？</p>
+<p>通过写屏障，可以看作是“引用类型字段赋值”这个动作的AOP切面，一般是写后屏障。</p>
+<p><strong>三色标记</strong></p>
+<p>我们需要在一个能保障一致性快照上才能进行对象图的遍历。</p>
+<ul>
+<li>白色：对象未被访问过。如果可达性分析结束，仍然是白色的对象代表不可达，需要被回收</li>
+<li>黑色：已经访问过，且这个对象的所有引用都已经被扫描过，代表存活对象</li>
+<li>灰色：被访问，但是这个对象至少还有一个引用没有被扫描过</li>
+</ul>
+<p>三色标记的过程是，先灰色再黑色的推进过程。</p>
+<p>但是由于并发的情况下，用户线程有可能修改引用关系。导致应该回收的对象活下来了，应该活下来的被回收了。</p>
+<p>解决方案是：</p>
+<ul>
+<li>增量更新</li>
+<li>原始快照</li>
+</ul>
 <blockquote>
-<p>对于简单的并行任务，可以通过“线程池+Future”的方案解决；如果任务之间有聚合关系，可以通过CompletableFuture解决；而批量的并行任务，则可以通过CompletionService解决。</p>
+<p>这个三色标记没有理解透彻，下次再看吧</p>
 </blockquote>
+<h4 id="具体的垃圾收集器"><strong>具体的垃圾收集器</strong></h4>
+<h3 id="虚拟机性能监控故障处理">虚拟机性能监控、故障处理</h3>
+<h2 id="虚拟机执行子系统">虚拟机执行子系统</h2>
+<h3 id="类文件结构">类文件结构</h3>
+<h3 id="类加载机制">类加载机制</h3>
+<p>加载、验证、准备、解析、初始化、使用、卸载</p>
+<ol type="1">
+<li><p>什么时候vm会去加载一个类？</p>
+<p>代码中用到这个类的时候，反正最开始就是main方法所在的那个</p></li>
+<li><p>什么是加载？</p>
+<p>1)、通过一个类的全限定名来获取定义此类的二进制字节流。</p>
+<p>2)、将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。</p>
+<p>3)、在内存中生成一个代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的访问入
+口。</p>
+<p>虚拟机外部的二进制流，按照虚拟机所设定的格式存储在方法区，Java堆内存会实例化一个Class对象作为程序访问方法区中的类型数据的外部接口</p></li>
+<li><p>什么是验证？</p>
+<p>这一步是确保你加载的信息是否符合规范，是否会危害虚拟机安全</p></li>
+<li><p>什么是准备？</p>
+<p>将类变量分配内存并初始化0值，这些变量和Class对象存在一起</p></li>
+<li><p>什么是解析？</p>
+<p>将常量池的符号引用转换为直接引用的过程。</p>
+<p>符号引用类似于java中的import语句，你import进来了，我们才可以用这个类来写代码。在解析时，才真正将它与具体的对象进行联系</p></li>
+<li><p>什么是初始化？</p>
+<p>执行静态方法，给静态变量赋值</p>
+<p>规则：当初始化一个类时，发现它的父类没有初始化那么先去初始化它的父类</p></li>
+<li><p>有哪些类加载器？</p>
+<p>实现上述过程都需要类加载器</p>
+<ul>
+<li>启动类加载器：Bootstrap ClassLoader，加载核心类lib目录</li>
+<li>扩展类加载器：Extension ClassLoader，加载lib</li>
+<li>应用程序加载器：Application
+ClassLoader，加载ClassPath指定路径的类，就是我们写的</li>
+<li>自定义类加载器</li>
+</ul>
+<blockquote>
+<p>Java虚拟机设计团队有意把类加载阶段中的“通过一个类的全限定名来获取描述该类的二进制字节
+流”这个动作放到Java虚拟机外部去实现，以便让应用程序自己决定如何去获取所需的类。实现这个动
+作的代码被称为“类加载器”(Class Loader)。</p>
+</blockquote>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230704203836577.png"
+alt="image-20230704203836577" />
+<figcaption aria-hidden="true">image-20230704203836577</figcaption>
+</figure></li>
+<li><p>什么是双亲委派模型？</p>
+<p>双亲委派模型的工作过程是:如果一个类加载器收到了类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到最顶层的启动类加载器中，只有当父加载器反馈自己无法完成这个加载请求(它的搜索范围中没有找到所需的类)时，子加载器才会尝试自己去完成加载。</p>
+<p>比较两个类是否“相
+等”，只有在这两个类是由同一个类加载器加载的前提下才有意义，否则，即使这两个类来源于同一个
+Class文件，被同一个Java虚拟机加载，只要加载它们的类加载器不同，那这两个类就必定不相等。</p>
+<p>所以双亲委派模型一个显而易见的好处就是Java中的类随着它的类
+加载器一起具备了一种带有优先级的层次关系。例如类java.lang.Object，它存放在rt.jar之中，无论哪一个类加载器要加载这个类，最终都是委派给处于模型最顶端的启动类加载器进行加载，因此Object类
+在程序的各种类加载器环境中都能够保证是同一个类。反之，如果没有使用双亲委派模型，都由各个类加载器自行去加载的话，如果用户自己也编写了一个名为java.lang.Object的类，并放在程序的ClassPath中，那系统中就会出现多个不同的Object类，Java类型体系中最基础的行为也就无从保证，应
+用程序将会变得一片混乱。</p></li>
+</ol>
 
       
     </div>
@@ -638,7 +1215,7 @@ alt="jbsY9d" />
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/12/15/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2021/06/17/Redis%E9%9D%A2%E8%AF%95%E6%94%BB%E7%95%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -656,7 +1233,7 @@ alt="jbsY9d" />
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/12/15/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Untitled</a>
+          <a href="/2021/06/17/Redis%E9%9D%A2%E8%AF%95%E6%94%BB%E7%95%A5/" class="post-title-link" itemprop="url">Redis</a>
         </h2>
 
         <div class="post-meta-container">
@@ -666,9 +1243,24 @@ alt="jbsY9d" />
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2021-12-15 23:11:49 / Modified: 23:12:30" itemprop="dateCreated datePublished" datetime="2021-12-15T23:11:49+08:00">2021-12-15</time>
+      <time title="Created: 2021-06-17 11:43:33" itemprop="dateCreated datePublished" datetime="2021-06-17T11:43:33+08:00">2021-06-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-08-22 17:24:37" itemprop="dateModified" datetime="2023-08-22T17:24:37+08:00">2023-08-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tech/" itemprop="url" rel="index"><span itemprop="name">tech</span></a>
+        </span>
     </span>
 
   
@@ -681,35 +1273,683 @@ alt="jbsY9d" />
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="工作总结">工作总结</h2>
-<p>上半年主要做的是协助用户引流组做相关各种钩子和靠近的需求，下半年主要做主站各模块的优化、审核、打折的需求。
-业务需求完成度100%，除产品变更需求外，没有发生延期，需求上线bug为0，无线上重大事故。下半年粗略估计排查了15个线上问题（只看了写了排期的，有些忘记写了），粗略估计处理了18次客诉，重构了引流钩子的代码和打折push与短信发送的代码（因为这两种需求做的最多）。能够从需求中洞悉产品的核心诉求，找到方便自己也方便产品的解决方案。</p>
-<h2 id="个人成长">个人成长</h2>
+          <h1 id="redis">Redis</h1>
+<h2 id="question">Question</h2>
+<p>如果阅读完都能回答上来，那么此篇就不必看啦😊</p>
 <ol type="1">
-<li>完善了自己的git提交规范 每次在排查问题时，找到当时的git
-commit很多都是无意义的fix，至少把当时需求的id留下也好呀。
-目前使用的格式是： 增加：tapdId#feat:增加了xx功能
-修复bug：tapdId#fix：修复了某个bug
-文案或格式：tapdId#style：xx文案改动</li>
-<li>优化打折短信发送逻辑
-之前每次测试打折短信时，测试反馈收到短信的概率并不是百分百。这里取短信配置进行发送难点在于，目前不知道短信配置是否已经在队列中，其中等待的时间是一个比较难估计的时长。太长也许影响线上发送短信的时间，太短就会造成测试人员测试的时候拿不到配置就结束流程了。
-可以把拿不到数据的情况想象成出现冲突，那么这种情况可以套用计算机网络中常用的算法“二进制指数退避算法”，按照这种思想改造优化后，测试再也没反馈过短信收不到了。
-3、对MongoDB、ELK、Canal等技术可以知其然，看了fastjson的源码</li>
+<li>了解Redis吗？说说它机制为什么快？✅</li>
+<li><strong>有几种数据结构，底层分别是怎么存储的？</strong>✅</li>
+<li>用过哪些数据结构？分别用在什么场景？✅</li>
+<li><strong>Redis的zset是如何实现的？为什么使用跳表不使用别的数据结构？</strong>✅</li>
+<li>Redis key 的过期策略？✅</li>
+<li>zset如何实现排名？✅</li>
+<li><strong>Redis有几种持久化方式？</strong>✅</li>
+<li>Redis数据幂等性是怎么保证的？</li>
+<li>Redis分布式锁你们是怎么用的，原理知道吗？</li>
+<li>Redis的热Key知道吗？一个热Key导致单机访问量过高，该怎么办？</li>
+<li>分布多台Redis的话，如果某一台缓存过期了，流量过大该怎么办？</li>
+<li>Redis的集群方式，各有什么特点？</li>
+<li>Redis Cluster的通信机制，说一下蜂巢？（没听说过）</li>
+<li>Redis的aof文件过大怎么处理，怎么解决，开启aof的方式有几种？了解rewrite命令吗？✅</li>
+<li>布隆过滤器怎么实现的？能否有删除功能？</li>
+<li>说一下redis的主从复制过程？✅</li>
+<li>Redis 的哨兵和集群？✅</li>
+<li>一致性哈希算法说一下，具体扩容过程？✅</li>
+<li>Redis如何实现高可用？✅</li>
 </ol>
-<h2 id="现有问题">现有问题</h2>
+<h2 id="data-structure">Data Structure</h2>
+<h3 id="simple-dynamic-string-简单动态字符串">Simple Dynamic String:
+简单动态字符串</h3>
+<p><strong>常数级字符串长度查询与杜绝缓冲区溢出</strong></p>
+<p>Redis的实现语言是C语言，为什么Redis不直接使用C语言内置的字符串呢？</p>
+<p>C语言不记录字符串长度，每次计算长度需要遍历找到\0为止，而且因为不知道为一个字符串分配了多少内存，有可能在进行拼接时产生缓冲区溢出。</p>
+<p>这种简单的字符串表示，在大多数情况下都能满足要求，但是，它并不能高效地支持长度计算和追加（append）这两种操作：</p>
+<ul>
+<li>每次计算字符串长度（<code>strlen(s)</code>）的复杂度为 θ(N) 。</li>
+<li>对字符串进行 N 次追加，必定需要对字符串进行 N
+次内存重分配（<code>realloc</code>）。</li>
+</ul>
+<p>在 Redis 内部， 字符串的追加和长度计算很常见， 而 <a
+target="_blank" rel="noopener" href="http://redis.readthedocs.org/en/latest/string/append.html#append">APPEND</a>
+和 <a
+target="_blank" rel="noopener" href="http://redis.readthedocs.org/en/latest/string/strlen.html#strlen">STRLEN</a>
+更是这两种操作，在 Redis 命令中的直接映射，
+这两个简单的操作不应该成为性能的瓶颈。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>* str = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"><span class="built_in">strlen</span>(str); <span class="comment">// 计算字符串长度</span></span><br><span class="line"><span class="type">char</span> *<span class="title function_">strcat</span><span class="params">(<span class="type">char</span> *dest, <span class="type">const</span> <span class="type">char</span> *src)</span>; <span class="comment">// 把src拼接到后面</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></span><br><span class="line">  <span class="type">int</span> len; <span class="comment">// 记录buf数组已使用的字节的数量</span></span><br><span class="line">  <span class="type">int</span> <span class="built_in">free</span>; <span class="comment">// 记录buf数组未使用的字节的数量</span></span><br><span class="line">  <span class="type">char</span> buf[]; <span class="comment">// 字节数组</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Redis3.0版本是这些字段，在最新版7.0已经变成</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr8</span> &#123;</span></span><br><span class="line">    <span class="type">uint8_t</span> len; <span class="comment">/* used */</span></span><br><span class="line">    <span class="type">uint8_t</span> alloc; <span class="comment">/* excluding the header and null terminator */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> flags; <span class="comment">/* 3 lsb of type, 5 unused bits */</span></span><br><span class="line">    <span class="type">char</span> buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>为了解决以上问题，SDS引入了len、free属性，len解决字符串长度问题，free+空间分配策略解决缓冲区溢出问题。</p>
+<p><strong>空间分配策略：</strong></p>
+<p>如果需要进行SDS修改，首先检查空间是否满足修改所需的大小，否则重新分配新的内存块。</p>
 <ol type="1">
-<li><p>不够自信</p>
-<p>之前写了一个记录操作记录的切面，已经测试通过，但是自我感觉不太实用且无可用之地就一直没有同步到master。</p></li>
-<li><p>不懂拒绝
-产品需要帮忙排查逻辑的时候，总是满口答应，然后会耽误自己完成需求的时间。</p></li>
-<li><p>思维假性近视
-在学习的时候，倾向于快速得出结论“这个我早知道了”，重新想起一星半点的关键词就停止思考，将真正的知识拒之门外，甚至觉得自己已经融会贯通。</p></li>
+<li><p>空间预分配</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(len &lt; <span class="number">1</span>MB)&#123;</span><br><span class="line">	<span class="built_in">free</span> = len;</span><br><span class="line">&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="built_in">free</span> = <span class="number">1</span>MB</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当发生连续执行字符串增长操作时，可以减少内存重分配次数。再次扩展SDS空间之前，如果有足够的空间，那么就不用执行内存重分配。</p>
+<p>通过这种预分配策略，SDS将连续增长N次字符串所需要的内存重分配次数从必定N次降低为最多N次。</p>
+<blockquote>
+<p>一切都是为了更快的速度这个总目标。</p>
+<p>在空间不值钱的时候，那么用空间换时间是非常划算的。进行内存重分配还需要从用户态转换为内核态，底层还需要中断操作，这些都是非常耗时的。</p>
+<p>大家还能想起其它用空间换时间的🌰吗？</p>
+</blockquote></li>
+<li><p>惰性空间释放</p>
+<p>当修改SDS字符串时，如果是截断操作，Redis会及时释放多余的空间吗？</p>
+<p>为了更快的速度，既然在增加长度时都不在乎内存了，那么减少时也没有必要太节约。</p>
+<p>使用<code>free</code>属性记录这些多余的空间,未来的增减更得心应手。</p></li>
 </ol>
-<h2 id="未来展望">未来展望</h2>
-<p>其实学会写代码并不难，但学会写好代码却很难。
-从易阅读上来说代码要有准确的命名和清晰的注释、从易使用上来说代码要具备设计模式的包装让对外的服务调用更简单、从易扩展上来说代码要做好业务和功能的实现分层。
-在易阅读、易使用、易扩展以及更多编码规范的约束下，还需要在开发完成上线后的交付结果上满足:高可用、高性能、高并发，与此同时还会接到现有项目中层出不穷来自产品新增的需求。
-下一年我会保持对自己的约束，不仅写代码，还写好代码。并且针对自己现有问题一一治疗。</p>
+<p><strong>二进制安全</strong></p>
+<p>C语言由于使用<code>'\0'</code>结束字符串，也就让C字符串无法保存图片、音频等二进制数据。</p>
+<p>SDS用二进制的方式处理buf数组的数据，所以SDS二进制安全。</p>
+<p><strong>兼容部分C字符串函数</strong></p>
+<p>Redis是C语言写的，所以和C语言字符串的运算不可避免啊，能重用当然更好咯。</p>
+<p>毕竟我们也只需要在保存的数据末尾加一个空字符就行咯。</p>
+<h4 id="question-1">Question</h4>
+<ol type="1">
+<li>Redis的SDS设计了len属性，便于常数复杂度获取一个SDS的长度，但是Redis需要这个设计吗？什么场景下会被用到？
+<ul>
+<li><code>strlen()</code>命令用于获取字符串长度，难道只是为了这个吗？</li>
+</ul></li>
+<li>Redis有惰性释放，那么真正释放的时机是多久呢？</li>
+</ol>
+<h3 id="dict字典">Dict：字典</h3>
+<p>字典可以结合Java中的HashMap进行学习，相似之处非常多。</p>
+<p>首先我们可以看一下，它的数据结构：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span></span><br><span class="line">  dictEntry **table; <span class="comment">// 哈希表数组</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> size; <span class="comment">// 哈希表大小</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> sizemask; <span class="comment">// size-1 ；哈希表大小掩码，用于计算哈希值</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> used; <span class="comment">// 该哈希表已有节点的数量</span></span><br><span class="line">&#125; dictth;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">  <span class="type">void</span> *key; <span class="comment">// 键</span></span><br><span class="line">  <span class="class"><span class="keyword">union</span>&#123;</span></span><br><span class="line">    <span class="type">void</span> *val;</span><br><span class="line">    unint64_tu64;</span><br><span class="line">    int64_ts64;</span><br><span class="line">  &#125; v; <span class="comment">// 值</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span> <span class="comment">// 拉链法，头结法</span></span><br><span class="line">&#125; dictEntry;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">  dictType *type; <span class="comment">// 类型特定函数</span></span><br><span class="line">  <span class="type">void</span> *private; <span class="comment">// 私有数据</span></span><br><span class="line">  dictht ht[<span class="number">2</span>]; <span class="comment">// 哈希表</span></span><br><span class="line">  <span class="type">int</span> rehashidx; <span class="comment">// rehash索引，也就是判断是否正在进行rehash，-1未进行</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230620011207518.png"
+alt="image-20230620011207518" />
+<figcaption aria-hidden="true">image-20230620011207518</figcaption>
+</figure>
+<p>对着图来看，平平无奇就是一个普通的使用拉链法的哈希表。</p>
+<p>唯一比较令人新奇的是sizemask是什么？为什么会有两个dictht，rehashidx是什么？</p>
+<h4 id="哈希算法">哈希算法</h4>
+<p>要了解sizemask就得了解如何计算哈希索引值</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hash = dict-&gt;type-&gt;hashFunction(key);</span><br><span class="line">index = hash &amp; dict-&gt;ht[x].sizemask;</span><br></pre></td></tr></table></figure>
+<p>首先使用<code>MurmurHash2</code>算法来计算键的哈希值，这个算法可以让有规律的键也给出很好的随机分布性。</p>
+<p>接着由于sizemask等于size-1，那么hash值与其相与就是求哈希值对size取余。</p>
+<h4 id="rehash">Rehash</h4>
+<p>如果一个哈希表不堪重负，也就是说查找效率开始降低了该怎么办？又或者一个容量巨大的哈希表却只有几个元素，太浪费空间了怎么办？</p>
+<p>这里的效率与浪费可以用负载因子来描述，为了让哈希表维持在进可攻退可守的状态，我们需要让负载因子(<span
+class="math inline">\(Loadfacter = used
+/size\)</span>)处在一个合理的水平。</p>
+<p>看公式，我们能决定的只有size而已，也就是说rehash其实是在重新分配空间。</p>
+<p><strong>什么情况下进行扩容：</strong></p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230620014053119.png"
+alt="image-20230620014053119" />
+<figcaption aria-hidden="true">image-20230620014053119</figcaption>
+</figure>
+<blockquote>
+<p>bgsave和bgrewrite是后台持久化操作，后续会讲，总之是一个消耗CPU资源的操作。</p>
+</blockquote>
+<p><strong>什么情况下进行缩容：</strong></p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230620014444494.png"
+alt="image-20230620014444494" />
+<figcaption aria-hidden="true">image-20230620014444494</figcaption>
+</figure>
+<p><strong>Rehash</strong></p>
+<p>无论是扩容还是缩容，都不可避免的会改变size和sizemask，而key的查询与sizemask有关，因此必须对每一个元素重新计算索引，引入新的哈希表。</p>
+<ol type="1">
+<li>找到新的size</li>
+<li>申请内存空间，并赋给dict.ht[1].table</li>
+<li>设置dict.rehashidx=0,标志正在rehash</li>
+<li>将dict.ht[0]的每一个元素都rehash到dict.ht[1]</li>
+<li>讲dict.ht[1]赋值给dict.ht[0]，dict.ht[1]指向空，释放原来dict.ht[0]的内存</li>
+</ol>
+<p>我们可以想想上述过程有什么隐患吗？</p>
+<p>如果当哈希表数据有几百万上千万，第四步还能顺利完成吗？</p>
+<p>由此引入了渐进式rehash</p>
+<p><strong>渐进式Rehash</strong></p>
+<ol type="1">
+<li>找到新的size</li>
+<li>申请内存空间，并赋给dict.ht[1].table</li>
+<li>设置dict.rehashidx=0,标志正在rehash</li>
+<li><em>每次对字典执行添加、删除、查找或者更新操作时，程序除了执行指定的操作以外，都检查一下dict.rehashidx是否大于-1，如果是，将ht[0].table[rehashidx]的Entry链表rehash到ht[1]，当rehash工作完成之后，并且将rehashidx属性的值增一。</em></li>
+<li>将dict.ht[1]赋值给dict.ht[0]，dict.ht[1]指向空，释放原来dict.ht[0]的内存</li>
+<li>将dict.rehashidx赋值为-1，代表结束rehash</li>
+<li>新增操作直接写入ht[1]，查询和删除需要依次查找，这样ht[1]不停的在增加，ht[0]不停的在减少最终为空。</li>
+</ol>
+<h3 id="ziplist-压缩列表">ZipList: 压缩列表</h3>
+<p><code>ZipList</code>是一种连续内存空间的“双端链表”，由一系列特殊编码的内存块组成，可以在任意一端进行压入与弹出，且时间复杂度为O(1)</p>
+<h4 id="压缩列表的构成ziplist">压缩列表的构成:ZipList</h4>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621011234057.png"
+alt="image-20230621011234057" />
+<figcaption aria-hidden="true">image-20230621011234057</figcaption>
+</figure>
+<p>zllen：最大值为65535，如果超过，那么就只能遍历才能知道，但是一般不会超过，因为ZipList设计初衷不是用来存很多东西的。</p>
+<p>固定不变的就是总字节数、尾偏移量、entry节点数、结束标识，这些一共占11个字节。</p>
+<p>尾偏移量用总字节数减去tail节点长度再减1</p>
+<h4
+id="压缩列表节点的构成ziplistentry">压缩列表节点的构成：ZipListEntry</h4>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621011755420.png"
+alt="image-20230621011755420" />
+<figcaption aria-hidden="true">image-20230621011755420</figcaption>
+</figure>
+<p><code>previous_entry_length</code>：前一个节点的长度，如果前一节点的长度小于254字节，就用1个字节存储，否则用5个字节存储，其中第一个字节为0xfe用来标识。</p>
+<blockquote>
+<p><code>previous_entry_length</code>的设计是为了能够向前访问，由于它长度不固定，导致连锁更新的罪魁祸首就是它。连锁更新稍微想想当每个entry的长度都是253，如果某个entry增加至少一个字节之后的更新操作，就明白了。</p>
+</blockquote>
+<p><code>encoding</code>：编码属性占一个字节或2个字节或5个字节</p>
+<p><code>content</code>：保存节点的数据，字符串或整数。可以没有（当数字小于14）</p>
+<blockquote>
+<p>ZipList中所有存储长度的数值均采用小端字节序，低位字节在前，高位字节在后。</p>
+</blockquote>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621013348769.png"
+alt="image-20230621013348769" />
+<figcaption aria-hidden="true">image-20230621013348769</figcaption>
+</figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230621013417294.png"
+alt="image-20230621013417294" />
+<figcaption aria-hidden="true">image-20230621013417294</figcaption>
+</figure>
+<h4 id="question-2">Question</h4>
+<ol type="1">
+<li><p>如何实现的双向？</p>
+<p>记录了上一个节点的长度与当前节点长度。</p></li>
+<li><p>有什么优点和缺点？</p>
+<p>优点和缺点都是由存储结构导致的，优点就是节省内存，缺点就是无法随机访问，增删可能会发生连续更新问题影响性能。</p></li>
+</ol>
+<h3 id="intset整数集合">IntSet:整数集合</h3>
+<p>IntSet是Redis中set集合的一种实现方式，基于整数数组实现，并且具备长度、有序等特征</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">intset</span> &#123;</span></span><br><span class="line">  <span class="type">uint32_t</span> encoding; <span class="comment">// 决定保存的整数的大小 16、32、64位</span></span><br><span class="line">  <span class="type">uint32_t</span> length; <span class="comment">// 长度</span></span><br><span class="line">  <span class="type">int8_t</span> contents[]; <span class="comment">// 上面提到的数组，实际上存储的是encoding决定的类型数据</span></span><br><span class="line">&#125; intset;</span><br></pre></td></tr></table></figure>
+<p>为了查找方便，所有整数按照升序排列，既然有序了那么查找就可以使用二分查找。数据在集合内唯一，编码取所有整数的公倍数，俗称IntSet升级，但只会升级不会降级。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622005603455.png"
+alt="image-20230622005603455" />
+<figcaption aria-hidden="true">image-20230622005603455</figcaption>
+</figure>
+<h3 id="quicklist">QuickList</h3>
+<p>链表➕数组</p>
+<p>数组是ZipList，为了解决长时间使用ZipList无法获取到大块内存的弊端。还可以进一步压缩，比如除了头尾节点其他ziplist都压缩。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624214436076.png"
+alt="image-20230624214436076" />
+<figcaption aria-hidden="true">image-20230624214436076</figcaption>
+</figure>
+<h3 id="skiplist">SkipList</h3>
+<p>一种有序数据结构，它通过在每个节点中维持多个指向其它节点的指针，从而达到快速访问节点的目的。维持多个指向其它的节点的指针其实与mysql中的索引有异曲同工之妙。时间复杂度与平衡树媲美，但是实现方式更简单。</p>
+<p>Redis只在两个地方用到了跳表：</p>
+<ol type="1">
+<li>有序集合键：集合数量较多或者成员是长字符串时</li>
+<li>在集群中用作内部数据结构</li>
+</ol>
+<p>本质链表</p>
+<ul>
+<li>元素按升序排列</li>
+<li>节点可能包含多个指针，指针跨度不同</li>
+<li>空间换时间，加索引</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span> <span class="comment">// 前进节点</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> span; <span class="comment">// 跨度</span></span><br><span class="line">  &#125; level[]; <span class="comment">// 层</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span> <span class="comment">// 后退节点</span></span><br><span class="line">  <span class="type">double</span> score; <span class="comment">// 分值</span></span><br><span class="line">  robj *obj; <span class="comment">// 成员对象</span></span><br><span class="line">&#125; zskiplistNode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">skiplistNode</span> *<span class="title">header</span>, *<span class="title">tail</span>;</span> <span class="comment">// 头节点、尾节点</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> length; <span class="comment">// 节点数量</span></span><br><span class="line">  <span class="type">int</span> level; <span class="comment">// 表中层数最大的节点的层数</span></span><br><span class="line">&#125; zskiplist;</span><br></pre></td></tr></table></figure>
+<p>跳表由两个结构组成，zskiplist和zskiplistNode，每个跳表节点的层高都是1～32的随机数，每个成员对象必须唯一，按分值大小排序。</p>
+<p>其实就是链表每次只保存下一个节点的地址，但是跳表保存了多个节点的地址，在查找的时候就可以一次性排除很多数据，，也是空间换时间的做法。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622144543868.png"
+alt="image-20230622144543868" />
+<figcaption aria-hidden="true">image-20230622144543868</figcaption>
+</figure>
+<h3 id="redisobject">RedisObject</h3>
+<p>Redis中的任意数据的键和值都会封装为一个RedisObject，叫做Redis对象。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622144936198.png"
+alt="image-20230622144936198" />
+<figcaption aria-hidden="true">image-20230622144936198</figcaption>
+</figure>
+<p>ptr占用8个字节，</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622145034088.png"
+alt="image-20230622145034088" />
+<figcaption aria-hidden="true">image-20230622145034088</figcaption>
+</figure>
+<p>Redis创建了一个对象系统，这个系统包含字符串对象、列表对象、哈希对象、集合对象和有序集合对象，每种对象都用到了前面所介绍的数据结构。</p>
+<p>对于数据库保存的键值对来说，键总是字符串对象，而值可以是任意一种。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type akey  # 查看键对象类型</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230622145110574.png"
+alt="image-20230622145110574" />
+<figcaption aria-hidden="true">image-20230622145110574</figcaption>
+</figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">object encoding akey # 查看一个数据库键对象的编码</span><br></pre></td></tr></table></figure>
+<h2 id="数据类型">数据类型</h2>
+<h3 id="string">String</h3>
+<p>String是Redis最常见的数据存储类型：</p>
+<ul>
+<li><p>其最基本的编码方式是<code>RAW</code>，基于简单动态字符串实现，存储上限是512mb</p>
+<blockquote>
+<p>需要申请两次内存，一次是RedisObject，一次是SDS</p>
+</blockquote></li>
+<li><p>如果存储的SDS长度小于44字节，则会采用<code>EMBSTR</code>编码，此时object
+head与SDS是一段连续空间（64字节）。申请内存时只需要调用一次内存分配函数，效率更高。</p>
+<blockquote>
+<p>以2的n次方进行内存分配，64字节正好是一片。</p>
+<p>所以建议不要存储超过44字节的字符串，容易产生内存碎片</p>
+</blockquote></li>
+<li><p>如果存储的字符串是整数值，并且大小在LONG_MAX范围内，则会采用<code>INT</code>编码：直接将数据保存在RedisObject的ptr指针位置（刚好8字节），不再需要SDS了。</p></li>
+</ul>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624183146469.png"
+alt="image-20230624183146469" />
+<figcaption aria-hidden="true">image-20230624183146469</figcaption>
+</figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624183451136.png"
+alt="image-20230624183451136" />
+<figcaption aria-hidden="true">image-20230624183451136</figcaption>
+</figure>
+<p>也就是说，能用数值用数值，能小于44字节就小于。</p>
+<h3 id="list">List</h3>
+<p>Redis的类型可以从首位操作列表中的元素：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">LPUSH l1 e3 e2 e1</span><br><span class="line">RPUSH</span><br><span class="line">LRANGE L1 0 2 // 取指定范围内的元素</span><br><span class="line">LPOP L1 1</span><br><span class="line">RPOP L1 </span><br></pre></td></tr></table></figure>
+<ul>
+<li>LinkedList:普通链表、双端访问，内存占用高，内存碎片多</li>
+<li>ZipList：压缩列表，双端访问，内存占用低，存储上限低</li>
+<li>QuickList：LinkedList+ZipList，双端访问，内存占用较低，存储上限高</li>
+</ul>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624214436076.png"
+alt="image-20230624214436076" />
+<figcaption aria-hidden="true">image-20230624214436076</figcaption>
+</figure>
+<h3 id="set">Set</h3>
+<p>Set是Redis中的集合，不一定确保元素有序，也不一定确保元素无序，满足元素唯一。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SADD s1 v1 v2 v3 // 添加</span><br><span class="line">SISMEMBER // 释放存在</span><br><span class="line">SINTER //交集</span><br></pre></td></tr></table></figure>
+<p>可以知道，set的操作中几乎都包含对某元素的查找，所以我们需要找一个查找效率高的数据结构来实现。</p>
+<p>从我们学过的：SDS、IntSet、Dict、ZipList、SkipList中找，发现Dict是效率最高的</p>
+<ul>
+<li>为了查询效率和唯一性，set采用Dict。key存储元素，value统一为null。</li>
+<li>当存储的所有数据都是整数时，并且元素数量不超过set_max_intset_entries时，Set会采用IntSet</li>
+</ul>
+<p>IntSet有序使用二分查找，查询效率也还可以，存储整数时可以减少内存占用</p>
+<p>Dict效率最高，但是内存占用大啊，每个Entry都有好多指针。</p>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230624221349310.png"
+alt="image-20230624221349310" />
+<figcaption aria-hidden="true">image-20230624221349310</figcaption>
+</figure>
+<p>但是IntSet不是永久的，一旦有新加入的元素不是整数或者超过了数量限制就会转换为Dict</p>
+<h3 id="zset">ZSet</h3>
+<p>ZSet也就是SortedSet，其中每一个元素都需要指定一个score值和member值，它的特点是：</p>
+<ul>
+<li>根据score排序</li>
+<li>唯一并且提交覆盖</li>
+<li>可以根据member查询score</li>
+</ul>
+<p>因此，zst底层数据结构必须满足键值存储、键唯一、可排序</p>
+<p>有序的数据结构：<code>SkipList</code>,<code>IntSet</code></p>
+<p>键值关系：<code>Dict</code>，<code>SkipList</code></p>
+<p>键唯一：<code>Dict</code>,</p>
+<p>IntSet只能存整数，所以排除。剩下的SkipList和Dict其实都能满足，但是都需要在性能上做些让步，比如SkipList在查询键时时间负责度降为链表，Dict在排序上也捉襟见肘。</p>
+<p>鉴于Redis的终极目标：FAST；不难猜到它全都要。但其实不用过于担心对内存的浪费，因为两者都只是存实际数据的指针而已。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ZADD z1 <span class="number">10</span> m1 <span class="number">20</span> m2</span><br><span class="line">ZSCORE z1 m1</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230625150541007.png"
+alt="image-20230625150541007" />
+<figcaption aria-hidden="true">image-20230625150541007</figcaption>
+</figure>
+<p>不过由于元素数量不多时，HT和SkipList的优势并不明显，而且指针也挺费的，要8字节呢。</p>
+<p>因此zst还会采用ZipList结构来节省内存，需要同时满足两个条件：</p>
+<ol type="1">
+<li>元素数量小于zst_max_ziplist_entries=128</li>
+<li>每个元素都小于zset_max_ziplist_value=64字节</li>
+</ol>
+<h3 id="hash">Hash</h3>
+<p>Hash结构与Reids中的Zset非常类似</p>
+<ul>
+<li>都是键值存储</li>
+<li>都需要根据键获取值</li>
+<li>键必须唯一</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hset user name yus age <span class="number">21</span></span><br><span class="line">hget user name</span><br></pre></td></tr></table></figure>
+<p>区别如下：</p>
+<ul>
+<li>zset的键是member，值时score；hash的键和值都是任意值</li>
+<li>zset要根据score排序；hash则无需排序</li>
+</ul>
+<p>因此，Hash底层采用的编码与Zset也基本一致，只需要把排序相关的SkipList去掉即可</p>
+<ul>
+<li><p>Hash结构默认采用ZipList编码，用以节约内存。ZipList中相邻的两个entry分别保存field和value</p></li>
+<li><p>当数据量较大时，hash结构会转换为HT编码</p>
+<ul>
+<li>ZipList中的数量超过了hash_max_ziplist_entry=512</li>
+<li>ZipList中的任意entry大小超过了hash_max_ziplist_value=64字节</li>
+</ul>
+<blockquote>
+<p>为什么这里比Zset的数量少？</p>
+<p>因为hash只需要存就行了，不需要排序等操作，所以存多点也没关系</p>
+</blockquote></li>
+</ul>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230625161200201.png"
+alt="image-20230625161200201" />
+<figcaption aria-hidden="true">image-20230625161200201</figcaption>
+</figure>
+<figure>
+<img
+src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/image-20230625161408072.png"
+alt="image-20230625161408072" />
+<figcaption aria-hidden="true">image-20230625161408072</figcaption>
+</figure>
+<h2 id="内存策略">内存策略</h2>
+<p>Redis之所以性能强，最主要的原因是基于内存存储，然而单节点的Redis其内存大小不宜过大，会影响持久化，或主从同步性能。</p>
+<p>可以通过配置文件来设置Redis的最大内存：</p>
+<p><code>maxmemory 1gb</code></p>
+<p>当内存使用达到上限时，就无法存储更多的数据了。</p>
+<p>所以我们Redis就提供了两种不同的策略</p>
+<ul>
+<li>过期策略</li>
+<li>淘汰策略</li>
+</ul>
+<h3 id="过期策略">过期策略</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> name jack</span><br><span class="line">expire name 5 <span class="comment"># 设置ttl为5s</span></span><br></pre></td></tr></table></figure>
+<p>这里有两个问题需要我们思考：</p>
+<ol type="1">
+<li>Redis是如何知道一个key是否过期？</li>
+<li>是不是TTL到期就立即删除了呢？</li>
+</ol>
+<h4 id="db结构">DB结构</h4>
+<p>Redis本身是一个典型的k-v结构，因此所有的key、value都保存在之前学习的Dict中。不过在database结构体中，有两个Dict：一个用来记录k-v，一个用来记录k-ttl</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisDb</span> &#123;</span></span><br><span class="line">  dict *dict;</span><br><span class="line">  dict *expires;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230625201220167.png"
+alt="image-20230625201220167" />
+<figcaption aria-hidden="true">image-20230625201220167</figcaption>
+</figure>
+<h4 id="惰性删除">惰性删除</h4>
+<p>每次访问一个key的时候，检查该key的存活时间，如果已经过期才执行删除。</p>
+<h4 id="周期删除">周期删除</h4>
+<p>通过一个定时任务，周期性的抽样部分过期的key，然后执行删除。执行周期有两种：</p>
+<ul>
+<li>SLOW模式执行频率默认为10，每次不超过25ms</li>
+<li>FAST模式执行频率不固定，但两次间隔不低于2ms，每次耗时不超过1ms</li>
+</ul>
+<blockquote>
+<p>删除的算法与渐进式hash有异曲同工之妙，也会记录上一次删到哪了，然后慢慢删</p>
+</blockquote>
+<ol type="1">
+<li><p>Redis是如何知道一个key是否过期？</p>
+<p>通过记录的ttl知道</p></li>
+<li><p>是不是TTL到期就立即删除了呢？</p>
+<p>惰性删除➕周期删除</p></li>
+</ol>
+<h3 id="淘汰策略">淘汰策略</h3>
+<p>内存淘汰：当Redis内存使用设置的阈值时，Redis主动挑选部分key删除以释放更多内存的流程。</p>
+<p>LRU（Least Recently
+Used），最少最近使用。用当前时间减去最后一次访问时间，这个值越大则淘汰优先级越高。</p>
+<p>LFU（Least Frequently
+Used），最少频率使用。会统计每个Key的访问频率，值越少淘汰优先级越高。</p>
+<p>都是保存在RedisObject对象的lru属性中。</p>
+<p>Redis是有内存上限的，为了避免到达内存上限，它有两种不同的策略，一个是内存过期，一个是内存淘汰。内存过期呢其实是设置一个key的过期时间，到期以后我们就可以想办法把它删掉，删的策略呢有两种，一种是惰性删除，就是指当你访问的那一刻我检查一下有没有过期，过期了就删除；另外一个呢是周期删除，Redis有周期性任务，每隔一段时间就尝试去清理一部分过期的key。这就是所谓的过期策略，这样的策略只能把那些过期的key删掉，如果说我们这些key都没过期，而Redis内存又已经跑到上限了，又该怎么办呢？这时候就应该采用内存淘汰策略。内存淘汰策略有8种，一种是不做驱逐，内存不足就报错；还有七种呢？包括两个随机的，两个LRU，两个LFU和一个TTL，所谓的两个是指，它可以从所有key淘汰，也可以从过期key里淘汰</p>
+<p><strong>单节点Redis的问题</strong></p>
+<ol type="1">
+<li><p>数据丢失问题：实现Redis数据持久化</p>
+<p>Redis是内存存储，服务重启可能会丢失数据</p></li>
+<li><p>并发能力问题：搭建主从集群，实现读写分离</p>
+<p>单节点Redis并发能力虽然不错，但也无法满足如618这样的高并发场景</p></li>
+<li><p>故障恢复问题：利用Redis哨兵，实现健康检测和自动恢复</p>
+<p>如果Redis宕机，则服务不可用，需要一种自动的故障恢复手段</p></li>
+<li><p>存储能力问题：搭建分片集群，利用插槽机制实现动态扩容</p>
+<p>Redis基于内存，单节点能存储的数据难以满足海量数据的要求</p></li>
+</ol>
+<h2 id="持久化">持久化</h2>
+<h3 id="rdb持久化">RDB持久化</h3>
+<p>RDB全称Redis Database Backup
+file，也被叫做Redis数据快照。简单来说就是把内存中的所有数据都记录在磁盘中。当Redis实例故障重启后，从磁盘读取快照文件，恢复数据。</p>
+<p>快照文件称为RDB文件，默认是保存在当前运行目录。</p>
+<ul>
+<li>save ：由Redis主进程执行RDB，会阻塞所有命令</li>
+<li>bgsave：开启子进程执行RDB，避免主进程受到影响</li>
+</ul>
+<p>bgsave开始时会fork主进程得到子进程，子进程共享主进程的内存数据，完成fork后读取内存数据并写入RDB文件。</p>
+<p>fork采用的是copy-on-write技术：</p>
+<ul>
+<li>当主进程执行读操作时，访问共享内存；</li>
+<li>当主进程执行写操作时，则会拷贝一份数据，执行写操作</li>
+</ul>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230628145725421.png"
+alt="image-20230628145725421" />
+<figcaption aria-hidden="true">image-20230628145725421</figcaption>
+</figure>
+<p>所有进程都无法操作物理内存，而是由操作系统给每个进程分配一个虚拟内存。操作系统会维护一个虚拟内存与物理内存的地址映射表，这个表称之为页表。</p>
+<p>fork会拷贝映射关系页表，将共享内存设置为只读，如果主进程要修改，就得拷贝一份新的去修改。</p>
+<ol type="1">
+<li><p>RDB会在什么时候执行？</p>
+<p>默认是服务停止时。</p></li>
+<li><p>save 60 1000 代表什么含义？</p>
+<p>代表60s内至少执行1000次修改则触发RDB</p></li>
+<li><p>RDB的缺点？</p>
+<p>RDB执行间隔长，两次RDB之间写入数据有丢失的风险</p>
+<p>fork子进程，压缩，写出RDB文件都比较耗时</p></li>
+</ol>
+<h3 id="aof持久化">AOF持久化</h3>
+<p>AOF全称为Append Only
+File（追加文件）。Redis处理的每一个命令都会记录在AOF文件，可以看做是命令日志文件。</p>
+<p>因为是记录命令，AOF文件比RDB文件大得多。而且AOF会记录同一个key的多次写操作，但只有最后一次写操作才有意义。通过<code>bgrewrited</code>命令，可以让AOF文件执行重写功能，用最少的命令达到相同效果。</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 42%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>RDB</th>
+<th>AOF</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>持久化方式</td>
+<td>定时对整个内存做快照</td>
+<td>记录每一次执行命令</td>
+</tr>
+<tr class="even">
+<td>数据完整性</td>
+<td>不完整，两次备份之间会丢失</td>
+<td>相对完整，取决于刷盘策略</td>
+</tr>
+<tr class="odd">
+<td>宕机恢复速度</td>
+<td>快</td>
+<td>慢</td>
+</tr>
+<tr class="even">
+<td>数据恢复优先级</td>
+<td>低，因为完整性不如AOF</td>
+<td>高</td>
+</tr>
+<tr class="odd">
+<td>系统资源占用</td>
+<td>高，大量CPU和内存消耗</td>
+<td>低，主要是磁盘IO，但AOF重写会占用大量CPU和内存</td>
+</tr>
+<tr class="even">
+<td>使用场景</td>
+<td>可用容忍分钟级的数据丢失，追求更高的启动速度</td>
+<td>对数据安全性要求较高</td>
+</tr>
+<tr class="odd">
+<td>文件大小</td>
+<td>会有压缩，体积小</td>
+<td>记录命令，体积大</td>
+</tr>
+</tbody>
+</table>
+<h2 id="主从">主从</h2>
+<p>单节点Redis的并发能力是有上限的，要进一步提高Redis的并发能力，就需要搭建主从集群，实现读写分离。</p>
+<h3 id="全量同步">全量同步</h3>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629201452329.png"
+alt="image-20230629201452329" />
+<figcaption aria-hidden="true">image-20230629201452329</figcaption>
+</figure>
+<p><u>master
+如何判断slave是不是第一次来同步数据？</u>这里会用到两个很重要的概念：</p>
+<ul>
+<li>Replication
+Id：简称replid，是数据集的标记，id一致则说明是同一数据集。每一个master都有唯一的replid，slave则会继承master节点的replid</li>
+<li>offset：偏移量，随着记录在repl_baklog的数据增多而逐渐增大。slave完成同步时也会记录当前同步的offset。如果slave的offset小于master的offset，说明slave数据落后于master，需要更新。</li>
+</ul>
+<p>因此slave做数据同步，必须向master声明字节的replication
+id和offset，master才可以判断到底需要同步哪些数据</p>
+<p><strong>master如何判断slave节点是不是第一次来做数据同步？</strong></p>
+<p>首先slave带着replication
+id来同步，如果id与自己的相同，说明就是之前来过了，然后就可以根据offset来判断同步哪些数据。</p>
+<p>主从第一次同步是全量同步</p>
+<ol type="1">
+<li>slave节点请求增量同步</li>
+<li>master节点判断replid，发现不一致，拒绝增量同步</li>
+<li>master将完整的内存数据生成RDB，发送到slave</li>
+<li>slave清空本地数据，加载master到RDB</li>
+<li>master将RDB期间的命令记录在repl_baklog，并持续将log中的命令发送给slave</li>
+</ol>
+<h3 id="增量同步">增量同步</h3>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629202453611.png"
+alt="image-20230629202453611" />
+<figcaption aria-hidden="true">image-20230629202453611</figcaption>
+</figure>
+<p>repl_baklog大小有上限，写满后会覆盖最早的数据。如果slave断开时间过久，导致未备份的数据被覆盖，则无法基于log做增量同步，只能再次全量同步。</p>
+<h3 id="哨兵">哨兵</h3>
+<p><strong>slave节点宕机恢复后可以找master节点同步数据，那master节点宕机怎么办？</strong></p>
+<h4 id="哨兵的作用">哨兵的作用</h4>
+<p>Redis提供了哨兵（Sentinel）机制来实现主从集群的自动故障恢复。</p>
+<ul>
+<li>监控：Sentinel会不断检查您的master和slave是否按预期工作</li>
+<li>自动故障恢复：如果master故障，Sentinel会将一个slave提升为master。当故障实例恢复后也以新的master为主。</li>
+<li>通知：Sentinel充当reids客户端的服务发现来源，当集群发生故障转移时，会将最新消息推送给Redis的客户端。</li>
+</ul>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629203541757.png"
+alt="image-20230629203541757" />
+<figcaption aria-hidden="true">image-20230629203541757</figcaption>
+</figure>
+<h4 id="服务状态监控">服务状态监控</h4>
+<p>Sentinel基于心跳机制监测服务状态，每隔1s向集群的每个实例发送ping命令：</p>
+<ul>
+<li>主观下线：如果某sentinel节点发现某实例未在规定时间响应，则认为该实例主观下线</li>
+<li>客观下线：若超过指定数量（quorum）的sentinel都认为该实例主观下线，则该实例客观下线。quorum值最好超过半数</li>
+</ul>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629203837398.png"
+alt="image-20230629203837398" />
+<figcaption aria-hidden="true">image-20230629203837398</figcaption>
+</figure>
+<h4 id="选举新的master">选举新的master</h4>
+<p>一旦发现master故障，sentinel需要在slave中选择一个作为新的master，选择依据如下：</p>
+<ol type="1">
+<li>首先判断slave节点<strong>与master节点断开的时间</strong>长短，如果超过指定值（down-after-milliseconds*10)则会排除该slave节点</li>
+<li>然后判断slave节点的<strong>slave-priority值</strong>，越小优先级越高，如果是0则永不参与选举</li>
+<li>如果slave-prority一样，则判断slave节点的<strong>offset值</strong>，越大说明数据越新，优先级越高</li>
+<li>最后是判断slave节点的运行id大小，越小优先级越高</li>
+</ol>
+<h4 id="如何实现故障转移">如何实现故障转移</h4>
+<p>当选中了其中一个slave为新的master后，故障的转移的步骤如下：</p>
+<ul>
+<li>首先选定一个slave作为新的master，执行slaveof no one</li>
+<li>然后让所有节点都执行slaveof 新的master</li>
+<li>修改故障节点配置，添加slaveof 新master</li>
+</ul>
+<h3 id="分片集群">分片集群</h3>
+<p>主从和哨兵可以解决高可用、高并发读的问题。但是依然有两个问题没有解决：</p>
+<ul>
+<li>海量数据存储问题</li>
+<li>高并发写的问题</li>
+</ul>
+<p>使用分片集群可以解决上述问题，分片集群特征：</p>
+<ul>
+<li>集群中有多个master，每个master保存不同数据</li>
+<li>每个master都可以有多个slave节点</li>
+<li>master之间通过ping监测彼此健康状态</li>
+<li>客户端请求可以访问集群任意节点，最终都会到达正确的节点</li>
+</ul>
+<h2 id="网络模型">网络模型</h2>
+<h3 id="用户空间和内核空间">用户空间和内核空间</h3>
+<p>为了避免用户应用导致冲突甚至内核崩溃，用户空间与内核是分离的：</p>
+<ul>
+<li><p>进程的寻址空间会划分两部分：内核空间、用户空间</p>
+<p>这个地址是一个无符号整数，最大值取决于</p></li>
+</ul>
+<h3 id="io模型">IO模型</h3>
+<ul>
+<li>Blocking IO</li>
+<li>Nonblocking IO</li>
+<li>IO Multiplexing</li>
+<li>Signal Driven IO</li>
+<li>Asynchronous IO</li>
+</ul>
+<h4 id="blocking-io">Blocking IO</h4>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629183958383.png"
+alt="image-20230629183958383" />
+<figcaption aria-hidden="true">image-20230629183958383</figcaption>
+</figure>
+<p>两个阶段用户进程都在阻塞。</p>
+<h4 id="nonblocking-io">Nonblocking IO</h4>
+<figure>
+<img
+src="../../../../../Library/Application%20Support/typora-user-images/image-20230629184153087.png"
+alt="image-20230629184153087" />
+<figcaption aria-hidden="true">image-20230629184153087</figcaption>
+</figure>
+<p>非阻塞IO模型，用户进程在第一个阶段是非阻塞，第二个阶段是阻塞状态。虽然是非阻塞，但性能并没有得到提高。而且忙等机制会导致CPU空转，CPU使用率暴增。</p>
+<h4 id="io-mutiplexing">IO Mutiplexing</h4>
+<p>无论是阻塞IO合适非阻塞IO，用户应用在第一个阶段都需要调用recvfrom来获取数据，差别在无数据时的处理方案：</p>
+<ul>
+<li>如果调用recvfrom时，恰好没有数据，阻塞IO会使进程阻塞，非阻塞IO会使CPU空转，都不能充分发挥CPU的作用。</li>
+<li>如果调用recvfrom时，恰好有数据，则用户进程可以直接进入第二阶段，读取并处理数据。</li>
+</ul>
+<p>比如服务端处理客户端Socket请求时，在单线程情况下，只能依次处理每一个socket，如果正在处理的socket恰好未就绪，线程就会阻塞，所有其他客户端socket都必须等待，性能自然会很差。</p>
+<p>要提高有几种方法？</p>
+<ol type="1">
+<li>每个socket准备一个线程：多线程</li>
+<li>哪个socket准备好了，就先去处理它</li>
+</ol>
+<h3 id="redis网络模型">Redis网络模型</h3>
+<p>Redis到底是单线程还是多线程？</p>
+<ul>
+<li>如果仅仅是聊Reids的核心业务（命令处理），答案是单线程</li>
+<li>如果是聊整个Redis，那么答案是多线程</li>
+</ul>
+<p>在Redis版本迭代过程中，在两个重要的时间节点引入了多线程的支持：</p>
+<ul>
+<li>4.0；引入了多线程异步处理一些耗时较长的任务，例如异步删除命令unlink</li>
+<li>6.0；在核心网络模块引入了多线程，进一步提高了对于多核CPU的利用率</li>
+</ul>
+<p><strong>为什么Reids要选择单线程？</strong></p>
+<ol type="1">
+<li>抛开持久化不谈，Reids是纯内存操作，执行速度非常快，它的性能瓶颈是网络延迟而不是执行速度，因此多线程并不会带来巨大的性能提升。</li>
+<li>多线程会导致过多的上下文切换，带来不必要的开销</li>
+<li>引入多线程会面临线程安全问题，必然要引入线程锁这样的安全手段，实现复杂度增高，而且性能也会大打折扣。</li>
+</ol>
 
       
     </div>

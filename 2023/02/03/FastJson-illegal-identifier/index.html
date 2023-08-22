@@ -22,26 +22,26 @@
 
     <meta name="description" content="记录一个线上问题🐞 先说一下情况：两个服务间用mq传递一个消息，由于需要传递的就两个字段，选择了使用common-lang3的Pair类，并且使用fastjson进行序列化。 本文按照以下的思路进行阐述  定位问题 解决问题 浅析原理  定位问题 堆栈如下 1234567891011[2022-08-31 10:36:37.462 -ERROR] c.z.f.r.consumer.Default">
 <meta property="og:type" content="article">
-<meta property="og:title" content="common-lang3的Pair不要使用Fastjson序列化">
-<meta property="og:url" content="https://twoandone.github.io/2022/08/31/FastJson-illegal-identifier/">
+<meta property="og:title" content="线上bug记录common-lang3的Pair不要使用Fastjson序列化">
+<meta property="og:url" content="https://twoandone.github.io/2023/02/03/FastJson-illegal-identifier/">
 <meta property="og:site_name" content="Yussss">
 <meta property="og:description" content="记录一个线上问题🐞 先说一下情况：两个服务间用mq传递一个消息，由于需要传递的就两个字段，选择了使用common-lang3的Pair类，并且使用fastjson进行序列化。 本文按照以下的思路进行阐述  定位问题 解决问题 浅析原理  定位问题 堆栈如下 1234567891011[2022-08-31 10:36:37.462 -ERROR] c.z.f.r.consumer.Default">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-08-31T08:42:10.000Z">
-<meta property="article:modified_time" content="2022-09-02T09:53:27.049Z">
+<meta property="article:published_time" content="2023-02-03T08:42:10.000Z">
+<meta property="article:modified_time" content="2023-08-22T09:27:23.076Z">
 <meta property="article:author" content="Yus">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://twoandone.github.io/2022/08/31/FastJson-illegal-identifier/">
+<link rel="canonical" href="https://twoandone.github.io/2023/02/03/FastJson-illegal-identifier/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://twoandone.github.io/2022/08/31/FastJson-illegal-identifier/","path":"2022/08/31/FastJson-illegal-identifier/","title":"common-lang3的Pair不要使用Fastjson序列化"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://twoandone.github.io/2023/02/03/FastJson-illegal-identifier/","path":"2023/02/03/FastJson-illegal-identifier/","title":"线上bug记录common-lang3的Pair不要使用Fastjson序列化"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>common-lang3的Pair不要使用Fastjson序列化 | Yussss</title>
+<title>线上bug记录common-lang3的Pair不要使用Fastjson序列化 | Yussss</title>
   
 
 
@@ -185,7 +185,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2022/08/31/FastJson-illegal-identifier/">
+    <link itemprop="mainEntityOfPage" href="https://twoandone.github.io/2023/02/03/FastJson-illegal-identifier/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -198,12 +198,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="common-lang3的Pair不要使用Fastjson序列化 | Yussss">
+      <meta itemprop="name" content="线上bug记录common-lang3的Pair不要使用Fastjson序列化 | Yussss">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          common-lang3的Pair不要使用Fastjson序列化
+          线上bug记录common-lang3的Pair不要使用Fastjson序列化
         </h1>
 
         <div class="post-meta-container">
@@ -214,14 +214,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2022-08-31 16:42:10" itemprop="dateCreated datePublished" datetime="2022-08-31T16:42:10+08:00">2022-08-31</time>
+      <time title="Created: 2023-02-03 16:42:10" itemprop="dateCreated datePublished" datetime="2023-02-03T16:42:10+08:00">2023-02-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-09-02 17:53:27" itemprop="dateModified" datetime="2022-09-02T17:53:27+08:00">2022-09-02</time>
+      <time title="Modified: 2023-08-22 17:27:23" itemprop="dateModified" datetime="2023-08-22T17:27:23+08:00">2023-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -349,13 +349,13 @@ src="https://raw.githubusercontent.com/TwoAndOne/my-images/master/uPic/Rsbe17.pn
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/08/12/FastJson-StackOverFlow/" rel="prev" title="FastJson StackOverFlow">
-                  <i class="fa fa-chevron-left"></i> FastJson StackOverFlow
+                <a href="/2022/09/05/%E8%A2%AB%E5%AB%8C%E5%BC%83%E7%9A%84Arthas%E7%9A%84%E4%B8%80%E7%94%9F/" rel="prev" title="被嫌弃的Arthas的一生">
+                  <i class="fa fa-chevron-left"></i> 被嫌弃的Arthas的一生
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/09/02/%E6%8A%A4%E5%8F%91%E6%8C%87%E5%8C%97/" rel="next" title="护发指北">
-                  护发指北 <i class="fa fa-chevron-right"></i>
+                <a href="/2023/02/06/%E5%BF%AB%E9%80%9F%E5%B9%82/" rel="next" title="快速幂">
+                  快速幂 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
